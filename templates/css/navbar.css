@@ -1,0 +1,100 @@
+#navbar
+{
+    height: 42px;
+    border-radius: 5px 5px 0 0;
+    -moz-border-radius: 5px 5px 0 0;
+    -webkit-border-radius: 5px 5px 0 0;
+    background: rgb(105, 169, 238);
+    border-bottom: 2px solid #e58919;
+}
+
+#navbar ul
+{
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+#navbar li
+{
+	margin: 0;
+	padding: 0;
+	float: left;	
+	position: relative;
+	list-style-type:none;
+}
+
+#navbar a
+{
+	padding: 0px 25px;
+	display: block;
+	background: rgb(105, 169, 238);
+	font-family: 'Tahoma';
+	font-size: 18px;
+	font-weight: 400;
+	color: white;
+	text-align: center;
+	text-decoration: none;
+	line-height: 42px;
+}
+
+#navbar li:first-child a {
+  border-radius: 5px 0 0 0;
+  -moz-border-radius: 5px 0 0 0;
+  -webkit-border-radius: 5px 0 0 0;
+  background-color: #aaaaaa;
+
+}
+
+#navbar li:first-child:hover a {
+  border-radius: 5px 0 0 0;
+  -moz-border-radius: 5px 0 0 0;
+  -webkit-border-radius: 5px 0 0 0;
+  background-color: #aaaaaa;
+
+}
+
+#navbar li:hover a
+{
+	background-color: rgb(58, 142, 219); //good
+}
+
+#navbar li ul 
+{
+	width: auto;
+	float: left;
+	visibility: hidden;
+	position: absolute;
+	left: 0;
+	z-index: 1;
+	background-color: rgb(58, 142, 219);	
+	opacity: 0;
+	-webkit-transition: all .2s ease;
+	-moz-transition: all .2s ease;
+	-ms-transition: all .2s ease;
+	-o-transition: all .2s ease;
+	transition: all .2s ease;
+}
+
+#navbar li:hover ul 
+{
+	visibility: visible;
+	top: 42px;
+	opacity: 1;
+}
+#navbar li ul li 
+{
+	width: 100%;
+}
+#navbar li ul li a
+{
+	width: 100%;
+	text-align: left;
+	font-size: 10px;
+	line-height: 22px;
+}
+#navbar li ul a:hover 
+{
+	background-color: rgb(49, 104, 163);
+}
