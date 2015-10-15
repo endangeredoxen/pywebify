@@ -5,7 +5,7 @@ function div_switch (name){
     // Check the file extension
     var re = /(?:\.([^.]+))?$/;
     var ext = re.exec(name)[1];
-    var dv = document.getElementById('view_div');
+    var dv = document.getElementById('viewer');
     if( ext=="html"){
         var isHTML0 =  document.getElementById('html0');
         if (typeof(isHTML0) != 'undefined' && isHTML0 != null)
@@ -22,6 +22,7 @@ function div_switch (name){
         else{
             // HTML not found, so create and add
             var newDiv = document.createElement('div');
+            var summary = document.getElementById('summary');
             newDiv.style.display = 'inline';
             dv.appendChild(newDiv);
             var newHTML = document.createElement("object");
@@ -29,7 +30,7 @@ function div_switch (name){
             newHTML.id = "html0";
             newHTML.width='98%';
             newHTML.height='100%';
-            dv.appendChild(newHTML);
+            dv.insertBefore(newHTML, summary);
         }
        
     }
@@ -46,39 +47,63 @@ function div_switch (name){
         else{
             // Image not found, so create and add
             var image = document.createElement("img");
+            var summary = document.getElementById('summary');
             image.src = name;
             image.id = "img0";
             image.removeAttribute('width');
             image.style.maxWidth='98%';
-            dv.appendChild(image);
+            dv.insertBefore(image, summary);
         }
-        var count = 0;
         var width0 = 0;
+        var zoom = 'in';
+        var startWidth = image.width;
+        console.log(startWidth);
         image.onclick = function () {
-            if( count < 5 ){
-                var resize = 1.25; // resize amount in percentage
-                var origW  = this.clientWidth; // original image width
-                var mouseX = event.x - dv.offsetLeft;
-                var mouseY = event.y;
-                var divWidth = dv.offsetWidth;
-                //Set the new width and height
-                this.style.maxWidth='none';
-                this.setAttribute('width', origW*resize);
-                if( count == 0){
-                    width0 = origW;
+            if (event.shiftKey) {
+                var resize = 0.75; // resize amount in percentage
+                if (zoom=='in') {
+                    zoom = 'out';
                 }
-                count += 1;
-                
-                // Set the new scroll bars
-                view_div.scrollLeft=(mouseX-dv.offsetWidth/2)*count*resize;
-                view_div.scrollTop=(mouseY-dv.offsetHeight/2)*count*resize;
+                else
+                    zoom = 'in';
+            } else {
+                var resize = 1.25; // resize amount in percentage
+                if (zoom=='out') {
+                    zoom = 'in';
+                }
+                else
+                    zoom = 'in';
+            }
+            if (event.ctrlKey) {
+                viewer.scrollLeft=0;
+                viewer.scrollTop=0;
+                this.removeAttribute('width');
+                this.style.maxWidth='800%';
             }
             else {
-                this.style.maxWidth='98%';
-                count = 0;
+                
+                //Set the new width and height
+                var origW  = this.clientWidth; // original image width
+                this.style.maxWidth='none';
+                this.setAttribute('width', origW*resize);
+                
+                // Set the scroll bars
+                var bbox = this.getBoundingClientRect();
+                var mouseX = event.x - bbox.left;
+                var mouseY = event.y - bbox.top;
+                var imgWidth = bbox.right-bbox.left;
+                var imgHeight = bbox.bottom-bbox.top;
+                var xOffset = mouseX*resize - imgWidth/2;
+                var yOffset = mouseY*resize - imgHeight/2;
+                var scrollWidthMax = this.scrollWidth - dv.offsetWidth;
+                var scrollHeightMax = this.scrollHeight - dv.offsetHeight;
+                var ratioWidth = scrollWidthMax/imgWidth;
+                
+                viewer.scrollLeft = scrollWidthMax/2 + xOffset;
+                viewer.scrollTop = scrollHeightMax/2 + yOffset;
             }
         }
     }
-    view_div.scrollTop=0;
-    view_div.scrollLeft=0;
+    viewer.scrollTop=0;
+    viewer.scrollLeft=0;
 }
