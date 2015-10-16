@@ -8,26 +8,56 @@ import pathlib
 from xml.dom import minidom
 from xml.etree import ElementTree
 import numpy as np
+from docutils import core
+
 
 class Files():
     def __init__(self, base_path, ext=None, **kwargs):
         self.base_path = base_path
+        self.build_rst = kwargs.get('build_rst', False)
         self.excludes = kwargs.get('excludes',[])
         self.files = []
         self.from_file = kwargs.get('from_file', False)
         self.onclick = kwargs.get('onclick',None)
         self.onmouseover = kwargs.get('onmouseover',None)
+        self.rst = ''
+        self.rst_stylesheet = kwargs.get('rst_stylesheet',None)
 
         self.ext = ext
-        if self.ext is not None:
+        if self.ext is not None and type(self.ext) is not list:
             self.ext = self.ext.replace(' ','').split(',')
             self.ext = [f.lower() for f in self.ext]
 
         self.get_files(self.from_file)
         self.filter()
+        if self.build_rst:
+            self.make_html()
+        self.files = self.files.drop_duplicates().reset_index(drop=True)
         self.nan_to_str()
         self.make_links()
         self.make_ul()
+
+    def convert_rst(self, file_name, stylesheet=None):
+        '''
+        Converts single rst files to html
+          Adapted from Andrew Pinion's solution @
+          http://halfcooked.com/blog/2010/06/01/generating-html-versions-of-restructuredtext-files/
+        :param file_name: Name of rst file to convert to html
+        :param stylesheet: Optional path to a stylesheet
+        :return: None
+        '''
+        settings_overrides=None
+        if stylesheet is not None:
+            if type(stylesheet) is not list:
+                stylesheet = [stylesheet]
+            settings_overrides = {'stylesheet_path':stylesheet}
+        source = open(file_name, 'r')
+        file_dest = os.path.splitext(file_name)[0] + '.html'
+        destination = open(file_dest, 'w')
+        core.publish_file(source=source, destination=destination, writer_name='html',
+                          settings_overrides=settings_overrides)
+        source.close()
+        destination.close()
 
     def df_to_xml(self, df, parent_node=None, parent_name=''):
         def node_for_value(name, value, parent_node, parent_name, dir=False):
@@ -98,6 +128,7 @@ class Files():
                     temp = {}
                     temp['full_path'] = osjoin(self.base_path,dirName,fname)
                     temp['html_path'] = pathlib.Path(temp['full_path']).as_uri()
+                    temp['ext'] = fname[-3:]
                     if self.from_file:
                         top = self.base_path.split(os.sep)[-1]
                         subdirs = temp['full_path'].replace(self.base_path.replace(top,''),'').split(os.sep)
@@ -123,6 +154,16 @@ class Files():
     def filter(self):
         for ex in self.excludes:
             self.files = self.files[~self.files.full_path.str.contains(ex)]
+
+    def make_html(self):
+        ''' Build html files from rst files '''
+        self.rst = self.files[self.files.ext=='rst']
+        for i, f in self.rst.iterrows():
+            self.convert_rst(f['full_path'], stylesheet=self.rst_stylesheet)
+            self.files.iloc[i]['ext'] = 'html'
+            self.files.iloc[i]['filename'] = self.files.iloc[i]['filename'].replace('rst','html')
+            self.files.iloc[i]['full_path'] = self.files.iloc[i]['full_path'].replace('rst','html')
+            self.files.iloc[i]['html_path'] = self.files.iloc[i]['html_path'].replace('rst','html')
 
     def make_links(self):
         self.files['link'] = '''<A onmouseover="div_switch(' ''' + \
