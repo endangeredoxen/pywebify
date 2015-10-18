@@ -1,4 +1,4 @@
 * handle optional summary section
-* build package
 * make docs
 * hold feature to compare plots
+* position toggle

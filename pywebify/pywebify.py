@@ -38,6 +38,8 @@ class PyWebify():
         self.output_name = 'webify'
         self.output_path = None
         self.rel_path = os.path.dirname(__file__)
+        self.report_folder = 'pywebify'
+        self.show_ext = False
         self.special = {}
         self.subtitle = ''
         self.temp_path = ''
@@ -48,6 +50,11 @@ class PyWebify():
 
         # Open and parse the config file
         self.get_config_file()
+
+        # Set the output path
+        if not self.output_path:
+            self.set_output_path()
+        self.excludes += [self.output_path]
 
         # Get the files at base_path
         self.get_files()
@@ -66,7 +73,7 @@ class PyWebify():
         self.css_path = r'%s' % self.config.get('TEMPLATES','css')
         self.check_path('css_path', 'CSS TEMPLATE')
         self.css = Template(self.css_path, css_replaces+[self.special])
-        self.css.write(dest=osjoin(self.output_path, 'html', 'css', '%s.css' % self.output_name), bonus=self.js_css)
+        self.css.write(dest=osjoin(self.output_path, 'css', '%s.css' % self.output_name), bonus=self.js_css)
 
     def build_html(self):
         ''' Build the html report file '''
@@ -80,7 +87,7 @@ class PyWebify():
         self.html_path = r'%s' % self.config.get('TEMPLATES','html')
         self.check_path('html_path', 'HTML TEMPLATE')
         self.html = Template(self.html_path,[self.html_dict, self.special])
-        self.html.write(dest=osjoin(self.output_path, 'html', 'webify.html'))
+        self.html.write(dest=osjoin(self.output_path, 'webify.html'))
 
     def build_navbar(self):
         ''' Build the top level navbar menu for the report '''
@@ -116,7 +123,8 @@ class PyWebify():
         self.files = Files(self.base_path, self.config.get('FILES','ext'),
                            onmouseover=self.config.get('SIDEBAR','onmouseover'),
                            onclick=self.config.get('SIDEBAR','onclick'),
-                           from_file=self.from_file, excludes=self.excludes)
+                           from_file=self.from_file, excludes=self.excludes,
+                           show_ext=self.show_ext)
 
     def get_javascript(self, files):
         '''
@@ -172,7 +180,7 @@ class PyWebify():
 
     def launch(self):
         ''' Open the report in the browser '''
-        os.startfile(osjoin(self.output_path, 'html', '%s.html' % self.output_name))
+        os.startfile(osjoin(self.output_path, '%s.html' % self.output_name))
 
     def move_files(self, files):
         '''
@@ -184,17 +192,13 @@ class PyWebify():
             self.temp_path = f
             self.check_path('temp_path', f)
             if os.path.exists(self.temp_path):
-                path = os.path.sep.join(osjoin(self.output_path,'html',f).split(os.path.sep)[0:-1])
+                path = os.path.sep.join(osjoin(self.output_path,f).split(os.path.sep)[0:-1])
                 if not os.path.exists(path):
                     os.makedirs(path)
-                shutil.copy(self.temp_path, osjoin(self.output_path,'html',f))
+                shutil.copy(self.temp_path, osjoin(self.output_path,f))
 
     def run(self):
         ''' Build, move, and open the report files '''
-
-        # Set the output path
-        if not self.output_path:
-            self.set_output_path()
 
         # Build the navbar
         self.build_navbar()
@@ -221,3 +225,4 @@ class PyWebify():
             self.output_path = os.sep.join(self.base_path.split(os.sep)[0:-1])
         else:
             self.output_path = self.base_path
+        self.output_path = osjoin(self.output_path,self.report_folder)

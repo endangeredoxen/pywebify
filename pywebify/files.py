@@ -18,10 +18,11 @@ class Files():
         self.excludes = kwargs.get('excludes',[])
         self.files = []
         self.from_file = kwargs.get('from_file', False)
-        self.onclick = kwargs.get('onclick',None)
-        self.onmouseover = kwargs.get('onmouseover',None)
+        self.onclick = kwargs.get('onclick', None)
+        self.onmouseover = kwargs.get('onmouseover', None)
         self.rst = ''
-        self.rst_stylesheet = kwargs.get('rst_stylesheet',None)
+        self.rst_stylesheet = kwargs.get('rst_stylesheet', None)
+        self.show_ext = kwargs.get('show_ext', False)
 
         self.ext = ext
         if self.ext is not None and type(self.ext) is not list:
@@ -126,7 +127,7 @@ class Files():
                     fileList = [f for f in fileList if f.split('.')[-1].lower() in self.ext]
                 for fname in fileList:
                     temp = {}
-                    temp['full_path'] = osjoin(self.base_path,dirName,fname)
+                    temp['full_path'] = os.path.abspath(osjoin(self.base_path,dirName,fname))
                     temp['html_path'] = pathlib.Path(temp['full_path']).as_uri()
                     temp['ext'] = fname[-3:]
                     if self.from_file:
@@ -137,12 +138,15 @@ class Files():
                     temp['base_path'] = self.base_path
                     for i,s in enumerate(subdirs[:-1]):
                         temp['subdir%s' % i] = s
-                    temp['filename'] = subdirs[-1]
+                    if self.show_ext:
+                        temp['filename'] = subdirs[-1]
+                    else:
+                        temp['filename'] = os.path.splitext(subdirs[-1])[0]
                     self.files += [temp]
 
             if len(self.files) == 0 and os.path.exists(self.base_path) and self.base_path.split('.')[-1] in self.ext:
                 temp = {}
-                temp['full_path'] = self.base_path
+                temp['full_path'] = os.path.abspath(self.base_path)
                 temp['html_path'] = pathlib.Path(temp['full_path']).as_uri()
                 subdirs = temp['full_path'].split(os.sep)
                 temp['base_path'] = os.sep.join(subdirs[0:-1])
@@ -153,7 +157,7 @@ class Files():
 
     def filter(self):
         for ex in self.excludes:
-            self.files = self.files[~self.files.full_path.str.contains(ex)]
+            self.files = self.files[~self.files.full_path.str.contains(ex, regex=False)].reset_index(drop=True)
 
     def make_html(self):
         ''' Build html files from rst files '''

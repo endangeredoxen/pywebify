@@ -7,6 +7,13 @@ function div_switch (name){
     var ext = re.exec(name)[1];
     var dv = document.getElementById('viewer');
     if( ext=="html"){
+        // Check for an existing image and remove if found
+        var image = document.getElementById('img0');
+        if (typeof(image) != 'undefined' && image != null)
+        {
+            image.parentNode.removeChild(image);
+        }
+        
         var isHTML0 =  document.getElementById('html0');
         if (typeof(isHTML0) != 'undefined' && isHTML0 != null)
         {
@@ -31,10 +38,18 @@ function div_switch (name){
             newHTML.width='98%';
             newHTML.height='100%';
             dv.insertBefore(newHTML, summary);
+           
         }
        
     }
     else{
+        // Check for an existing html remove if found
+        var html = document.getElementById('html0');
+        if (typeof(html) != 'undefined' && html != null)
+        {
+            html.parentNode.removeChild(html);
+        }
+        
         // Check for an existing image
         var image =  document.getElementById('img0');
         if (typeof(image) != 'undefined' && image != null)
@@ -57,7 +72,7 @@ function div_switch (name){
         var width0 = 0;
         var zoom = 'in';
         var startWidth = image.width;
-        console.log(startWidth);
+        
         image.onclick = function () {
             if (event.shiftKey) {
                 var resize = 0.75; // resize amount in percentage
