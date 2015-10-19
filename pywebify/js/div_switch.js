@@ -22,20 +22,17 @@ function div_switch (name){
             var newHTML = document.createElement("object");
             newHTML.data = name;
             newHTML.id = "html0";
-            newHTML.width='98%';
+            newHTML.width='100%';
             newHTML.height='100%';
             oldTHML.parentNode.replaceChild(newHTML, oldTHML);
         }
         else{
             // HTML not found, so create and add
-            var newDiv = document.createElement('div');
             var summary = document.getElementById('summary');
-            newDiv.style.display = 'inline';
-            dv.appendChild(newDiv);
             var newHTML = document.createElement("object");
             newHTML.data = name;
             newHTML.id = "html0";
-            newHTML.width='98%';
+            newHTML.width='100%';
             newHTML.height='100%';
             dv.insertBefore(newHTML, summary);
            
@@ -56,7 +53,11 @@ function div_switch (name){
         {
             // Image found, so replace with new
             image.removeAttribute('width');
-            image.style.maxWidth='98%';
+            image.style.maxWidth='100%';
+            // Center images
+            // image.style.display = 'block';
+            // image.style.marginLeft = 'auto';
+            // image.style.marginRight = 'auto';
             image.src = name;
         }
         else{
@@ -66,7 +67,11 @@ function div_switch (name){
             image.src = name;
             image.id = "img0";
             image.removeAttribute('width');
-            image.style.maxWidth='98%';
+            image.style.maxWidth='100%';
+            // Center images
+            // image.style.display = 'block';
+            // image.style.marginLeft = 'auto';
+            // image.style.marginRight = 'auto';
             dv.insertBefore(image, summary);
         }
         var width0 = 0;

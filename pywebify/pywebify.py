@@ -35,7 +35,7 @@ class PyWebify():
         self.make = False
         self.navbar_path = ''
         self.open = True
-        self.output_name = 'webify'
+        self.output_name = 'report'
         self.output_path = None
         self.rel_path = os.path.dirname(__file__)
         self.report_folder = 'pywebify'
@@ -87,7 +87,7 @@ class PyWebify():
         self.html_path = r'%s' % self.config.get('TEMPLATES','html')
         self.check_path('html_path', 'HTML TEMPLATE')
         self.html = Template(self.html_path,[self.html_dict, self.special])
-        self.html.write(dest=osjoin(self.output_path, 'webify.html'))
+        self.html.write(dest=osjoin(self.output_path, '%s.html' % self.output_name))
 
     def build_navbar(self):
         ''' Build the top level navbar menu for the report '''

@@ -12,6 +12,15 @@ function div_toggle() {
     $('#sidebar').animate({width:origWidth});
     $('#toggle').html('<<');
     });
+    
+    // position the toggle at the bottom and account for a reduced viewer div height
+    var h1 = $('#viewer').height();
+    $('#viewer').height('100%');
+    var h2 = $('#viewer').height();
+    var h3 = h2-h1;
+    
+    $('#toggle').css({'bottom':h3+'px'});
+    $('#viewer').height(h1);
 };
 
 $(document).ready( function() {
