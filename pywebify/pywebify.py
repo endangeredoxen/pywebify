@@ -174,6 +174,7 @@ class PyWebify():
         self.special['COMPILEDBY'] = platform.node()
         self.special['FAVICON'] = self.config.get('ICONS','favicon')
         self.special['QUANTITY'] = '%s' % len(self.files.files)
+        self.special['REPORTNAME'] = self.output_name
         self.special['SUBTITLE'] = self.subtitle
         self.special['SUMMARY'] = ''
         self.special['TITLE'] = self.title
