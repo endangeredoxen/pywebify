@@ -1,5 +1,9 @@
-__author__ = 'Steve'
+__author__    = 'Steve Nicholes'
+__copyright__ = 'Copyright (C) 2015 Steve Nicholes'
+__license__   = 'GPLv3'
+__version__   = '.1'
+__url__       = 'https://github.com/endangeredoxen/pywebify'
 
-from pywebify.pywebify import PyWebify
-from pywebify.files import Files
-from pywebify.template import Template
+from pywebify.files import *
+from pywebify.template import *
+from pywebify.pywebify import *

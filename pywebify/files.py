@@ -1,17 +1,118 @@
+############################################################################
+# files.py
+#   Contains classes for reading various types of files
+############################################################################
+__author__    = 'Steve Nicholes'
+__copyright__ = 'Copyright (C) 2015 Steve Nicholes'
+__license__   = 'GPLv3'
+__version__   = '.1'
+__url__       = 'https://github.com/endangeredoxen/pywebify'
+
+
+try:
+    import configparser
+except:
+    import ConfigParser as configparser
 import os
-osjoin = os.path.join
 import scandir
 import pandas as pd
 import pdb
-st = pdb.set_trace
 import pathlib
 from xml.dom import minidom
 from xml.etree import ElementTree
 import numpy as np
 from docutils import core
+osjoin = os.path.join
+st = pdb.set_trace
 
 
-class Files():
+def str_2_dtype(val):
+    '''
+    Convert a string to the most appropriate data type
+    :param val:
+    :return:
+    '''
+
+    # None
+    if val == 'None':
+        return None
+    # bool
+    if val == 'True':
+        return True
+    if val == 'False':
+        return False
+    # dict
+    if ':' in val and '{' in val:
+        k = val.split(':').rstrip().lstrip()[0]
+        v = str_2_dtype(val.split(':').rstrip().lstrip()[1])
+        return {k:v}
+    # list
+    if ',' in val:
+        val = val.replace('[','').replace(']','')
+        new = []
+        for v in val.split(','):
+            new += [str_2_dtype(v.rstrip().lstrip())]
+        return new
+    # float and int
+    try:
+        int(val)
+        return int(val)
+    except:
+        try:
+            float(val)
+            return float(val)
+        except:
+            return val.rstrip().lstrip()
+
+
+class ConfigFile():
+    def __init__(self, path):
+        '''
+        Read and parse a config.ini file
+        :param path: location of the ini file
+        :return: object containing config file attributes
+        '''
+        self.config_path = path
+        self.config = None
+        self.config_dict = {}
+        self.is_valid = False
+        self.rel_path = os.path.dirname(__file__)
+
+        self.validate_file_path()
+
+        if self.is_valid:
+            self.read_file()
+        else:
+            raise ValueError('Could not find a config.ini file at the following location: %s' % self.config_path)
+
+        self.force_types()
+
+        self.make_dict()
+
+    def force_types(self):
+        ''' Convert items to proper data types '''
+        pass
+
+    def make_dict(self):
+        ''' Convert the configparser object into a dictionary for easier handling '''
+        self.config_dict = {s:{k:str_2_dtype(v) for k,v in self.config.items(s)} for s in self.config.sections()}
+
+    def read_file(self):
+        self.config = configparser.RawConfigParser()
+        self.config.read(self.config_path)
+
+    def validate_file_path(self):
+        ''' Make sure there is a valid config file at the location specified by self.config_path '''
+
+        if os.path.exists(self.config_path):
+            self.is_valid = True
+        else:
+            if os.path.exists(osjoin(self.rel_path, file)):
+                self.config_path = osjoin(self.rel_path, self.config_path )
+                self.is_valid = True
+
+
+class Dir2HTML():
     def __init__(self, base_path, ext=None, **kwargs):
         self.base_path = base_path
         self.build_rst = kwargs.get('build_rst', False)
@@ -187,3 +288,9 @@ class Files():
 
     def nan_to_str(self):
         self.files = self.files.replace(np.nan, 'nan')
+
+
+class FileReader():
+    def __init__(self):
+        # partial/full path or list of files | search string | concat | use_gui | custom label per file | filename attr | scandir option
+        pass

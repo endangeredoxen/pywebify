@@ -1,7 +1,9 @@
-/*****************************************************************************/
-/* Modified from http://jasalguero.com/ledld/development/web/expandable-list */
-/*   Makes the file list ul dynamically expandable/collapsible               */
-/*****************************************************************************/
+/*******************************************************************************/
+/* Makes the file list ul dynamically expandable/collapsible                   */
+/*   Modified from http://jasalguero.com/ledld/development/web/expandable-list */
+/*   Designed for the PyWebify project                                         */
+/*   https://github.com/endangeredoxen/pywebify                                */
+/*******************************************************************************/
 
 function prepareList() {
     $('#collapse').find('li:has(ul)')

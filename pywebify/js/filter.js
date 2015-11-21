@@ -1,7 +1,9 @@
-/************************************************************/
-/* Modified from http://jsfiddle.net/GoranMottram/4CJMe/4/  */
-/*   Filters the report file list                           */
-/************************************************************/
+/*******************************************************************************/
+/* Filters the report file list                                                */
+/*   Modified from http://jsfiddle.net/GoranMottram/4CJMe/4/                   */
+/*   Designed for the PyWebify project                                         */
+/*   https://github.com/endangeredoxen/pywebify                                */
+/*******************************************************************************/
 (function ($) {
 
     function searchList(elm, mylist) { // elm is any element, mylist is an unordered list

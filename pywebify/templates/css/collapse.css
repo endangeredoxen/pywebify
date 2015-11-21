@@ -1,5 +1,5 @@
 #collapse {
-    margin-left : -15px;
+    margin-left : -20px;
 
 }
 #collapse ul, li {
@@ -16,10 +16,12 @@
 }
 #collapse li {
     line-height         : 140%;
-    text-indent         : 0px;
-    background-position : 1px 8px;
-    padding-left        : 25px;
+    text-indent         : -12px;
+    background-position : 0px 8px;
+    padding-left        : 35px;
+    padding-right       : 10px;
     background-repeat   : no-repeat;
+    word-wrap           : break-word;
 }
 #collapse .collapsed {
     background-image : url(../img/collapsed.png);

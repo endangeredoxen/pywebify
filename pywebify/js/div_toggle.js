@@ -1,3 +1,9 @@
+/*******************************************************************************/
+/* Div size toggler                                                            */
+/*   Designed for the PyWebify project                                         */
+/*   https://github.com/endangeredoxen/pywebify                                */
+/*******************************************************************************/
+
 function div_toggle() {
     var origWidth = $('#sidebar').width();
     $('#toggle').toggle(function(){

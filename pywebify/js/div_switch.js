@@ -1,5 +1,8 @@
-/* Div content switcher
-*/
+/*******************************************************************************/
+/* Div content switcher                                                        */
+/*   Designed for the PyWebify project                                         */
+/*   https://github.com/endangeredoxen/pywebify                                */
+/*******************************************************************************/
 
 function div_switch (name){
     // Check the file extension
