@@ -47,6 +47,7 @@ body {
   background: transparent;
 }
 img {
+  image-rendering: $IMG_RENDERING_MOZ;
   image-rendering: $IMG_RENDERING;
 }
 #main_div {
@@ -183,6 +184,7 @@ img {
     padding          : $TOGGLE_PADDING;
     text-decoration  : none;
     position         : absolute;
+    bottom           : $TOGGLE_POSITION_Y;
 }
 #toggle:hover {
     background-color : $TOGGLE_BKGRD_HOVER;

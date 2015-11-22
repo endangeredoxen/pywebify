@@ -81,7 +81,7 @@ function div_switch (name){
         var zoom = 'in';
         var startWidth = image.width;
         
-        image.onclick = function () {
+        image.onclick = function (event) {
             if (event.shiftKey) {
                 var resize = 0.75; // resize amount in percentage
                 if (zoom=='in') {
@@ -112,8 +112,8 @@ function div_switch (name){
                 
                 // Set the scroll bars
                 var bbox = this.getBoundingClientRect();
-                var mouseX = event.x - bbox.left;
-                var mouseY = event.y - bbox.top;
+                var mouseX = event.clientX - bbox.left;
+                var mouseY = event.clientY - bbox.top;
                 var imgWidth = bbox.right-bbox.left;
                 var imgHeight = bbox.bottom-bbox.top;
                 var xOffset = mouseX*resize - imgWidth/2;
