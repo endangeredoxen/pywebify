@@ -180,7 +180,7 @@ class PyWebify():
 
     def get_special(self):
         ''' Populate special replacement strings '''
-        self.special['BASEPATH'] = self.base_path
+        self.special['BASEPATH'] = 'file:///' + self.base_path.replace('\\','/')
         self.special['NOW'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.special['COMPILEDBY'] = platform.node()
         self.special['FAVICON'] = self.config['ICONS']['favicon']
