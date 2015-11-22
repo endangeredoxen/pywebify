@@ -32,7 +32,7 @@ def copy_config(dir):
     filename = 'pywebify.ini'
     if not os.path.exists(dir):
         os.makedirs(dir)
-    shutil.copyfile('config.ini', osjoin(dir, filename))
+    shutil.copyfile(osjoin(os.path.dirname(__file__),'config.ini'), osjoin(dir, filename))
 
 
 class PyWebify():
