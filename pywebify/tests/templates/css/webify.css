@@ -1,0 +1,198 @@
+html {
+    min-height : 100%;
+    height     : 100%
+}
+body {
+    margin     : $BODY_MARGIN;
+    background : $BODY_BKGRD;
+    background : -moz-linear-gradient($BODY_GRADIENT);
+    background : -webkit-linear-gradient($BODY_GRADIENT);
+    background : -o-linear-gradient($BODY_GRADIENT);
+    background : -ms-linear-gradient($BODY_GRADIENT);
+    overflow   : hidden;
+    height     : 100%;
+    max-height : 100%;
+}
+::-webkit-scrollbar {
+  width  : 12px;
+  height : 12px;
+}
+::-webkit-scrollbar-button {
+  width  : 0px;
+  height : 0px;
+}
+::-webkit-scrollbar-thumb {
+  background    : #67696d;
+  border        : 0px none #ffffff;
+  border-radius : 0px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background : #505153;
+}
+::-webkit-scrollbar-thumb:active {
+  background : #505153;
+}
+::-webkit-scrollbar-track {
+  background    : #26272a;
+  border        : 0px none #ffffff;
+  border-radius : 0px;
+}
+::-webkit-scrollbar-track:hover {
+  background : #313235;
+}
+::-webkit-scrollbar-track:active {
+  background : #333333;
+}
+::-webkit-scrollbar-corner {
+  background : transparent;
+}
+#main_div {
+    position : relative;
+    width    : auto;
+    height   : $MAIN_HEIGHT;
+    overflow : hidden;
+}
+#navbar {
+    height                : $NAV_HEIGHT;
+    border-radius         : $NAV_BORDER_RADIUS_L $NAV_BORDER_RADIUS_R 0 0;
+    -moz-border-radius    : $NAV_BORDER_RADIUS_L $NAV_BORDER_RADIUS_R 0 0;
+    -webkit-border-radius : $NAV_BORDER_RADIUS_L $NAV_BORDER_RADIUS_R 0 0;
+    background            : $NAV_BKGRD;
+    border-bottom         : $NAV_BORDER_BOTTOM;
+}
+#navbar ul {
+    width      : 100%;
+    margin     : 0;
+    padding    : 0;
+    list-style : none;
+}
+#navbar li {
+    margin          : 0;
+    padding         : 0;
+    float           : left;
+    position        : relative;
+    list-style-type : none;
+}
+#navbar a {
+    padding         : $NAV_PADDING;
+    display         : block;
+    background      : $NAV_BKGRD;
+    font-family     : $NAV_FONT;
+    font-size       : $NAV_FONT_SIZE;
+    font-weight     : $NAV_FONT_WEIGHT;
+    color           : $NAV_FONT_COLOR;
+    text-align      : $NAV_FONT_ALIGN;
+    text-decoration : none;
+    line-height     : $NAV_HEIGHT;
+}
+#navbar li:first-child a {
+    border-radius         : $NAV_BORDER_RADIUS_L 0 0 0;
+    -moz-border-radius    : $NAV_BORDER_RADIUS_L 0 0 0;
+    -webkit-border-radius : $NAV_BORDER_RADIUS_L 0 0 0;
+    background-color      : $NAV_BKGRD_TITLE;
+}
+#navbar li:first-child:hover a {
+    border-radius         : $NAV_BORDER_RADIUS_L 0 0 0;
+    -moz-border-radius    : $NAV_BORDER_RADIUS_L 0 0 0;
+    -webkit-border-radius : $NAV_BORDER_RADIUS_L 0 0 0;
+    background-color      : $NAV_BKGRD_LINKS;
+}
+#navbar li:hover a
+{
+    background-color : $NAV_BKGRD_HOVER;
+}
+#navbar li ul {
+    width              : auto;
+    float              : left;
+    visibility         : hidden;
+    position           : absolute;
+    left               : 0;
+    z-index            : 1;
+    opacity            : 0;
+    -webkit-transition : all $NAV_ITEMS_DELAY ease;
+    -moz-transition    : all $NAV_ITEMS_DELAY ease;
+    -ms-transition     : all $NAV_ITEMS_DELAY ease;
+    -o-transition      : all $NAV_ITEMS_DELAY ease;
+    transition         : all $NAV_ITEMS_DELAY ease;
+}
+#navbar li:hover ul {
+    visibility : visible;
+    top        : $NAV_HEIGHT;
+    opacity    : 1;
+}
+#navbar li ul li
+{
+    width : 100%;
+}
+#navbar li ul li a {
+    width       : $NAV_ITEMS_WIDTH;
+    text-align  : left;
+    font-size   : $NAV_FONT_SIZE_ITEMS;
+    line-height : $NAV_HEIGHT_ITEMS;
+}
+#navbar li ul a:hover
+{
+    background-color : $NAV_BKGRD_HOVER;
+}
+#sidebar {
+    float           : left;
+    height          : $SB_HEIGHT;
+    width           : $SB_WIDTH;
+    font-size       : $SB_FONT_SIZE;
+    background      : $SB_BKGRD;
+    background      : -moz-linear-gradient($SB_GRADIENT);
+    background      : -webkit-linear-gradient($SB_GRADIENT);
+    background      : -o-linear-gradient($SB_GRADIENT);
+    background      : -ms-linear-gradient($SB_GRADIENT);
+    box-shadow      : $SB_SHADOW;
+    overflow-y      : auto;
+    list-style-type : none;
+}
+#sidebar li{
+    list-style : none;
+    font-size : $SB_FONT_SIZE_DECREASE;
+}
+#sidebar a {
+    color           : $SB_FONT_COLOR;
+    text-decoration : $SB_LINK_DECORATION;
+
+}
+#sidebar a:hover {
+    color: $SB_FONT_COLOR_LINKS;
+}
+#summary{
+
+}
+#toggle {
+    margin           : 0;
+    padding          : 0;
+    border           : $TOGGLE_BORDER;
+    background       : transparent;
+    cursor           : pointer;
+    background-color : $TOGGLE_BKGRD;
+    display          : inline-block;
+    cursor           : pointer;
+    color            : $TOGGLE_FONT_COLOR;
+    font-family      : $TOGGLE_FONT;
+    font-size        : $TOGGLE_FONT_SIZE;
+    font-weight      : $TOGGLE_FONT_WEIGHT;
+    padding          : $TOGGLE_PADDING;
+    text-decoration  : none;
+    position         : absolute;
+    bottom           : $TOGGLE_POSITION_Y;
+}
+#toggle:hover {
+    background-color : $TOGGLE_BKGRD_HOVER;
+}
+#toggle:active {
+    position : absolute;
+}
+#toggle:focus {
+    outline : $TOGGLE_BORDER;
+}
+#viewer {
+    height     : $VIEW_HEIGHT;
+    background : $VIEW_BKGRD;
+    box-shadow : $VIEW_SHADOW;
+    overflow   : auto;
+}

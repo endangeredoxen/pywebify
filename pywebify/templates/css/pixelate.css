@@ -1,0 +1,47 @@
+#pixelCheckboxDiv{
+    margin-bottom : 0px;
+    margin-left   : -5px;
+}
+#pixelCheckboxText{
+    color       : #aaaaaa;
+    font-style  : italic;
+    margin-left : 6px;
+    display     : inline-block;
+    position    : relative;
+    top         : -12px;
+    left        : 6px;
+}
+#pixelCheckbox {
+    display : none;
+}
+#pixelCheckboxSpan {
+    display        : inline-block;
+    border         : 1px solid #cacece;
+    border-radius  : 3px;
+    width          : 15px;
+    height         : 15px;
+    background     : #555555;
+    vertical-align : middle;
+    text-align     : center;
+    position       : relative;
+    top            : -12px;
+    left           : 5px;
+}
+#pixelCheckbox:checked + #pixelCheckboxSpan{
+    background : #555555;
+}
+#pixelCheckbox:checked + #pixelCheckboxSpan:after{
+    content   : '\2714';
+    font-size : 10px;
+    position  : relative;
+    top       : -5px;
+    left      : 0px;
+    color     : #FFCC00;
+}
+#pixelCheckboxSpan:before {
+    content        : '';
+    vertical-align : middle;
+}
+#pixelCheckbox :checked + #pixelCheckboxSpan:before {
+    content : '\2714';
+}
