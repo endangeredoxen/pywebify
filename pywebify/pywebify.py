@@ -10,44 +10,109 @@ __version__   = '.1'
 __url__       = 'https://github.com/endangeredoxen/pywebify'
 
 import pdb
-from pywebify.files import ConfigFile
-from pywebify.files import Dir2HTML
+from pywebify.fileio import ConfigFile
+from pywebify.fileio import Dir2HTML
 from pywebify.template import Template
+import getpass
 import os
 import shutil
-import platform
 import datetime
 import sys
-sys.path.append(os.path.dirname(__file__))
+cur_dir = os.path.dirname(__file__)
+sys.path.append(cur_dir)
 st = pdb.set_trace
 osjoin = os.path.join
 
 
-def copy_config(dir):
+def copy_configs(dir):
     '''
-    Copy the default config file to a user directory for manipulation
+    Copy the default config file and the templates to a user directory for manipulation
     :param dir: directory of the new file
-    :return: None
+    :return: none
     '''
-    filename = 'pywebify.ini'
+
+    print ('Transferring PyWebify files:')
+    # Create directory if needed
     if not os.path.exists(dir):
         os.makedirs(dir)
-    shutil.copyfile(osjoin(os.path.dirname(__file__),'config.ini'), osjoin(dir, filename))
+
+    # Copy the config file
+    print('   config.ini...', end='')
+    shutil.copyfile(osjoin(cur_dir, 'config.ini'), osjoin(dir, 'config.ini'))
+    print('done!')
+
+    # Copy the templates folder
+    print('   templates....', end='')
+    shutil.copytree(osjoin(cur_dir, 'templates'), osjoin(dir, 'templates'))
+    print('done!')
+
+
+def get_config():
+    '''
+    Read the default config path from the setup.txt file
+    :return: config path
+    '''
+    with open(osjoin(cur_dir, 'setup.txt'), 'r') as input:
+        return input.readlines()[0]
+
+
+def reset_config():
+    '''
+    Reset the default config path in setup.txt
+    :return: none
+    '''
+    set_config('config.ini')
+
+
+def set_config(path):
+    '''
+    To avoid having to always add a custom config path to an instantiation of PyWebify update a setup.txt file with the
+    path to the user-defined config path
+    :param path: full path to user config.ini
+    :return: none
+    '''
+    with open(osjoin(cur_dir, 'setup.txt'), 'w') as output:
+        output.write(path)
 
 
 class PyWebify():
 
     def __init__(self, base_path, **kwargs):
+        '''
+        Build a PyWebify report
+        :param base_path: top-level directory containing files to add to the report
+        :param kwargs: see below
+        :Keyword Arguments:
+            * config: str; path to config ini file (note: most options are controlled using this file)
+            * browser: str; name of browser with which to open the report
+            * excludes: list; file names to exclude from the sidebar list of files
+            * make: boolean; make the report upon initialization
+            * natsort: boolean; use natural (human) sorting on the file list
+            * open: boolean; pop open the report
+            * output_name: str; name of output html report file
+            * report_folder: str; name of folder to dump report setup files
+            * show_ext: boolean; show/hide file extension in the file list
+            * subtitle: str; report subtitle (location depends on template)
+            * title: str; report title (location depends on template)
+        '''
+
         # Get configuration file
-        self.config_path = kwargs.get('config', 'config.ini')
+        self.config_path = kwargs.get('config', get_config())
+        if not os.path.exists(self.config_path):
+            raise OSError('Config file "%s" not found.  Please try again.' % self.config_path)
         self.config = getattr(ConfigFile(self.config_path), 'config_dict')
 
         # Set class attributes
-        self.base_path = base_path
+        self.base_path = os.path.abspath(base_path)
         self.browser = kwargs.get('browser', self.config['OPTIONS']['browser'])
         self.css = None
         self.css_path = ''
-        self.excludes = []
+        if 'excludes' in self.config['OPTIONS']:
+            self.excludes = kwargs.get('excludes', self.config['OPTIONS']['excludes'])
+            if type(self.excludes) is str:
+                self.excludes = [self.excludes]
+        else:
+            self.excludes = []
         self.files = None
         self.from_file = False
         self.html = None
@@ -57,12 +122,17 @@ class PyWebify():
         self.js_css = ''
         self.js_files = []
         self.make = kwargs.get('make', self.config['OPTIONS']['make'])
+        self.natsort = kwargs.get('natsort', self.config['OPTIONS']['natsort'])
         self.navbar_path = ''
         self.open = kwargs.get('open', self.config['OPTIONS']['open'])
         self.output_name = kwargs.get('output_name', self.config['OPTIONS']['output_name'])
         self.output_path = None
-        self.rel_path = os.path.dirname(__file__)
+        self.rel_path = cur_dir
         self.report_folder = kwargs.get('report_folder', self.config['OPTIONS']['report_folder'])
+        if 'rst_css' in self.config['OPTIONS'].keys():
+            self.rst_css = self.config['OPTIONS']['rst_css']
+        else:
+            self.rst_css = None
         self.show_ext = kwargs.get('show_ext', self.config['OPTIONS']['show_ext'])
         self.special = {}
         self.subtitle = kwargs.get('subtitle', self.config['OPTIONS']['subtitle'])
@@ -93,7 +163,7 @@ class PyWebify():
         css_replaces = self.get_replacements('css')
 
         self.css_path = r'%s' % self.config['TEMPLATES']['css']
-        self.check_path('css_path', 'CSS TEMPLATE')
+        self.check_path('css_path')
         self.css = Template(self.css_path, css_replaces+[self.special])
         self.css.write(dest=osjoin(self.output_path, 'css', '%s.css' % self.output_name), bonus=self.js_css)
 
@@ -107,7 +177,7 @@ class PyWebify():
 
         # Load the html template and build
         self.html_path = r'%s' % self.config['TEMPLATES']['html']
-        self.check_path('html_path', 'HTML TEMPLATE')
+        self.check_path('html_path')
         self.html = Template(self.html_path,[self.html_dict, self.special])
         self.html.write(dest=osjoin(self.output_path, '%s.html' % self.output_name))
 
@@ -117,13 +187,13 @@ class PyWebify():
         self.html_dict['NAVBAR'] = ''
         if 'navbar' in self.config.get('TEMPLATES').keys():
             self.navbar_path = self.config['TEMPLATES']['navbar']
-            self.check_path('navbar_path', 'NAVBAR')
+            self.check_path('navbar_path')
             if os.path.exists(self.navbar_path):
                 nav_replaces = self.get_replacements('navbar')
                 self.navbar = Template(self.navbar_path, nav_replaces+[self.special])
                 self.html_dict['NAVBAR'] = self.navbar.write()
 
-    def check_path(self, path, filetype='CONFIG'):
+    def check_path(self, path):
         ''' Handle relative paths '''
 
         file = getattr(self, path)
@@ -134,11 +204,15 @@ class PyWebify():
     def get_files(self):
         ''' Build a Files object that contains information about the files used in the report '''
 
+        if 'rst' in [f.lower() for f in self.config['FILES']['ext']]:
+            build_rst = True
+        else:
+            build_rst = False
+
         self.files = Dir2HTML(self.base_path, self.config['FILES']['ext'],
-                              onmouseover=self.config['SIDEBAR']['onmouseover'],
-                              onclick=self.config['SIDEBAR']['onclick'],
-                              from_file=self.from_file, excludes=self.excludes,
-                              show_ext=self.show_ext)
+                              onmouseover=self.config['SIDEBAR']['onmouseover'], from_file=self.from_file,
+                              onclick=self.config['SIDEBAR']['onclick'], excludes=self.excludes,
+                              show_ext=self.show_ext, build_rst=build_rst, rst_css=self.rst_css, natsort=self.natsort)
 
     def get_javascript(self, files):
         '''
@@ -158,7 +232,7 @@ class PyWebify():
 
             # Get any additional css related to the js addition
             self.temp_path = osjoin('templates\css', f.split('.')[0] + '.css')
-            self.check_path('temp_path','JS CSS')
+            self.check_path('temp_path')
             if os.path.exists(self.temp_path):
                 with open(self.temp_path, 'r') as input:
                     jscss += input.read()
@@ -180,16 +254,21 @@ class PyWebify():
 
     def get_special(self):
         ''' Populate special replacement strings '''
-        self.special['BASEPATH'] = 'file:///' + self.base_path.replace('\\','/')
+        self.special['BASEPATH'] = r'file:///' + self.base_path.replace('\\','/')
         self.special['NOW'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        self.special['COMPILEDBY'] = platform.node()
+        self.special['COMPILEDBY'] = getpass.getuser()
         self.special['FAVICON'] = self.config['ICONS']['favicon']
-        if self.config['ICONS']['logo'] is None:
-            self.special['LOGO'] = ''
-        else:
-            self.special['LOGO'] = '<img id="img0" src="%s" alt="" />' % self.config['ICONS']['logo']
+        if self.config['ICONS']['logo'] is not None:
+            self.move_files([self.config['ICONS']['logo']], new_dir='img')
         self.special['QUANTITY'] = '%s' % len(self.files.files)
         self.special['REPORTNAME'] = self.output_name
+        if self.config['OPTIONS']['start_screen'] == 'logo':
+            self.special['START_SCREEN'] = '<img id="img0" src="%s" alt="" />' \
+                                           % self.config['ICONS']['logo'].split(os.path.sep)[-1]
+        elif 'html' in self.config['OPTIONS']['start_screen']:
+            self.special['START_SCREEN'] = '<object id="html0" data="' + \
+                                           self.config['OPTIONS']['start_screen'] + \
+                                           '" width=100% height=100% />'
         self.special['SUBTITLE'] = self.subtitle
         self.special['SUMMARY'] = ''
         self.special['TITLE'] = self.title
@@ -198,7 +277,7 @@ class PyWebify():
         ''' Open the report in the browser '''
         os.startfile(osjoin(self.output_path, '%s.html' % self.output_name))
 
-    def move_files(self, files):
+    def move_files(self, files, new_dir=None):
         '''
         Transfer files to the report directory
         :param files: list of filepaths to transfer
@@ -206,12 +285,16 @@ class PyWebify():
         '''
         for f in files:
             self.temp_path = f
-            self.check_path('temp_path', f)
+            self.check_path('temp_path')
             if os.path.exists(self.temp_path):
-                path = os.path.sep.join(osjoin(self.output_path,f).split(os.path.sep)[0:-1])
+                if new_dir is not None:
+                    path = osjoin(self.output_path,new_dir)
+                    f = f.split(os.path.sep)[-1]
+                else:
+                    path = self.output_path #os.path.sep.join(osjoin(self.output_path,f).split(os.path.sep)[0:-1])
                 if not os.path.exists(path):
                     os.makedirs(path)
-                shutil.copy(self.temp_path, osjoin(self.output_path,f))
+                shutil.copy(self.temp_path, osjoin(path, f))
 
     def run(self):
         ''' Build, move, and open the report files '''
@@ -229,7 +312,7 @@ class PyWebify():
         self.move_files(self.js_files)
 
         self.img_path = self.config['FILES']['img_dir']
-        self.check_path('img_path', 'IMAGE DIR')
+        self.check_path('img_path')
         self.move_files([osjoin('img', f) for f in os.listdir(self.img_path)])
 
         # Open web report
@@ -237,6 +320,9 @@ class PyWebify():
             self.launch()
 
     def set_output_path(self):
+        '''
+        Create the output path
+        '''
         if self.from_file:
             self.output_path = os.sep.join(self.base_path.split(os.sep)[0:-1])
         else:
