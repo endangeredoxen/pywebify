@@ -56,12 +56,37 @@ def convert_rst(file_name, stylesheet=None):
     destination.close()
 
 
+def read_csv(file_name, **kwargs):
+    '''
+    Wrapper for pandas.read_csv to deal with kwargs overload
+    :param file_name: str; filename
+    :param kwargs: keyword arguments
+    :return: pandas.DataFrame
+    '''
+
+    kw_master = []
+
+    delkw = [f for f in kwargs.keys() if f not in kw_master]
+    for kw in delkw:
+        kwargs.pop(kw)
+
+    return pd.read_csv(file_name, **kwargs)
+
+
 def str_2_dtype(val):
     '''
     Convert a string to the most appropriate data type
     :param val:
     :return:
     '''
+
+    # Remove comments
+    v = val.split('#')
+    if len(v) > 1:  # handle comments
+        if v[0] == '':
+            val = '#' + v[1].rstrip().lstrip()
+        else:
+            val = v[0].rstrip().lstrip()
 
     # None
     if val == 'None':
@@ -92,14 +117,7 @@ def str_2_dtype(val):
             float(val)
             return float(val)
         except:
-            v = val.split('#')
-            if len(v) > 1:  # handle comments
-                if v[0] == '':
-                    return '#' + v[1].rstrip().lstrip()
-                else:
-                    return v[0].rstrip().lstrip()
-            else:
-                return val.rstrip().lstrip()
+            return val
 
 
 class ConfigFile():
@@ -180,7 +198,6 @@ class Dir2HTML():
         self.onmouseover = kwargs.get('onmouseover', None)
         self.rst = ''
         self.rst_css = kwargs.get('rst_css', None)
-        st()
         self.show_ext = kwargs.get('show_ext', False)
 
         self.ext = ext
@@ -360,11 +377,14 @@ class FileReader():
                             (None are ignored)
             * tag_char: str; split character for file tag values (ex. Filename='MyData_T=25C.txt' --> file_tags=['T']
                              and tag_char='=' to extract)
+            * verbose: boolean; print file read progress
         '''
 
         self.path = path
         self.contains = kwargs.get('contains', '')
+        self.header = kwargs.get('header', True)
         self.concat = kwargs.get('concat', True)
+        self.ext = kwargs.get('ext', '')
         self.gui = kwargs.get('gui', False)
         self.labels = kwargs.get('labels', [])
         self.scan = kwargs.get('scan', False)
@@ -374,8 +394,19 @@ class FileReader():
         self.read = kwargs.get('read', True)
         self.split_fields = kwargs.get('split_fields', [])
         self.tag_char = kwargs.get('tag_char', '=')
-
         self.file_list = []
+        self.verbose = kwargs.get('verbose', False)
+        self.read_func = kwargs.get('read_func', read_csv)
+        self.kwargs = kwargs
+
+        # Format ext
+        if self.ext != '':
+            if type(self.ext) is not list:
+                self.ext = [self.ext]
+            for i, ext in enumerate(self.ext):
+                if ext[0] != '.':
+                    self.ext[i] = '.' + ext
+
         if self.concat:
             self.df = pd.DataFrame()
         else:
@@ -402,14 +433,26 @@ class FileReader():
         # If list of files is passed to FileReader with a scan option
         elif type(self.path) is list and self.scan == True:
             for p in self.path:
-                walk_dir(p)
+                self.walk_dir(p)
 
         # If single path is passed to FileReader
+        elif self.scan:
+            self.walk_dir(self.path)
+
+        # No scanning - use provided path
         else:
-            if self.scan:
-                walk_dir(self.path)
-            else:
-                self.file_list = [self.path]
+            self.file_list = [self.path]
+
+        # Filter based on self.contains search string
+        self.file_list = [f for f in self.file_list if self.contains in f]
+
+        # Filter based on self.ext
+        try:
+            if self.ext != '':
+                self.file_list = [f for f in self.file_list if os.path.splitext(f)[-1] in self.ext]
+        except:
+            raise ValueError('File name list is malformatted: \n   %s\nIf you passed a path and ' % self.file_list + \
+                             'meant to scan the directory, please set the "scan" parameter to True')
 
     def gui_search(self):
         '''
@@ -458,17 +501,25 @@ class FileReader():
         '''
         Read the files in self.file_list (assumes all files can be cast into pandas DataFrames)
         '''
+
+        if self.verbose:
+            print('Reading files...')
+
         for i, f in enumerate(self.file_list):
 
             # Read the raw data file
             try:
-                temp = pd.read_csv(f)
+                if self.verbos:
+                    print('   %s' % f)
+                temp = self.read_func(f, **self.kwargs)
             except:
                 raise ValueError('Could not read "%s".  Is it a valid data file?' % f)
 
             # Add optional info to the table
             if type(self.labels) is list and len(self.labels) > i:
                 temp['Label'] = self.labels[i]
+            elif self.labels == '#':
+                temp['Label'] = i
             elif type(self.labels) is str:
                 temp['Label'] = self.labels
 
@@ -477,13 +528,16 @@ class FileReader():
                 temp = self.parse_filename(f, temp)
 
             # Add filename
-            temp['filename'] = f
+            temp['Filename'] = f
 
             # Add to master
             if self.concat:
                 self.df = pd.concat([self.df, temp])
             else:
                 self.df += [temp]
+
+        if self.concat:
+            self.df = self.df.reset_index(drop=True)
 
     def walk_dir(self, path):
         '''
