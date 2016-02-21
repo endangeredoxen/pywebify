@@ -1,11 +1,14 @@
 ############################################################################
-# files.py
-#   Contains classes for reading various types of files
+# fileio.py
+#   Contains classes and functions for reading and creating various types of
+#     files
+#   Originally created as part of the pywebify project but suitable for
+#     reuse in other applications
 ############################################################################
 __author__    = 'Steve Nicholes'
 __copyright__ = 'Copyright (C) 2015 Steve Nicholes'
 __license__   = 'GPLv3'
-__version__   = '.1'
+__version__   = '0.2'
 __url__       = 'https://github.com/endangeredoxen/pywebify'
 
 
@@ -19,11 +22,16 @@ try:
     oswalk = scandir.walk
 except:
     oswalk = os.walk
-    print('scandir module not found! Try installing for faster file reading performance ' +
+    print('scandir module not found! Try installing for faster file reading '
+          'performance ' +
           '(http://www.lfd.uci.edu/~gohlke/pythonlibs/#scandir).')
 import pandas as pd
 import pdb
 import pathlib
+import re
+import sys
+import textwrap
+import ast
 from xml.dom import minidom
 from xml.etree import ElementTree
 import numpy as np
@@ -34,14 +42,20 @@ st = pdb.set_trace
 
 
 def convert_rst(file_name, stylesheet=None):
-    '''
-    Converts single rst files to html
-      Adapted from Andrew Pinion's solution @
-      http://halfcooked.com/blog/2010/06/01/generating-html-versions-of-restructuredtext-files/
-    :param file_name: Name of rst file to convert to html
-    :param stylesheet: Optional path to a stylesheet
-    :return: None
-    '''
+    """ Converts single rst files to html
+
+    Adapted from Andrew Pinion's solution @
+    http://halfcooked.com/blog/2010/06/01/generating-html-versions-of-
+        restructuredtext-files/
+
+    Args:
+        file_name (str): name of rst file to convert to html
+        stylesheet (str): optional path to a stylesheet
+
+    Returns:
+        None
+    """
+
     settings_overrides=None
     if stylesheet is not None:
         if type(stylesheet) is not list:
@@ -50,21 +64,91 @@ def convert_rst(file_name, stylesheet=None):
     source = open(file_name, 'r')
     file_dest = os.path.splitext(file_name)[0] + '.html'
     destination = open(file_dest, 'w')
-    core.publish_file(source=source, destination=destination, writer_name='html',
+    core.publish_file(source=source, destination=destination,
+                      writer_name='html',
                       settings_overrides=settings_overrides)
     source.close()
     destination.close()
 
+    # Fix issue with spaces in figure path and links
+    with open(file_name, 'r') as input:
+        rst = input.readlines()
+
+    with open(file_dest, 'r') as input:
+        html = input.read()
+
+    # Case of figures
+    imgs = [f for f in rst if 'figure::' in f]
+
+    for img in imgs:
+        img = img.replace('.. figure:: ', '').replace('\n', '')
+        if ' ' in img:
+            img_ns = img.replace(' ','')
+            idx = html.find(img_ns) - 5
+            old = 'alt="%s" src="%s"' % (img_ns, img_ns)
+            new = 'alt="%s" src="%s"' % (img, img)
+            html = html[0:idx] + new + html[idx+len(old):]
+
+            with open(file_dest, 'w') as output:
+                output.write(html)
+
+    # Case of substituted images
+    imgs = [f for f in rst if 'image::' in f]
+
+    for img in imgs:
+        img = img.replace('.. figure:: ', '').replace('\n', '')
+        if ' ' in img:
+            img_idx = img.find('image:: ')
+            img = img[img_idx+8:]
+            img_ns = img.replace(' ','')
+            idx = html.find(img_ns)
+            html = html[0:idx] + img + html[idx+len(img_ns):]
+            with open(file_dest, 'w') as output:
+                output.write(html)
+
+    # Case of links
+    links = [f for f in rst if ">`_" in f]
+
+    for link in links:
+        link = re.search("<(.*)>`_", link).group(1)
+        if ' ' in link:
+            link_ns = link.replace(' ','')
+            idx = html.find(link_ns)
+            html = html[0:idx] + link + html[idx+len(link_ns):]
+
+
+            with open(file_dest, 'w') as output:
+                output.write(html)
+
 
 def read_csv(file_name, **kwargs):
-    '''
+    """
     Wrapper for pandas.read_csv to deal with kwargs overload
-    :param file_name: str; filename
-    :param kwargs: keyword arguments
-    :return: pandas.DataFrame
-    '''
 
-    kw_master = []
+    Args:
+        file_name (str): filename
+        **kwargs: valid keyword arguments for pd.read_csv
+
+    Returns:
+        pandas.DataFrame containing the csv data
+    """
+
+    # kwargs may contain values that are not valid in the read_csv function;
+    #  we need to filter those out first before calling the function
+    kw_master = ['filepath_or_buffer', 'sep', 'dialect', 'compression',
+                 'doublequote', 'escapechar', 'quotechar', 'quoting',
+                 'skipinitialspace', 'lineterminator', 'header', 'index_col',
+                 'names', 'prefix', 'skiprows', 'skipfooter', 'skip_footer',
+                 'na_values', 'true_values', 'false_values', 'delimiter',
+                 'converters', 'dtype', 'usecols', 'engine',
+                 'delim_whitespace', 'as_recarray', 'na_filter',
+                 'compact_ints', 'use_unsigned', 'low_memory', 'buffer_lines',
+                 'warn_bad_lines', 'error_bad_lines', 'keep_default_na',
+                 'thousands', 'comment', 'decimal', 'parse_dates',
+                 'keep_date_col', 'dayfirst', 'date_parser', 'memory_map',
+                 'float_precision', 'nrows', 'iterator', 'chunksize',
+                 'verbose', 'encoding', 'squeeze', 'mangle_dupe_cols',
+                 'tupleize_cols', 'infer_datetime_format', 'skip_blank_lines']
 
     delkw = [f for f in kwargs.keys() if f not in kw_master]
     for kw in delkw:
@@ -73,12 +157,19 @@ def read_csv(file_name, **kwargs):
     return pd.read_csv(file_name, **kwargs)
 
 
-def str_2_dtype(val):
-    '''
+def str_2_dtype(val, ignore_list=False):
+    """
     Convert a string to the most appropriate data type
-    :param val:
-    :return:
-    '''
+    Args:
+        val (str): string value to convert
+        ignore_list (bool):  ignore option to convert to list
+
+    Returns:
+        val with the interpreted data type
+    """
+
+    # Special chars
+    chars = {'\\t':'\t', '\\n':'\n', '\\r':'\r'}
 
     # Remove comments
     v = val.split('#')
@@ -88,6 +179,9 @@ def str_2_dtype(val):
         else:
             val = v[0].rstrip().lstrip()
 
+    # Special
+    if val in chars.keys():
+        val = chars[val]
     # None
     if val == 'None':
         return None
@@ -98,17 +192,37 @@ def str_2_dtype(val):
         return False
     # dict
     if ':' in val and '{' in val:
-        k = val.split(':').rstrip().lstrip()[0]
-        v = str_2_dtype(val.split(':').rstrip().lstrip()[1])
-        return {k:v}
+        val = val.replace('{','').replace('}','')
+        val = re.split(''',(?=(?:[^'"]|'[^']*'|"[^"]*")*$)''', val)
+        k = []
+        v = []
+        for t in val:
+            k += [str_2_dtype(t.split(':')[0], ignore_list=True)]
+            v += [str_2_dtype(t.split(':')[1])]
+        return dict(zip(k,v))
+    # tuple
+    if '(' in val and ')' in val and ',' in val:
+        return ast.literal_eval(val)
     # list
-    if ',' in val or '[' in val:
-        val = val.replace('[','').replace(']','')
+    if (',' in val or val.lstrip(' ')[0] == '[') and not ignore_list \
+            and val != ',':
+        if val.lstrip(' ')[0] == '[':
+            val = val.lstrip('[').rstrip(']')
         new = []
-        for v in val.split(','):
-            new += [str_2_dtype(v.rstrip().lstrip())]
+        val = re.split(', (?=(?:"[^"]*?(?: [^"]*)*))|, (?=[^",]+(?:,|$))', val)
+        # for v in val.split(','):
+        for v in val:
+            if '=="' in v:
+                new += [v.rstrip().lstrip()]
+            elif '"' in v:
+                new += [v.replace('"','').rstrip().lstrip()]
+            else:
+                new += [str_2_dtype(v.replace('"','').rstrip().lstrip())]
+        if len(new) == 1:
+            return new[0]
         return new
     # float and int
+
     try:
         int(val)
         return int(val)
@@ -117,16 +231,31 @@ def str_2_dtype(val):
             float(val)
             return float(val)
         except:
-            return val
-
+            v = val.split('#')
+            if len(v) > 1:  # handle comments
+                if v[0] == '':
+                    return '#' + v[1].rstrip().lstrip()
+                else:
+                    return v[0].rstrip().lstrip()
+            else:
+                return val.rstrip().lstrip()
+  
 
 class ConfigFile():
     def __init__(self, path):
-        '''
-        Read and parse a config.ini file
-        :param path: location of the ini file
-        :return: object containing config file attributes
-        '''
+        """
+        Config file reader
+
+        Reads and parses a config file of the .ini format.  Data types are
+        interpreted using str_2_dtype and all parameters are stored in both
+        a ConfigParser class and a multi-dimensional dictionary.  "#" is the
+        comment character.
+
+        Args:
+            path (str): location of the ini file
+
+        """
+
         self.config_path = path
         self.config = None
         self.config_dict = {}
@@ -138,56 +267,68 @@ class ConfigFile():
         if self.is_valid:
             self.read_file()
         else:
-            raise ValueError('Could not find a config.ini file at the following location: %s' % self.config_path)
+            raise ValueError('Could not find a config.ini file at the '
+                             'following location: %s' % self.config_path)
 
         self.make_dict()
 
     def make_dict(self):
-        '''
+        """
         Convert the configparser object into a dictionary for easier handling
-        '''
-        self.config_dict = {s:{k:str_2_dtype(v) for k,v in self.config.items(s)} for s in self.config.sections()}
+        """
+        self.config_dict = {s:{k:str_2_dtype(v)
+                            for k,v in self.config.items(s)}
+                            for s in self.config.sections()}
 
     def read_file(self):
-        '''
-        Read the config file
-        '''
+        """
+        Read the config file as using the parser option
+        """
+
         self.config = configparser.RawConfigParser()
         self.config.read(self.config_path)
 
     def validate_file_path(self):
-        '''
-        Make sure there is a valid config file at the location specified by self.config_path
-        '''
+        """
+        Make sure there is a valid config file at the location specified by
+        self.config_path
+        """
 
         if os.path.exists(self.config_path):
             self.is_valid = True
         else:
             if os.path.exists(osjoin(self.rel_path, file)):
-                self.config_path = osjoin(self.rel_path, self.config_path )
+                self.config_path = osjoin(self.rel_path, self.config_path)
                 self.is_valid = True
 
 
 class Dir2HTML():
     def __init__(self, base_path, ext=None, **kwargs):
-        '''
-        Converts a list of directories/files to an HTML unordered list (UL)
-        :param base_path: str; top level directory or path to a list of files to use in the report
-        :param ext: list; file types to include when building file list
-        :param kwargs: see below
-        :Keyword Arguments:
-            * build_rst: boolean; convert rst files to html
-            * excludes: list; names of files to exclude from the UL
-            * from_file: boolean; make the report from a file containing a list of directories + files or just scan the
-                         base_path directory
-            * natsort: boolean; use natural (human) sorting on the file list
-            * onclick: boolean; enable click to open for files listed in the UL
-            * onmouseover: boolean; enable onmouseover viewing for files listed in the UL
-            * rst_css: str; path to css file for rst files
-            * show_ext: boolean; show/hide file extension in the file list
-            
-        '''
-        
+        """
+        Directory to unordered html list (UL) conversion tool
+
+        Args:
+            base_path (str): top level directory or path to a list of files to
+                             use in the UL
+            ext (list): file extensions to include when building file list
+
+        Keyword Args:
+            build_rst (bool): convert rst files to html
+            excludes (list): names of files to exclude from the UL
+            from_file (bool): make the report from a text file containing a
+                              list of directories and files or just scan the
+                              base_path directory
+            natsort (bool): use natural (human) sorting on the file list
+            onclick (bool): enable click to open for files listed in the UL
+            onmouseover (bool): enable onmouseover viewing for files listed in
+                                the UL
+            rst_css (str): path to css file for rst files
+            show_ext (bool): show/hide file extension in the file list
+
+        Returns:
+
+        """
+
         self.base_path = base_path
         self.build_rst = kwargs.get('build_rst', False)
         self.excludes = kwargs.get('excludes',[])
@@ -215,14 +356,29 @@ class Dir2HTML():
         self.make_ul()
 
     def df_to_xml(self, df, parent_node=None, parent_name=''):
+        """
+        Builds an xml structure from a DataFrame
 
-        def node_for_value(name, value, parent_node, parent_name, dir=False):
+        Args:
+            df (DataFrame):  directory structure
+            parent_node (node|None):  parent node in the xml structure
+            parent_name (str|''):  string name of the node
+
+        Returns:
+            node:  ElementTree xml representation of df
+        """
+
+
+        def node_for_value(name, value, parent_node, parent_name, dir=False, set_id=None):
             """
             creates the <li><input><label>...</label></input></li> elements.
             returns the <li> element.
             """
+
             node= ElementTree.SubElement(parent_node, 'li')
             child= ElementTree.SubElement(node, 'A')
+            if set_id is not None:
+                child.set('id', set_id)
             if self.onmouseover and not dir:
                 child.set('onmouseover', self.onmouseover+"('"+value+"')")
             if self.onclick and not dir:
@@ -248,7 +404,8 @@ class Dir2HTML():
                 del g[subdirs[0]]
                 if n == 'nan':
                     for row in range(0,len(g)):
-                        node_for_value(g.filename.iloc[row], g.html_path.iloc[row], node, parent_name)
+                        node_for_value(g.filename.iloc[row], g.html_path.iloc[row], node, 
+                                       parent_name, set_id='image_link')
                 else:
                     current_path_list = g.full_path.iloc[0].split(os.path.sep)
                     path_idx = current_path_list.index(n)
@@ -262,12 +419,23 @@ class Dir2HTML():
 
         else:
             for row in range(0,len(df)):
-                node_for_value(df.filename.iloc[row], df.html_path.iloc[row], node, parent_name)
+                node_for_value(df.filename.iloc[row], df.html_path.iloc[row], node, parent_name, 
+                               set_id='image_link')
 
         return node
 
     def get_files(self, from_file):
+        """
+        Get the files for the report
+
+        Args:
+            from_file (bool):  use a text file to identify the directories
+                               and files to be used in the report
+
+        """
+
         if from_file:
+            # Build the list from a text file
             with open(self.base_path,'r') as input:
                 files = input.readlines()
             temp = pd.DataFrame()
@@ -279,20 +447,28 @@ class Dir2HTML():
             self.files = temp.reset_index(drop=True)
 
         else:
+            # Walk the base_path to identify all the files for the report
             self.files = []
             for dirName, subdirList, fileList in oswalk(self.base_path):
                 if self.ext is not None:
-                    fileList = [f for f in fileList if f.split('.')[-1].lower() in self.ext]
+                    fileList = [f for f in fileList
+                                if f.split('.')[-1].lower() in self.ext]
                 for fname in fileList:
                     temp = {}
-                    temp['full_path'] = os.path.abspath(osjoin(self.base_path,dirName,fname))
-                    temp['html_path'] = pathlib.Path(temp['full_path']).as_uri().replace('file:', r'file:///')
+                    temp['full_path'] = \
+                        os.path.abspath(osjoin(self.base_path,dirName,fname))
+                    temp['html_path'] = \
+                        pathlib.Path(temp['full_path']).as_uri()
                     temp['ext'] = fname.split('.')[-1]
                     if self.from_file:
                         top = self.base_path.split(os.sep)[-1]
-                        subdirs = temp['full_path'].replace(self.base_path.replace(top,''),'').split(os.sep)
+                        subdirs = temp['full_path']\
+                                  .replace(self.base_path.replace(top,''),'')\
+                                  .split(os.sep)
                     else:
-                        subdirs = temp['full_path'].replace(self.base_path+os.sep,'').split(os.sep)
+                        subdirs = temp['full_path']\
+                                  .replace(self.base_path+os.sep,'')\
+                                  .split(os.sep)
                     temp['base_path'] = self.base_path
                     for i,s in enumerate(subdirs[:-1]):
                         temp['subdir%s' % i] = s
@@ -300,7 +476,8 @@ class Dir2HTML():
                     temp['filename'] = os.path.splitext(subdirs[-1])[0]
                     self.files += [temp]
 
-            if len(self.files) == 0 and os.path.exists(self.base_path) and self.base_path.split('.')[-1] in self.ext:
+            if len(self.files) == 0 and os.path.exists(self.base_path) \
+                    and self.base_path.split('.')[-1] in self.ext:
                 temp = {}
                 temp['full_path'] = os.path.abspath(self.base_path)
                 temp['html_path'] = pathlib.Path(temp['full_path']).as_uri()
@@ -311,26 +488,58 @@ class Dir2HTML():
 
             self.files = pd.DataFrame(self.files)
 
+            # Sort the files
             if self.natsort:
                 temp = self.files.set_index('full_path')
-                self.files = temp.reindex(index=natsorted(temp.index)).reset_index()
+                self.files = \
+                    temp.reindex(index=natsorted(temp.index)).reset_index()
 
     def filter(self):
+        """
+        Filter out any files on the exclude list
+        """
+
         for ex in self.excludes:
-            self.files = self.files[~self.files.full_path.str.contains(ex, regex=False)].reset_index(drop=True)
+            self.files = \
+                self.files[~self.files.full_path.str.contains(ex, regex=False)]
+
+        self.files = self.files.reset_index(drop=True)
 
     def make_html(self):
-        ''' Build html files from rst files '''
+        """
+        Build html files from rst files
+        """
+
         self.rst = self.files[self.files.ext=='rst']
+        idx_to_drop = []
         for i, f in self.rst.iterrows():
             convert_rst(f['full_path'], stylesheet=self.rst_css)
             self.files.iloc[i]['ext'] = 'html'
-            self.files.iloc[i]['filename'] = self.files.iloc[i]['filename'].replace('rst','html')
-            self.files.iloc[i]['filename_ext'] = self.files.iloc[i]['filename_ext'].replace('rst','html')
-            self.files.iloc[i]['full_path'] = self.files.iloc[i]['full_path'].replace('rst','html')
-            self.files.iloc[i]['html_path'] = self.files.iloc[i]['html_path'].replace('rst','html')
+            self.files.iloc[i]['filename'] = \
+                self.files.iloc[i]['filename'].replace('rst','html')
+            self.files.iloc[i]['filename_ext'] = \
+                self.files.iloc[i]['filename_ext'].replace('rst','html')
+            self.files.iloc[i]['full_path'] = \
+                self.files.iloc[i]['full_path'].replace('rst','html')
+            self.files.iloc[i]['html_path'] = \
+                self.files.iloc[i]['html_path'].replace('rst','html')
+
+            # Check for same-named images
+            for ext in [v for v in self.ext if v != 'html']:
+                idx = self.files.query('full_path==r"%s"' %
+                              self.files.iloc[i]['full_path']
+                                       .replace('html',ext)) \
+                                       .index
+                if len(idx) > 0:
+                    idx_to_drop += list(idx)
+
+        self.files = self.files.drop(idx_to_drop).reset_index(drop=True)
 
     def make_links(self):
+        """
+        Build the HTML links
+        """
+
         self.files['link'] = '''<A onmouseover="div_switch(' ''' + \
                              self.files.html_path.map(str) + \
                              '''')" onclick="HREF=window.open(' ''' + \
@@ -340,6 +549,10 @@ class Dir2HTML():
                              '''</A><br>'''
 
     def make_ul(self):
+        """
+        Convert the DataFrame of paths and files to xml
+        """
+
         element= self.df_to_xml(self.files)
         xml = ElementTree.tostring(element)
         xml = minidom.parseString(xml)
@@ -347,43 +560,67 @@ class Dir2HTML():
         self.ul = self.ul.replace('<?xml version="1.0" ?>\n', '')
 
     def nan_to_str(self):
+        """
+        Replace NaN with a string version
+        """
+
         self.files = self.files.replace(np.nan, 'nan')
 
 
 class FileReader():
     def __init__(self, path, **kwargs):
-        '''
-        Reads multiple raw data files into memory based on a partial path name or a list of files and populates them
-        into a single pandas DataFrame or a list of DataFrames
-        :param path: str|list; partial path name or a list of files
-        :param kwargs: see below
-        :Keyword Arguments:
-            * contains: str; search string used to filter the file list (default='')
-            * concat: boolean; True=concatenate all DataFrames into one | False=return a list of DataFrames
-                      (default=True)
-            * gui: boolean; True=use a PyQt4 gui prompt to select files | False=search directories automatically
-            * labels: list|str; adds a special label column to the DataFrame for distinguishing between files
-                      list=one entry per DataFrame added in order of self.file_list
-                      str: single label added to all files (ex. today's date, username, etc.)
-            * file_tags: list; values separated by self.tag_char in the filename that can be added as columns to the
-                         file (ex. Filename='MyData_T=25C.txt' --> file_tags=['T'] and tag_char='=' to extract)
-            * file_split: str; str by which to split the filename.  Can be used with split_fields to extract values from
-                          a filename (ex. Filename='MyData_20151225_Wfr16.txt' --> file_split = '_' and
-                          split_fields = [None, 'Date', 'Wafer'] (None are ignored)
-            * read: boolean; read the DataFrames after compiling the file_list
-            * scan: boolean; search subdirectories
-            * split_fields: list; values to extract from the filename based on file_split (ex. Filename=
-                            'MyData_20151225_Wfr16.txt' --> file_split = '_' and split_fields = [None, 'Date', 'Wafer']
-                            (None are ignored)
-            * tag_char: str; split character for file tag values (ex. Filename='MyData_T=25C.txt' --> file_tags=['T']
-                             and tag_char='=' to extract)
-            * verbose: boolean; print file read progress
-        '''
+        """
+        Reads multiple raw data files into memory based on a partial path name
+        or a list of files and populates them into a single pandas DataFrame
+        or a list of DataFrames
+
+        Args:
+            path (str|list): partial path name or list of files
+
+        Keyword Args:
+            contains (str|list): search string(s) used to filter the file
+                                 list; default=''
+            concat (bool):  True=concatenate all DataFrames into one |
+                            False=return a list of DataFrames; default=True
+            gui (bool):  True=use a PyQt4 gui prompt to select files |
+                         False=search directories automatically; default=False
+            labels (list|str): adds a special label column to the DataFrame
+                               for distinguishing between files
+                               list=one entry per DataFrame added in order of
+                                    self.file_list
+                               str=single label added to all files (ex.
+                                   today's date, username, etc.)
+            file_tags (list): values separated by self.tag_char in the
+                              filename that can be added as columns to the file
+                              (ex. Filename='MyData_T=25C.txt' -->
+                              file_tags=['T'] and tag_char='=' to extract)
+            file_split (str): str by which to split the filename.  Can be
+                              used with split_fields to extract values from
+                              a filename (ex.
+                              Filename='MyData_20151225_Sample16.txt' -->
+                              file_split = '_' and
+                              split_fields = [None, 'Date', 'Sample'] (None
+                              values are ignored)
+            read (bool): read the DataFrames after compiling the file_list
+            scan (bool): search subdirectories
+            split_fields (list): values to extract from the filename based on
+                                 file_split (ex. Filename=
+                                 'MyData_20151225_Sample16.txt' -->
+                                 file_split = '_' and split_fields = [None,
+                                 'Date', 'Sample'] (None values are ignored)
+            tag_char (str): split character for file tag values
+                            (ex. Filename='MyData_T=25C.txt' -->
+                            file_tags=['T']
+                            and tag_char='=' to extract)
+            verbose (bool): print file read progress
+
+        """
 
         self.path = path
         self.contains = kwargs.get('contains', '')
         self.header = kwargs.get('header', True)
         self.concat = kwargs.get('concat', True)
+        self.exclude = kwargs.get('exclude', [])
         self.ext = kwargs.get('ext', '')
         self.gui = kwargs.get('gui', False)
         self.labels = kwargs.get('labels', [])
@@ -392,12 +629,19 @@ class FileReader():
         self.file_tags_parsed = {}
         self.file_split = kwargs.get('file_split', '_')
         self.read = kwargs.get('read', True)
+        self.include_filename = kwargs.get('include_filename', True)
         self.split_fields = kwargs.get('split_fields', [])
         self.tag_char = kwargs.get('tag_char', '=')
+        self.file_df = None
         self.file_list = []
-        self.verbose = kwargs.get('verbose', False)
+        self.verbose = kwargs.get('verbose', True)
         self.read_func = kwargs.get('read_func', read_csv)
+        self.counter = kwargs.get('counter', True)
         self.kwargs = kwargs
+
+        # Format the contains value
+        if type(self.contains) is not list:
+            self.contains = [self.contains]
 
         # Format ext
         if self.ext != '':
@@ -406,6 +650,12 @@ class FileReader():
             for i, ext in enumerate(self.ext):
                 if ext[0] != '.':
                     self.ext[i] = '.' + ext
+
+        # Overrides
+        if self.file_tags is None:
+            self.file_tags = []
+        if self.split_fields is None:
+            self.split_fields = []
 
         if self.concat:
             self.df = pd.DataFrame()
@@ -418,9 +668,10 @@ class FileReader():
             self.read_files()
 
     def get_files(self):
-        '''
-        Search directories automatically or manually by gui for file paths to add to self.file_list
-        '''
+        """
+        Search directories automatically or manually by gui for file paths to
+        add to self.file_list
+        """
 
         # Gui option
         if self.gui:
@@ -444,76 +695,131 @@ class FileReader():
             self.file_list = [self.path]
 
         # Filter based on self.contains search string
-        self.file_list = [f for f in self.file_list if self.contains in f]
+        for c in self.contains:
+            self.file_list = [f for f in self.file_list if c in f]
+
+        # Filter out exclude
+        for exc in self.exclude:
+            self.file_list = [f for f in self.file_list if exc not in f]
 
         # Filter based on self.ext
         try:
             if self.ext != '':
-                self.file_list = [f for f in self.file_list if os.path.splitext(f)[-1] in self.ext]
+                self.file_list = [f for f in self.file_list
+                                  if os.path.splitext(f)[-1] in self.ext]
         except:
-            raise ValueError('File name list is malformatted: \n   %s\nIf you passed a path and ' % self.file_list + \
-                             'meant to scan the directory, please set the "scan" parameter to True')
+            raise ValueError('File name list is malformatted: \n   %s\nIf you '
+                             'passed a path and ' % self.file_list + \
+                             'meant to scan the directory, please set the '
+                             '"scan" parameter to True')
+
+        # Make a DataFrame of file paths and names
+        self.file_df = pd.DataFrame({'path': self.file_list})
+        if len(self.file_list) > 0:
+            self.file_df['folder'] = \
+                self.file_df.path.apply(
+                        lambda x: os.sep.join(x.split(os.sep)[0:-1]))
+            self.file_df['filename'] = \
+                self.file_df.path.apply(lambda x: x.split(os.sep)[-1])
+            self.file_df['ext'] = \
+                self.file_df.filename.apply(lambda x: os.path.splitext(x)[-1])
+            for i, sf in enumerate(self.split_fields):
+                self.file_df[sf] = \
+                    self.file_df.filename.apply(
+                            lambda x: str_2_dtype(x.split(self.file_split)[i],
+                                                  ignore_list=True))
 
     def gui_search(self):
-        '''
+        """
         Search for files using a PyQt4 gui
             Add new files to self.file_list
-        '''
+        """
 
         from PyQt4 import QtGui
 
         done = False
         while done != QtGui.QMessageBox.Yes:
             # Open the file dialog
-            self.file_list += QtGui.QFileDialog.getOpenFileNames(None, 'Pick files to open', self.path)
+            self.file_list += \
+                QtGui.QFileDialog.getOpenFileNames(None,
+                                                   'Pick files to open',
+                                                   self.path)
 
             # Check if all files have been selected
-            done = QtGui.QMessageBox.question(None, 'File search', 'Finished adding files?',
-                                               QtGui.QMessageBox.Yes | QtGui.QMessageBox.No, QtGui.QMessageBox.Yes)
+            done = \
+                QtGui.QMessageBox.question(None,
+                                           'File search',
+                                           'Finished adding files?',
+                                           QtGui.QMessageBox.Yes |
+                                           QtGui.QMessageBox.No,
+                                           QtGui.QMessageBox.Yes)
+
+        # Uniquify
+        self.file_list = list(set(self.file_list))
 
     def parse_filename(self, filename, df):
-        '''
+        """
         Parse the filename to retrieve attributes for each file
-        :param: filename: str; name of the file
-        :param: df: pandas.DataFrame; DataFrame containing the data found in filename
-        :return: updated Dataframe
-        '''
+
+        Args:
+            filename (str): name of the file
+            df (pandas.DataFrame): DataFrame containing the data found in
+                                   filename
+
+        Returns:
+            updated DataFrame
+        """
 
         filename = filename.split(os.path.sep)[-1]  # remove the directory
-        filename = ''.join(filename.split('.')[0:-1]) # remove the extension
+        filename = os.path.splitext(filename)[0] # remove the extension
 
         # Handle file_splits
         file_splits = filename.split(self.file_split)
         for i, f in enumerate(self.split_fields):
             if f is not None:
-                df[f] = str_2_dtype(file_splits[i])
+                df[f] = str_2_dtype(file_splits[i], ignore_list=True)
 
         # Handle file tags
         for i, f in enumerate(self.file_tags):
             val = [k for k in file_splits if f in k]
             val_split = val[0].split(self.tag_char)
             if len(val_split) > 0:
-                df[val_split[0]] = str_2_dtype(val_split[1])
+                df[val_split[0]] = str_2_dtype(val_split[1], ignore_list=True)
 
         return df
 
     def read_files(self):
-        '''
-        Read the files in self.file_list (assumes all files can be cast into pandas DataFrames)
-        '''
-
-        if self.verbose:
-            print('Reading files...')
+        """
+        Read the files in self.file_list (assumes all files can be cast into
+        pandas DataFrames)
+        """
 
         for i, f in enumerate(self.file_list):
 
             # Read the raw data file
             try:
-                if self.verbos:
-                    print('   %s' % f)
+                if self.verbose:
+                    print(textwrap.fill(f,
+                                        initial_indent=' '*3,
+                                        subsequent_indent=' '*6))
+                elif self.counter:
+                    # Print a file counter
+                    previous = '[%s/%s]' % ((i), len(self.file_list))
+                    counter = '[%s/%s]' % ((i+1), len(self.file_list))
+                    bs = len(previous)
+                    if i == 0:
+                        bs = 0
+                    if i < len(self.file_list) - 1:
+                        print('\b'*bs + counter, end='')
+                    if i == len(self.file_list) - 1:
+                        print('\b'*bs, end='')
+                    sys.stdout.flush()
+
                 temp = self.read_func(f, **self.kwargs)
+
             except:
-                raise ValueError('Could not read "%s".  Is it a valid data file?' % f)
+                raise ValueError('Could not read "%s".  Is it a valid data '
+                                 'file?' % f)
 
             # Add optional info to the table
             if type(self.labels) is list and len(self.labels) > i:
@@ -524,11 +830,17 @@ class FileReader():
                 temp['Label'] = self.labels
 
             # Optionally parse the filename to add new columns to the table
-            if type(self.file_tags) is list and len(self.file_tags) > 0:
+            if hasattr(self, 'split_fields') and type(self.split_fields) is \
+                    not list:
+                self.split_fields = [self.split_fields]
+            if type(self.file_tags) is list and len(self.file_tags) > 0 \
+                    or \
+               type(self.split_fields) is list and len(self.split_fields) > 0:
                 temp = self.parse_filename(f, temp)
 
             # Add filename
-            temp['Filename'] = f
+            if self.include_filename:
+                temp['Filename'] = f
 
             # Add to master
             if self.concat:
@@ -536,14 +848,14 @@ class FileReader():
             else:
                 self.df += [temp]
 
-        if self.concat:
-            self.df = self.df.reset_index(drop=True)
-
     def walk_dir(self, path):
-        '''
+        """
         Walk through a directory and its subfolders to find file names
-        :param path: top level directory
-        '''
+
+        Args:
+            path (str): top level directory
+
+        """
 
         for dir_name, subdir_list, file_list in oswalk(path):
             self.file_list += [os.path.join(dir_name, f) for f in file_list]

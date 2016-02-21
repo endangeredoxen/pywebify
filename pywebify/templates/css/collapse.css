@@ -21,7 +21,6 @@
     padding-left        : 35px;
     padding-right       : 10px;
     background-repeat   : no-repeat;
-    word-wrap           : break-word;
 }
 #collapse .collapsed {
     background-image : url(../img/collapsed.png);

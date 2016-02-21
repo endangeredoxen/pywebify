@@ -64,22 +64,18 @@ body {
     width      : 100%;
     margin     : 0;
     padding    : 0;
-    list-style : none;
 }
 #navbar li {
     margin          : 0;
     padding         : 0;
     float           : left;
     position        : relative;
-    list-style-type : none;
 }
 #navbar a {
     padding         : $NAV_PADDING;
     display         : block;
     background      : $NAV_BKGRD;
     font-family     : $NAV_FONT;
-    font-size       : $NAV_FONT_SIZE;
-    font-weight     : $NAV_FONT_WEIGHT;
     color           : $NAV_FONT_COLOR;
     text-align      : $NAV_FONT_ALIGN;
     text-decoration : none;
@@ -91,15 +87,12 @@ body {
     -webkit-border-radius : $NAV_BORDER_RADIUS_L 0 0 0;
     background-color      : $NAV_BKGRD_TITLE;
 }
-#navbar li:first-child:hover a {
+#navbar li:hover a
+{
     border-radius         : $NAV_BORDER_RADIUS_L 0 0 0;
     -moz-border-radius    : $NAV_BORDER_RADIUS_L 0 0 0;
     -webkit-border-radius : $NAV_BORDER_RADIUS_L 0 0 0;
     background-color      : $NAV_BKGRD_LINKS;
-}
-#navbar li:hover a
-{
-    background-color : $NAV_BKGRD_HOVER;
 }
 #navbar li ul {
     width              : auto;
@@ -127,12 +120,27 @@ body {
 #navbar li ul li a {
     width       : $NAV_ITEMS_WIDTH;
     text-align  : left;
-    font-size   : $NAV_FONT_SIZE_ITEMS;
     line-height : $NAV_HEIGHT_ITEMS;
 }
 #navbar li ul a:hover
 {
     background-color : $NAV_BKGRD_HOVER;
+}
+#navbar .main{
+    font-weight     : $NAV_FONT_WEIGHT;
+    font-size       : $NAV_FONT_SIZE;
+}
+#navbar .main :hover {
+    font-weight     : $NAV_FONT_WEIGHT;
+    font-size       : $NAV_FONT_SIZE;
+}
+#navbar .sub{
+    font-weight     : $NAV_FONT_WEIGHT_ITEMS;
+    font-size       : $NAV_FONT_SIZE_ITEMS;
+}
+#navbar .sub :hover {
+    font-weight     : $NAV_FONT_WEIGHT_ITEMS;
+    font-size       : $NAV_FONT_SIZE_ITEMS;
 }
 #sidebar {
     float           : left;
@@ -151,15 +159,33 @@ body {
 #sidebar li{
     list-style : none;
     font-size : $SB_FONT_SIZE_DECREASE;
+    border-top: 1px solid $SB_DIVIDER_LINE;
 }
-#sidebar a {
+#sidebar li:last-child{
+    border-bottom: 1px solid $SB_DIVIDER_LINE;
+}
+#sidebar li ul li:last-child{
+    border-bottom: 0px solid $SB_BKGRD;
+}
+#sidebar a:not(#image_link):not(#expandList):not(#collapseList){
     color           : $SB_FONT_COLOR;
     text-decoration : $SB_LINK_DECORATION;
-
 }
 #sidebar a:hover {
-    color: $SB_FONT_COLOR_LINKS;
+    color: $SB_FONT_COLOR_LINKS_HOVER;
 }
+#image_link{
+    color: $SB_FONT_COLOR_LINKS;
+    text-decoration : none;
+}
+#expandList{
+    text-decoration : none;
+    color: $SB_BUTTON_FONT_COLOR;
+}  
+#collapseList{
+    text-decoration : none;
+    color: $SB_BUTTON_FONT_COLOR;
+}  
 #summary{
 
 }
@@ -180,6 +206,7 @@ body {
     text-decoration  : none;
     position         : absolute;
     bottom           : $TOGGLE_POSITION_Y;
+    margin-left      : -$VIEW_PADDING;
 }
 #toggle:hover {
     background-color : $TOGGLE_BKGRD_HOVER;
@@ -191,8 +218,9 @@ body {
     outline : $TOGGLE_BORDER;
 }
 #viewer {
-    height     : $VIEW_HEIGHT;
-    background : $VIEW_BKGRD;
-    box-shadow : $VIEW_SHADOW;
-    overflow   : auto;
+    height       : $VIEW_HEIGHT;
+    background   : $VIEW_BKGRD;
+    box-shadow   : $VIEW_SHADOW;
+    overflow     : auto;
+    padding-left : $VIEW_PADDING;
 }
