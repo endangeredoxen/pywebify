@@ -17,14 +17,7 @@ try:
 except:
     import ConfigParser as configparser
 import os
-try:
-    import scandir
-    oswalk = scandir.walk
-except:
-    oswalk = os.walk
-    print('scandir module not found! Try installing for faster file reading '
-          'performance ' +
-          '(http://www.lfd.uci.edu/~gohlke/pythonlibs/#scandir).')
+oswalk = os.walk
 import pandas as pd
 import pdb
 import pathlib
@@ -32,6 +25,7 @@ import re
 import sys
 import textwrap
 import ast
+import win32clipboard
 from xml.dom import minidom
 from xml.etree import ElementTree
 import numpy as np
@@ -201,16 +195,18 @@ def str_2_dtype(val, ignore_list=False):
             v += [str_2_dtype(t.split(':')[1])]
         return dict(zip(k,v))
     # tuple
-    if '(' in val and ')' in val and ',' in val:
+    if val[0] == '(' and val[-1] == ')' and ',' in val:
         return ast.literal_eval(val)
     # list
     if (',' in val or val.lstrip(' ')[0] == '[') and not ignore_list \
             and val != ',':
+        if val[0] == '"' and val[-1] == '"' and ', ' not in val:
+            return str(val.replace('"', ''))
         if val.lstrip(' ')[0] == '[':
             val = val.lstrip('[').rstrip(']')
+        val = val.replace(', ', ',')
         new = []
-        val = re.split(', (?=(?:"[^"]*?(?: [^"]*)*))|, (?=[^",]+(?:,|$))', val)
-        # for v in val.split(','):
+        val = re.split(',(?=(?:"[^"]*?(?: [^"]*)*))|,(?=[^",]+(?:,|$))', val)
         for v in val:
             if '=="' in v:
                 new += [v.rstrip().lstrip()]
@@ -242,7 +238,7 @@ def str_2_dtype(val, ignore_list=False):
   
 
 class ConfigFile():
-    def __init__(self, path):
+    def __init__(self, path=None, paste=False):
         """
         Config file reader
 
@@ -252,20 +248,25 @@ class ConfigFile():
         comment character.
 
         Args:
-            path (str): location of the ini file
+            path (str): location of the ini file (default=None)
+            paste (bool): allow pasting of a config file from the clipboard
 
         """
 
         self.config_path = path
-        self.config = None
+        self.config = configparser.RawConfigParser()
         self.config_dict = {}
         self.is_valid = False
+        self.paste = paste
         self.rel_path = os.path.dirname(__file__)
 
-        self.validate_file_path()
-
+        if self.config_path:
+            self.validate_file_path()
         if self.is_valid:
             self.read_file()
+        elif self.paste:
+            self.read_pasted()
+        
         else:
             raise ValueError('Could not find a config.ini file at the '
                              'following location: %s' % self.config_path)
@@ -285,9 +286,17 @@ class ConfigFile():
         Read the config file as using the parser option
         """
 
-        self.config = configparser.RawConfigParser()
         self.config.read(self.config_path)
 
+    def read_pasted(self):
+        """
+        Read from clipboard
+        """
+        win32clipboard.OpenClipboard()
+        data = win32clipboard.GetClipboardData()
+        win32clipboard.CloseClipboard()
+        self.config.read_string(data)
+        
     def validate_file_path(self):
         """
         Make sure there is a valid config file at the location specified by
@@ -316,12 +325,12 @@ class Dir2HTML():
             build_rst (bool): convert rst files to html
             excludes (list): names of files to exclude from the UL
             from_file (bool): make the report from a text file containing a
-                              list of directories and files or just scan the
-                              base_path directory
+                list of directories and files or just scan the
+                base_path directory
             natsort (bool): use natural (human) sorting on the file list
             onclick (bool): enable click to open for files listed in the UL
             onmouseover (bool): enable onmouseover viewing for files listed in
-                                the UL
+                the UL
             rst_css (str): path to css file for rst files
             show_ext (bool): show/hide file extension in the file list
 
@@ -369,7 +378,8 @@ class Dir2HTML():
         """
 
 
-        def node_for_value(name, value, parent_node, parent_name, dir=False, set_id=None):
+        def node_for_value(name, value, parent_node, parent_name,
+                           dir=False, set_id=None):
             """
             creates the <li><input><label>...</label></input></li> elements.
             returns the <li> element.
@@ -404,23 +414,26 @@ class Dir2HTML():
                 del g[subdirs[0]]
                 if n == 'nan':
                     for row in range(0,len(g)):
-                        node_for_value(g.filename.iloc[row], g.html_path.iloc[row], node, 
+                        node_for_value(g.filename.iloc[row],
+                                       g.html_path.iloc[row], node,
                                        parent_name, set_id='image_link')
                 else:
                     current_path_list = g.full_path.iloc[0].split(os.path.sep)
                     path_idx = current_path_list.index(n)
-                    folder_path = os.path.sep.join(current_path_list[0:path_idx+1])
+                    folder_path = \
+                        os.path.sep.join(current_path_list[0:path_idx+1])
                     try:
                         folder_path = pathlib.Path(folder_path).as_uri()
                     except:
                         st()
-                    child = node_for_value(n, folder_path, node, parent_name, dir=True)
+                    child = node_for_value(n, folder_path, node,
+                                           parent_name, dir=True)
                     self.df_to_xml(g, child, n)
 
         else:
             for row in range(0,len(df)):
-                node_for_value(df.filename.iloc[row], df.html_path.iloc[row], node, parent_name, 
-                               set_id='image_link')
+                node_for_value(df.filename.iloc[row], df.html_path.iloc[row],
+                               node, parent_name, set_id='image_link')
 
         return node
 
@@ -430,7 +443,7 @@ class Dir2HTML():
 
         Args:
             from_file (bool):  use a text file to identify the directories
-                               and files to be used in the report
+                and files to be used in the report
 
         """
 
@@ -579,45 +592,33 @@ class FileReader():
 
         Keyword Args:
             contains (str|list): search string(s) used to filter the file
-                                 list; default=''
+                list; default=''
             concat (bool):  True=concatenate all DataFrames into one |
-                            False=return a list of DataFrames; default=True
+                False=return a list of DataFrames; default=True
             gui (bool):  True=use a PyQt4 gui prompt to select files |
-                         False=search directories automatically; default=False
+                False=search directories automatically; default=False
             labels (list|str): adds a special label column to the DataFrame
-                               for distinguishing between files
-                               list=one entry per DataFrame added in order of
-                                    self.file_list
-                               str=single label added to all files (ex.
-                                   today's date, username, etc.)
-            file_tags (list): values separated by self.tag_char in the
-                              filename that can be added as columns to the file
-                              (ex. Filename='MyData_T=25C.txt' -->
-                              file_tags=['T'] and tag_char='=' to extract)
-            file_split (str): str by which to split the filename.  Can be
-                              used with split_fields to extract values from
-                              a filename (ex.
-                              Filename='MyData_20151225_Sample16.txt' -->
-                              file_split = '_' and
-                              split_fields = [None, 'Date', 'Sample'] (None
-                              values are ignored)
+                for distinguishing between files
+                list=one entry per DataFrame added in order of self.file_list
+                str=single label added to all files (ex. today's date,
+                username, etc.)
             read (bool): read the DataFrames after compiling the file_list
             scan (bool): search subdirectories
-            split_fields (list): values to extract from the filename based on
-                                 file_split (ex. Filename=
-                                 'MyData_20151225_Sample16.txt' -->
-                                 file_split = '_' and split_fields = [None,
-                                 'Date', 'Sample'] (None values are ignored)
+            split_char (str|list): chars by which to split the filename
+            split_values (list): values to extract from the filename based on
+                file_split (ex. Filename='MyData_20151225_Wfr16.txt' -->
+                file_split = '_' and split_values = [None, 'Date', 'Wafer']
+            skip_initial_space (bool):  remove leading whitespace from
+                split_values
             tag_char (str): split character for file tag values
-                            (ex. Filename='MyData_T=25C.txt' -->
-                            file_tags=['T']
-                            and tag_char='=' to extract)
+                (ex. Filename='MyData_T=25C.txt' --> removes T= and adds 25C
+                to a column named T
             verbose (bool): print file read progress
 
         """
 
         self.path = path
-        self.contains = kwargs.get('contains', '')
+        self.contains = kwargs.get('contains', '')  
         self.header = kwargs.get('header', True)
         self.concat = kwargs.get('concat', True)
         self.exclude = kwargs.get('exclude', [])
@@ -625,12 +626,11 @@ class FileReader():
         self.gui = kwargs.get('gui', False)
         self.labels = kwargs.get('labels', [])
         self.scan = kwargs.get('scan', False)
-        self.file_tags = kwargs.get('file_tags', [])
-        self.file_tags_parsed = {}
-        self.file_split = kwargs.get('file_split', '_')
         self.read = kwargs.get('read', True)
         self.include_filename = kwargs.get('include_filename', True)
-        self.split_fields = kwargs.get('split_fields', [])
+        self.split_char = kwargs.get('split_char', ['_'])
+        self.split_values = kwargs.get('split_values', [])
+        self.skip_initial_space = kwargs.get('skip_initial_space', True)
         self.tag_char = kwargs.get('tag_char', '=')
         self.file_df = None
         self.file_list = []
@@ -652,10 +652,10 @@ class FileReader():
                     self.ext[i] = '.' + ext
 
         # Overrides
-        if self.file_tags is None:
-            self.file_tags = []
-        if self.split_fields is None:
-            self.split_fields = []
+        if type(self.split_char) is not list:
+            self.split_char = list(self.split_char)
+        if self.split_values is None:
+            self.split_values = []
 
         if self.concat:
             self.df = pd.DataFrame()
@@ -723,12 +723,7 @@ class FileReader():
                 self.file_df.path.apply(lambda x: x.split(os.sep)[-1])
             self.file_df['ext'] = \
                 self.file_df.filename.apply(lambda x: os.path.splitext(x)[-1])
-            for i, sf in enumerate(self.split_fields):
-                self.file_df[sf] = \
-                    self.file_df.filename.apply(
-                            lambda x: str_2_dtype(x.split(self.file_split)[i],
-                                                  ignore_list=True))
-
+            
     def gui_search(self):
         """
         Search for files using a PyQt4 gui
@@ -764,7 +759,7 @@ class FileReader():
         Args:
             filename (str): name of the file
             df (pandas.DataFrame): DataFrame containing the data found in
-                                   filename
+                filename
 
         Returns:
             updated DataFrame
@@ -773,18 +768,29 @@ class FileReader():
         filename = filename.split(os.path.sep)[-1]  # remove the directory
         filename = os.path.splitext(filename)[0] # remove the extension
 
-        # Handle file_splits
-        file_splits = filename.split(self.file_split)
-        for i, f in enumerate(self.split_fields):
-            if f is not None:
-                df[f] = str_2_dtype(file_splits[i], ignore_list=True)
+        # Split tag values out of the filename as specified by split_values
+        for i, sc in enumerate(self.split_char):
+            if i == 0:
+                file_splits = filename.split(sc)
+            else:
+                file_splits = [f.split(sc) for f in file_splits]
 
-        # Handle file tags
-        for i, f in enumerate(self.file_tags):
-            val = [k for k in file_splits if f in k]
-            val_split = val[0].split(self.tag_char)
-            if len(val_split) > 0:
-                df[val_split[0]] = str_2_dtype(val_split[1], ignore_list=True)
+        if len(self.split_char) > 1:
+            file_splits = [item for sublist in file_splits for item in sublist]
+
+        # Remove initial whitespace
+        if self.skip_initial_space:
+            file_splits = [f.lstrip(' ') for f in file_splits]
+
+        # Remove tag_char from split_values
+        for i, fs in enumerate(file_splits):
+            if self.tag_char is not None and self.tag_char in fs:
+                file_splits[i] = file_splits[i].split(self.tag_char)[1]
+
+        # file_splits = filename.split(self.file_split)
+        for i, f in enumerate(self.split_values):
+            if f is not None and i < len(file_splits):
+                df[f] = str_2_dtype(file_splits[i], ignore_list=True)
 
         return df
 
@@ -830,12 +836,10 @@ class FileReader():
                 temp['Label'] = self.labels
 
             # Optionally parse the filename to add new columns to the table
-            if hasattr(self, 'split_fields') and type(self.split_fields) is \
+            if hasattr(self, 'split_values') and type(self.split_values) is \
                     not list:
-                self.split_fields = [self.split_fields]
-            if type(self.file_tags) is list and len(self.file_tags) > 0 \
-                    or \
-               type(self.split_fields) is list and len(self.split_fields) > 0:
+                self.split_values = [self.split_values]
+            if len(self.split_values) > 0:
                 temp = self.parse_filename(f, temp)
 
             # Add filename
