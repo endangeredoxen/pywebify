@@ -1,0 +1,339 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Config Files &mdash; PyWebify 0.2 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.png"/>
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="PyWebify 0.2 documentation" href="index.html"/>
+        <link rel="next" title="Templates" href="templates.html"/>
+        <link rel="prev" title="Report Structure" href="overview.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> PyWebify
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="launch.html">PyWebifying (Making a Report)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Report Structure</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Config Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="templates.html">Templates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fileio.html">fileio</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">PyWebify</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Config Files</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/config.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="config-files">
+<h1>Config Files<a class="headerlink" href="#config-files" title="Permalink to this headline">¶</a></h1>
+<p>Design and setup options are controlled using an ini-style configuration file.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span># PyWebify Default Configuration File
+# Copyright (C) 2015 Steve Nicholes
+# GPLv3
+# https://github.com/endangeredoxen/pywebify
+# Change, destroy, modify as you like!
+
+[BODY]
+replace_in    = css
+body_bkgrd    = #aaa
+body_gradient = NA
+body_margin = 0
+
+[BROWSER]
+launch     = True
+useBrowser = default
+
+[EMAIL]
+send       = False
+sender     = Bob
+recipients = none@yahoo.com
+server     = None
+subject    = PyWebify Report
+
+[FILES]
+ext     = jpg, jpeg, png, tif, tiff, html, bmp
+img_dir = img
+
+[ICONS]
+favicon = img\favicon.png
+logo    = img\favicon.png
+
+[JAVASCRIPT]
+files = div_switch.js, collapse.js, div_toggle.js, filter.js, pixelate.js
+
+[LABELS]
+prepend_dirs = None
+title        = My Report
+
+[MAINDIV]
+replace_in  = css
+main_height = 98%
+
+[NAVBAR]
+replace_in            = css
+nav_bkgrd             = #334364
+nav_bkgrd_hover       = #475674
+nav_bkgrd_title       = #2E3C5A
+nav_border_bottom     = 2px solid #000000
+nav_border_radius_L   = 0px
+nav_border_radius_R   = 0px
+nav_font              = Arial
+nav_font_align        = center
+nav_font_color        = #aaaaaa
+nav_font_size         = 16px
+nav_font_size_items   = 12px
+nav_font_weight       = bold
+nav_font_weight_items = bold
+nav_height            = 40px
+nav_height_items      = 30px
+nav_items_delay       = 0.2s
+nav_items_width       = 400px
+nav_padding           = 0px 25px
+
+[OPTIONS]
+browser       = default
+collapsible   = True
+excludes      = index.html  # list
+make          = True
+natsort       = True
+open          = True
+output_name   = report
+report_folder = pywebify
+show_ext      = False
+start_screen  = ..\index.html  # or use logo
+subtitle      = PyWebify
+title         = My Report
+
+[SIDEBAR]
+onmouseover                 = div_switch
+onclick                     = window.open
+replace_in                  = css
+sb_bkgrd                    = #2f2f2f
+sb_bkgrd_hover              = #2f2f2f
+sb_button_font_color        = #aaaaaa
+sb_divider_line             = #3c3c3c
+sb_font                     = Arial
+sb_font_color               = #cccaaa
+sb_font_color_links         = #aaaaaa
+sb_font_color_links_hover   = #FFCC00
+sb_font_size                = 18px
+sb_font_size_decrease       = 95%
+sb_font_weight              = 300
+sb_gradient                 = NA
+sb_height                   = 96%
+sb_link_decoration          = none
+sb_position                 = left
+sb_shadow                   = 0px 20px 8px #aaaaaa
+sb_width                    = 300px
+
+[TEMPLATES]
+css     = templates\css\webify.css
+html    = templates\html\webify.html
+navbar  = templates\html\navbar.html
+rst_css = templates\css\rst.css
+
+[TOGGLE]
+replace_in           = css
+toggle_bkgrd         = #473e3d
+toggle_bkgrd_hover   = #575657
+toggle_border        = 0px
+toggle_font          = Trebuchet MS
+toggle_font_color    = #ffffff
+toggle_font_size     = 14px
+toggle_font_weight   = 300
+toggle_padding       = 6px 5px
+toggle_position_y    = 20px
+toggle_text_collapse = &lt;&lt;
+toggle_text_expand   = &gt;&gt;
+
+[VIEWER]
+replace_in        = css
+view_bkgrd        = white
+view_gradient     = NA
+view_height       = 96%
+view_padding      = 5px
+view_shadow       = 0px 2px 8px #aaaaaa
+view_summary      = &#39;&#39;
+</pre></div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="templates.html" class="btn btn-neutral float-right" title="Templates" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="overview.html" class="btn btn-neutral" title="Report Structure" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015, Steve Nicholes.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.2',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
