@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Overview &mdash; PyWebify 0.1.0.dev1 documentation</title>
+  <title>Report Structure &mdash; PyWebify 0.2 documentation</title>
   
 
   
@@ -32,8 +32,9 @@
   
 
   
-    <link rel="top" title="PyWebify 0.1.0.dev1 documentation" href="index.html"/>
-        <link rel="prev" title="PyWebify: Rapid Browser-Based Report Visualization" href="index.html"/> 
+    <link rel="top" title="PyWebify 0.2 documentation" href="index.html"/>
+        <link rel="next" title="Config Files" href="config.html"/>
+        <link rel="prev" title="PyWebifying (Making a Report)" href="launch.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -61,7 +62,7 @@
             
             
               <div class="version">
-                0.1.0.dev1
+                0.2
               </div>
             
           
@@ -83,13 +84,18 @@
             
             
                 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="">Overview</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#why-pywebify">Why PyWebify?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="launch.html">PyWebifying (Making a Report)</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Report Structure</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#general-report-structure">General Report Structure</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#contents">Contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#report-contents">Report Contents</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#customization">Customization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#features">Features</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="config.html">Config Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="templates.html">Templates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fileio.html">fileio</a></li>
 </ul>
 
             
@@ -120,7 +126,7 @@
   <ul class="wy-breadcrumbs">
     <li><a href="index.html">Docs</a> &raquo;</li>
       
-    <li>Overview</li>
+    <li>Report Structure</li>
       <li class="wy-breadcrumbs-aside">
         
           
@@ -134,17 +140,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="overview">
-<h1>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="why-pywebify">
-<h2>Why PyWebify?<a class="headerlink" href="#why-pywebify" title="Permalink to this headline">¶</a></h2>
-<p>Navigating through plots, charts, images, and data tables can be cumbersome and inefficient.
-Common tools like Powerpoint are fine for consolidating key results and findings with a small,
-subset of plots and charts, but they often do not provide a way to drill down further into the
-details.  PyWebify was designed as a quick tool that hyperlinks a large number of image or html
-files into a single, easily-navigable, searchable, html report.  This approach lends itself to
-rapid analysis of much more relevant data, resulting in faster and more accurate conclusions.</p>
-</div>
+  <div class="section" id="report-structure">
+<h1>Report Structure<a class="headerlink" href="#report-structure" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="general-report-structure">
 <h2>General Report Structure<a class="headerlink" href="#general-report-structure" title="Permalink to this headline">¶</a></h2>
 <p>A PyWebify report typically consists of three key sections:</p>
@@ -161,8 +158,8 @@ relevant imformation (experiment details, previous reports, DOE split tables, et
 <img alt="_images/report.png" src="_images/report.png" />
 </div>
 </div>
-<div class="section" id="contents">
-<h2>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="report-contents">
+<h2>Report Contents<a class="headerlink" href="#report-contents" title="Permalink to this headline">¶</a></h2>
 <p>PyWebify reports can consist of content aggregated in two distinct ways:</p>
 <blockquote>
 <div><ol class="arabic simple">
@@ -177,8 +174,13 @@ like interactive html tables or bokeh plots.  The specific types of files to be 
 </div>
 <div class="section" id="customization">
 <h2>Customization<a class="headerlink" href="#customization" title="Permalink to this headline">¶</a></h2>
-<p>PyWebify is template based so the options of how to present the data and how to style the report
-are unbounded.</p>
+<p>PyWebify is template based so the options of how to present the data and how to
+style the report are unbounded.  Many options (color, spacing, etc.) can be
+specfied by adjusting CSS parameters in the <a class="reference external" href="config.html">config file</a>.</p>
+</div>
+<div class="section" id="features">
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
+<p>Coming soon...</p>
 </div>
 </div>
 
@@ -189,8 +191,10 @@ are unbounded.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
+        <a href="config.html" class="btn btn-neutral float-right" title="Config Files" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
-        <a href="index.html" class="btn btn-neutral" title="PyWebify: Rapid Browser-Based Report Visualization" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+        <a href="launch.html" class="btn btn-neutral" title="PyWebifying (Making a Report)" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -221,7 +225,7 @@ are unbounded.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.1.0.dev1',
+            VERSION:'0.2',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

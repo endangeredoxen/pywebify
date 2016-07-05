@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>PyWebify: Rapid Browser-Based Report Visualization &mdash; PyWebify 0.1.0.dev1 documentation</title>
+  <title>PyWebify: Rapid Browser-Based Report Visualization &mdash; PyWebify 0.2 documentation</title>
   
 
   
@@ -32,8 +32,8 @@
   
 
   
-    <link rel="top" title="PyWebify 0.1.0.dev1 documentation" href="#"/>
-        <link rel="next" title="Overview" href="overview.html"/> 
+    <link rel="top" title="PyWebify 0.2 documentation" href="#"/>
+        <link rel="next" title="Installation" href="install.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.1.0.dev1
+                0.2
               </div>
             
           
@@ -83,7 +83,12 @@
             
             
                 <ul>
-<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="launch.html">PyWebifying (Making a Report)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Report Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html">Config Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="templates.html">Templates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fileio.html">fileio</a></li>
 </ul>
 
             
@@ -130,16 +135,36 @@
             
   <div class="section" id="pywebify-rapid-browser-based-report-visualization">
 <h1>PyWebify:  Rapid Browser-Based Report Visualization<a class="headerlink" href="#pywebify-rapid-browser-based-report-visualization" title="Permalink to this headline">¶</a></h1>
-<p>Contents:</p>
+<p>Everyone seems to be talking about data: some of it is &#8220;big&#8221;; some of it is
+&#8220;driven&#8221;.  But generally speaking, data are useless unless properly visualized
+to point the investigator to correct conclusions.  Getting access to the right
+data quickly can be challenging.  For example, imagine an analysis that yields
+numerous plots, charts, images, and data tables.  How can these results be
+investigated?  Navigating through a file directory can be cumbersome, slow,
+and inefficient.  Common tools like Powerpoint quickly become intractable
+unless the number of plots and charts included is kept small, leaving no path
+to drill down further into the nitty-gritty details when questions arise.
+Saving reports in proprietary software like JMP or exensio provides better
+flexibility but also requires your organization to fork over lots of cash for
+license fees.</p>
+<p>PyWebify attempts to mitigate these issues by enabling data report
+visualization within a common web browser.  It is completely free and open-
+source and runs using Python.  Designed primarily for scientists and engineers,
+PyWebify quickly hyperlinks large numbers of images, plots, tables, or
+generic html files into a customizable, easily-navigable, and searchable
+html report.</p>
+<img alt="_images/report_in_action.gif" class="align-center" src="_images/report_in_action.gif" />
+</div>
+<div class="section" id="user-guide-contents">
+<h1>User Guide Contents:<a class="headerlink" href="#user-guide-contents" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="overview.html#why-pywebify">Why PyWebify?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="overview.html#general-report-structure">General Report Structure</a></li>
-<li class="toctree-l2"><a class="reference internal" href="overview.html#contents">Contents</a></li>
-<li class="toctree-l2"><a class="reference internal" href="overview.html#customization">Customization</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="launch.html">PyWebifying (Making a Report)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Report Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html">Config Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="templates.html">Templates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fileio.html">fileio</a></li>
 </ul>
 </div>
 </div>
@@ -159,7 +184,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="overview.html" class="btn btn-neutral float-right" title="Overview" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="install.html" class="btn btn-neutral float-right" title="Installation" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
     </div>
@@ -191,7 +216,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.1.0.dev1',
+            VERSION:'0.2',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

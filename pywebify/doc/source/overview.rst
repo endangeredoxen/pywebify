@@ -1,14 +1,5 @@
-Overview
-=============
-
-Why PyWebify?
-----------------
-Navigating through plots, charts, images, and data tables can be cumbersome and inefficient.  
-Common tools like Powerpoint are fine for consolidating key results and findings with a small, 
-subset of plots and charts, but they often do not provide a way to drill down further into the 
-details.  PyWebify was designed as a quick tool that hyperlinks a large number of image or html 
-files into a single, easily-navigable, searchable, html report.  This approach lends itself to
-rapid analysis of much more relevant data, resulting in faster and more accurate conclusions.
+Report Structure
+================
 
 General Report Structure
 --------------------------
@@ -38,8 +29,10 @@ like interactive html tables or bokeh plots.  The specific types of files to be 
 
 Customization
 ---------------
-PyWebify is template based so the options of how to present the data and how to style the report
-are unbounded.  See ***
+PyWebify is template based so the options of how to present the data and how to 
+style the report are unbounded.  Many options (color, spacing, etc.) can be
+specfied by adjusting CSS parameters in the `config file <config.html>`_.
 
 Features
 ------------
+Coming soon...

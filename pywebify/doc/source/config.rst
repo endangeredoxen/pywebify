@@ -1,0 +1,6 @@
+Config Files
+============
+
+Design and setup options are controlled using an ini-style configuration file.
+
+.. literalinclude:: _files\config.ini
