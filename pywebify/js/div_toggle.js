@@ -6,6 +6,7 @@
 
 function div_toggle() {
     var origWidth = $('#sidebar').width();
+    $('#toggle').html('<<');
     $('#toggle').toggle(function(){
     $('#sidebar').css({'overflow': 'hidden'});
     $('#sidebar li').css({'visibility': 'hidden'});
