@@ -61,13 +61,13 @@ function div_switch (name){
             // image.style.display = 'block';
             // image.style.marginLeft = 'auto';
             // image.style.marginRight = 'auto';
-            image.src = name;
+            image.src = name + "?" + new Date().getTime();
         }
         else{
             // Image not found, so create and add
             var image = document.createElement("img");
             var summary = document.getElementById('summary');
-            image.src = name;
+            image.src = name + "?" + new Date().getTime();
             image.id = "img0";
             image.removeAttribute('width');
             image.style.maxWidth='100%';
@@ -82,6 +82,7 @@ function div_switch (name){
         var startWidth = image.width;
         
         image.onclick = function (event) {
+            var action = false;
             if (event.shiftKey) {
                 var resize = 0.75; // resize amount in percentage
                 if (zoom=='in') {
@@ -89,21 +90,23 @@ function div_switch (name){
                 }
                 else
                     zoom = 'in';
-            } else {
+                action = true;
+            } else if (event.ctrlKey) {
                 var resize = 1.25; // resize amount in percentage
                 if (zoom=='out') {
                     zoom = 'in';
                 }
                 else
                     zoom = 'in';
+                action = true;
             }
-            if (event.ctrlKey) {
+            if (event.altKey) {
                 viewer.scrollLeft=0;
                 viewer.scrollTop=0;
                 this.removeAttribute('width');
                 this.style.maxWidth='800%';
             }
-            else {
+            else if (action) {
                 
                 //Set the new width and height
                 var origW  = this.clientWidth; // original image width
