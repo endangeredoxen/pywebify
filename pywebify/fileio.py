@@ -266,7 +266,6 @@ class ConfigFile():
             self.read_file()
         elif self.paste:
             self.read_pasted()
-        
         else:
             raise ValueError('Could not find a config.ini file at the '
                              'following location: %s' % self.config_path)
@@ -323,7 +322,7 @@ class Dir2HTML():
 
         Keyword Args:
             build_rst (bool): convert rst files to html
-            excludes (list): names of files to exclude from the UL
+            exclude (list): names of files to exclude from the UL
             from_file (bool): make the report from a text file containing a
                 list of directories and files or just scan the
                 base_path directory
@@ -340,7 +339,7 @@ class Dir2HTML():
 
         self.base_path = base_path
         self.build_rst = kwargs.get('build_rst', False)
-        self.excludes = kwargs.get('excludes',[])
+        self.exclude = kwargs.get('exclude',[])
         self.files = []
         self.from_file = kwargs.get('from_file', False)
         self.natsort = kwargs.get('natsort', True)
@@ -349,7 +348,8 @@ class Dir2HTML():
         self.rst = ''
         self.rst_css = kwargs.get('rst_css', None)
         self.show_ext = kwargs.get('show_ext', False)
-
+        self.use_relative = kwargs.get('use_relative', True)
+        
         self.ext = ext
         if self.ext is not None and type(self.ext) is not list:
             self.ext = self.ext.replace(' ','').split(',')
@@ -470,8 +470,13 @@ class Dir2HTML():
                     temp = {}
                     temp['full_path'] = \
                         os.path.abspath(osjoin(self.base_path,dirName,fname))
-                    temp['html_path'] = \
-                        pathlib.Path(temp['full_path']).as_uri()
+                    temp['rel_path'] = \
+                        temp['full_path'].replace(self.base_path+'\\', '')
+                    if self.use_relative:
+                        temp['html_path'] = temp['rel_path'].replace('\\', '/')
+                    else:
+                        temp['html_path'] = \
+                            pathlib.Path(temp['full_path']).as_uri()
                     temp['ext'] = fname.split('.')[-1]
                     if self.from_file:
                         top = self.base_path.split(os.sep)[-1]
@@ -512,7 +517,7 @@ class Dir2HTML():
         Filter out any files on the exclude list
         """
 
-        for ex in self.excludes:
+        for ex in self.exclude:
             self.files = \
                 self.files[~self.files.full_path.str.contains(ex, regex=False)]
 
