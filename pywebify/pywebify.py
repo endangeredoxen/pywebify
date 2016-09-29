@@ -194,9 +194,14 @@ class PyWebify():
                                   self.config['OPTIONS']['natsort'])
         self.navbar_path = ''
         self.open = kwargs.get('open', self.config['OPTIONS']['open'])
-        self.rel_path = cur_dir
-        self.report_folder = kwargs.get('report_folder',
-                                        self.config['OPTIONS']['report_folder'])
+        self.report_filename = kw_get(kwargs, 'report_filepath'
+                                      self.config['OPTIONS'], 'report')
+        self.report_path = None
+        self.report_subdir = kw_get(kwargs, 'report_subdir',
+                                    self.config['OPTIONS'], None)
+        self.setup_path = None
+        self.setup_subdir = kw_get(kwargs, 'setup_subdir',
+                                   self.config['OPTIONS'], 'pywebify')
         if 'rst_css' in self.config['TEMPLATES'].keys():
             self.rst_css = self.config['TEMPLATES']['rst_css']
             self.check_path('rst_css')
@@ -217,7 +222,7 @@ class PyWebify():
                 setattr(self,key,value)
 
         # Set the output path
-        self.set_output_path()
+        self.set_output_paths()
         self.exclude += [osjoin(self.report_path, self.report_filename),
                          self.setup_path, 'index.html']
 
@@ -436,7 +441,7 @@ class PyWebify():
         if self.open:
             self.launch()
 
-    def set_output_path(self):
+    def set_output_paths(self):
         """ 
         Update the report path for the actual html file and all
         supplementary files
