@@ -194,7 +194,7 @@ class PyWebify():
                                   self.config['OPTIONS']['natsort'])
         self.navbar_path = ''
         self.open = kwargs.get('open', self.config['OPTIONS']['open'])
-        self.report_filename = kw_get(kwargs, 'report_filepath'
+        self.report_filename = kw_get(kwargs, 'report_filepath',
                                       self.config['OPTIONS'], 'report')
         self.report_path = None
         self.report_subdir = kw_get(kwargs, 'report_subdir',
