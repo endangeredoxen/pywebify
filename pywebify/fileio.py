@@ -90,13 +90,14 @@ def convert_rst(file_name, stylesheet=None):
     imgs = [f for f in rst if 'image::' in f]
 
     for img in imgs:
-        img = img.replace('.. figure:: ', '').replace('\n', '')
+        img = img.replace('.. image:: ', '').replace('\n', '')
         if ' ' in img:
-            img_idx = img.find('image:: ')
-            img = img[img_idx+8:]
             img_ns = img.replace(' ','')
-            idx = html.find(img_ns)
-            html = html[0:idx] + img + html[idx+len(img_ns):]
+            idx = html.find(img_ns) - 5
+            old = 'alt="%s" src="%s"' % (img_ns, img_ns)
+            new = 'alt="%s" src="%s"' % (img, img)
+            html = html[0:idx] + new + html[idx+len(old):]
+
             with open(file_dest, 'w') as output:
                 output.write(html)
 
