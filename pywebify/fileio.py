@@ -425,6 +425,7 @@ class Dir2HTML():
                         os.path.sep.join(current_path_list[0:path_idx+1])
                     try:
                         folder_path = pathlib.Path(folder_path).as_uri()
+                        folder_path = folder_path.replace('file:', 'file:///')
                     except:
                         st()
                     child = node_for_value(n, folder_path, node,
