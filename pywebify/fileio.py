@@ -543,6 +543,8 @@ class Dir2HTML():
                 self.files.iloc[i]['full_path'].replace('rst','html')
             self.files.iloc[i]['html_path'] = \
                 self.files.iloc[i]['html_path'].replace('rst','html')
+            self.files.iloc[i]['rel_path'] = \
+                self.files.iloc[i]['rel_path'].replace('rst','html')
 
             # Check for same-named images
             for ext in [v for v in self.ext if v != 'html']:
