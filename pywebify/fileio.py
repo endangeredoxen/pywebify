@@ -890,5 +890,5 @@ class FileReader():
 
         for dir_name, subdir_list, file_list in oswalk(path):
             for exc in self.exclude:
-                subdir_list[:] = [s for s in subdir_list is exc not in s]
+                subdir_list[:] = [s for s in subdir_list if exc not in s]
             self.file_list += [os.path.join(dir_name, f) for f in file_list]
