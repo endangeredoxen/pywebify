@@ -423,11 +423,11 @@ class Dir2HTML():
                     path_idx = current_path_list.index(n)
                     folder_path = \
                         os.path.sep.join(current_path_list[0:path_idx+1])
-                    try:
+                    if self.use_relative:
+                        folder_path = folder_path.replace(self.base_path + '\\', '')
+                        folder_path = folder_path.replace('\\', '/')
+                    else:
                         folder_path = pathlib.Path(folder_path).as_uri()
-                        folder_path = folder_path.replace('file:', 'file:///')
-                    except:
-                        st()
                     child = node_for_value(n, folder_path, node,
                                            parent_name, dir=True)
                     self.df_to_xml(g, child, n)
