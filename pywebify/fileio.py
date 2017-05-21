@@ -8,7 +8,7 @@
 __author__    = 'Steve Nicholes'
 __copyright__ = 'Copyright (C) 2015 Steve Nicholes'
 __license__   = 'GPLv3'
-__version__   = '0.2'
+__version__   = '0.3'
 __url__       = 'https://github.com/endangeredoxen/pywebify'
 
 
@@ -97,7 +97,7 @@ def convert_rst(file_name, stylesheet=None):
             old = 'alt="%s" src="%s"' % (img_ns, img_ns)
             new = 'alt="%s" src="%s"' % (img, img)
             html = html[0:idx] + new + html[idx+len(old):]
-
+            
             with open(file_dest, 'w') as output:
                 output.write(html)
 
@@ -193,7 +193,7 @@ def str_2_dtype(val, ignore_list=False):
         v = []
         for t in val:
             k += [str_2_dtype(t.split(':')[0], ignore_list=True)]
-            v += [str_2_dtype(t.split(':')[1])]
+            v += [str_2_dtype(':'.join(t.split(':')[1:]))]
         return dict(zip(k,v))
     # tuple
     if val[0] == '(' and val[-1] == ')' and ',' in val:
@@ -699,7 +699,7 @@ class FileReader():
             self.file_list = self.path
 
         # If list of files is passed to FileReader with a scan option
-        elif type(self.path) is list and self.scan == True:
+        elif type(self.path) is list and self.scan:
             for p in self.path:
                 self.walk_dir(p)
 
@@ -808,7 +808,8 @@ class FileReader():
                 file_splits[i] = file_splits[i].split(self.tag_char)[1]
 
         # file_splits = filename.split(self.file_split)
-        if self.split_values[0].lower() == 'usetags':
+        if len(self.split_values)==0 or \
+                self.split_values[0].lower() == 'usetags':
             self.split_values = tag_splits.copy()
         for i, f in enumerate(self.split_values):
             if f is not None and i < len(file_splits) and f != file_splits[i]:
@@ -851,8 +852,10 @@ class FileReader():
                     meta = None
 
             except:
-                raise ValueError('Could not read "%s".  Is it a valid data '
-                                 'file?' % f)
+                raise ValueError('File Read Error:\n\nFilename: "%s"\n\n'
+                                 'Read function: "%s".\n\nIs the data file '
+                                 'valid or do you have the wrong read '
+                                 'function specified?' % (f, self.read_func))
 
             # Add optional info to the table
             if type(self.labels) is list and len(self.labels) > i:
