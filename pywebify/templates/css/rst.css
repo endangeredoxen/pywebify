@@ -100,7 +100,7 @@ table td, table th {
     padding: 0.2em 0.5em 0.2em 0.5em;
 }
 
-div.admonition, div.warning {
+div.admonition, div.warning, div.note {
     font-size: 0.9em;
     margin: 1em 0 1em 0;
     border: 1px solid #86989B;
@@ -108,17 +108,18 @@ div.admonition, div.warning {
     padding: 0;
 }
 
-div.admonition p, div.warning p {
+div.admonition p, div.warning p, div.note p {
     margin: 0.5em 1em 0.5em 1em;
     padding: 0;
 }
 
-div.admonition pre, div.warning pre {
+div.admonition pre, div.warning pre, div.note pre {
     margin: 0.4em 1em 0.4em 1em;
 }
 
 div.admonition p.admonition-title,
-div.warning p.admonition-title {
+div.warning p.admonition-title, 
+div.note p.admonition-title {
     margin: 0;
     padding: 0.1em 0 0.1em 0.5em;
     color: white;
