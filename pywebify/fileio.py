@@ -214,7 +214,10 @@ def str_2_dtype(val, ignore_list=False):
             elif '"' in v:
                 new += [v.replace('"','').rstrip().lstrip()]
             else:
-                new += [str_2_dtype(v.replace('"','').rstrip().lstrip())]
+                try:
+                    new += [str_2_dtype(v.replace('"','').rstrip().lstrip())]
+                except RecursionError:
+                    pass
         if len(new) == 1:
             return new[0]
         return new
