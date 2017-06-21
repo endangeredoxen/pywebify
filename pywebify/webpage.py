@@ -39,11 +39,26 @@ class Webpage(object):
 
     def __init__(self, **kwargs):
 
+        self.basepath = r'c:\temp'
+        self.context = None
         self.forbiddennew = ''
         self.logger = None
-        self.print = False
+        self.print_ = False
         self.overwrite = True
         self.overwrite_static = False
+        self.relpaths = []  # has to come before others with attribute error chekcin
+        self.tabbed = False
+        self.tabs = None  # update in tabsinit method
+        self.tabtype = 'tab'  # tab|pill
+        self.url = None
+
+        self.figfileext = '.png'
+        self.pagefileext = '.html'
+        self._figfilename = 'figure'
+        self._pagefilename = 'page'
+
+        self.figname = 'figure.png'
+        self.pagename = 'pagename.html'
 
         self._set_kwargs(**kwargs)
 
@@ -54,3 +69,33 @@ class Webpage(object):
         """
         for key, value in kwargs.items():
             setattr(self, key, value)
+
+    def _setname(self, filename, fileext):
+        """
+        concatenate and return either the page or figure full file name (including path)
+        """
+        path = self.basepath
+        for relpath in self.relpaths:
+            path = osjoin(path, relpath)
+        os.makedirs(path) if not os.path.isdir(path) else None
+        name = osjoin(path, '{}{}'.format(filename, fileext))
+
+        return name
+
+    @property
+    def pagefilename(self):
+        return self._pagefilename
+
+    @pagefilename.setter
+    def pagefilename(self, filename):
+        self._pagefilename = filename
+        self.pagename = self._setname(filename, self.pagefileext)
+
+    @property
+    def figfilename(self):
+        return self._figfilename
+
+    @figfilename.setter
+    def figfilename(self, filename):
+        self._figfilename = filename
+        self.figname = self._setname(filename, self.figfileext)
