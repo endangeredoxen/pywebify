@@ -320,7 +320,7 @@ class PyWebify():
             subdir = self.setup_subdir + '/'
         else:
             subdir = ''
-        
+
         for f in files:
             # Define the script call for the html file
             js += '<script type="text/javascript" src="%sjs/%s"></script>\n' \
@@ -442,7 +442,7 @@ class PyWebify():
             self.launch()
 
     def set_output_paths(self):
-        """ 
+        """
         Update the report path for the actual html file and all
         supplementary files
         """
@@ -450,16 +450,18 @@ class PyWebify():
         # Update the base path if reading from file
         if self.from_file:
             self.base_path = os.sep.join(self.base_path.split(os.sep)[0:-1])
-        
+
         # Set the actual html file path
         if self.report_subdir is not None:
             self.report_path = osjoin(self.base_path, self.report_folder)
         else:
             self.report_path = self.base_path
-            
+
         # Set the supplemental files path
         if self.setup_subdir is not None:
             self.setup_path = osjoin(self.base_path, self.setup_subdir)
         else:
             self.setup_path = self.base_path
-        
+
+if __name__ == "__main__":
+    pass
