@@ -1,0 +1,12 @@
+diff a/pywebify/config.ini b/pywebify/config.ini	(rejected hunks)
+@@ -26,8 +26,8 @@
+ img_dir = img
+ 
+ [ICONS]
+-favicon = img\favicon.png
+-logo    = img\favicon.png
++favicon = pywebify\img\favicon.png
++logo    = pywebify\img\favicon.png
+ 
+ [JAVASCRIPT]
+ files = div_switch.js, collapse.js, div_toggle.js, filter.js, pixelate.js
