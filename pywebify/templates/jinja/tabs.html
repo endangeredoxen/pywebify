@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    {% block head %}
+      <title>pixelcrunch - {% block title %}{% endblock %}</title>
+      <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/s/dt/jq-2.1.4,jszip-2.5.0,pdfmake-0.1.18,dt-1.10.10,af-2.1.0,b-1.1.0,b-colvis-1.1.0,b-html5-1.1.0,b-print-1.1.0,cr-1.3.0,fc-3.2.0,fh-3.1.0,kt-2.1.0,r-2.0.0,rr-1.1.0,sc-1.4.0,se-1.1.0/datatables.min.css"/>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+      <link rel= "stylesheet" type= "text/css" href= "{{relpath}}/static/css/datatables.css">
+      <link rel= "stylesheet" type= "text/css" href= "{{relpath}}/static/css/base.css">
+
+    {% endblock %}
+  </head>
+
+  <style type="text/css">
+    body {
+      padding-top: 0px;   /* remove pad in default for fixed navbar - could change default css/template */
+      margin: 0;
+      overflow: auto;
+    }
+  </style>
+
+  <body>
+    {% block content %}
+        {% for c in content %}
+            {{c|safe}}
+        {% endfor %}
+    {% endblock %}
+
+    <div class="divider"></div>
+      {% block footer %}
+      <hr>
+      {{footer|safe}}
+      {% endblock %}
+    </div>
+  </body>
+
+  <script src="{{relpath}}/static/js/datatables.min.js"></script> <!-- including jQuery and bootstrap -->
+  <script type="text/javascript" src="https://cdn.datatables.net/s/dt/jq-2.1.4,jszip-2.5.0,pdfmake-0.1.18,dt-1.10.10,af-2.1.0,b-1.1.0,b-colvis-1.1.0,b-html5-1.1.0,b-print-1.1.0,cr-1.3.0,fc-3.2.0,fh-3.1.0,kt-2.1.0,r-2.0.0,rr-1.1.0,sc-1.4.0,se-1.1.0/datatables.min.js"></script>
+  {% block javascript %}
+      {% for j in js %}
+          {{j|safe}}
+      {% endfor %}
+  {% endblock %}
+</html>
