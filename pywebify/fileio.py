@@ -25,7 +25,10 @@ import re
 import sys
 import textwrap
 import ast
-import win32clipboard
+try:
+    import win32clipboard
+except Exception:
+    pass
 from xml.dom import minidom
 from xml.etree import ElementTree
 import numpy as np
