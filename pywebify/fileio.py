@@ -215,7 +215,13 @@ def str_2_dtype(val, ignore_list=False):
             if '=="' in v:
                 new += [v.rstrip().lstrip()]
             elif '"' in v:
-                new += [v.replace('"','').rstrip().lstrip()]
+                double_quoted = [f for f in re.findall(r'"([^"]*)"', v)
+                                 if f != '']
+                v = str(v.replace('"', ''))
+                for dq in double_quoted:
+                    v = v.replace(dq, '"%s"' % dq)
+                new += [v]
+                # new += [v.replace('"','').rstrip().lstrip()]
             else:
                 try:
                     new += [str_2_dtype(v.replace('"','').rstrip().lstrip())]
