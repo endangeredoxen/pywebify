@@ -62,7 +62,7 @@ setup(
 
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
-    #packages=find_packages(exclude=['contrib', 'docs']),
+    packages=find_packages(exclude=['contrib', 'docs']),
 
     # List run-time dependencies here.  These will be installed by pip when
     # your project is installed. For an analysis of "install_requires" vs pip's
@@ -82,7 +82,7 @@ setup(
     # installed, specify them here.  If using Python 2.6 or less, then these
     # have to be included in MANIFEST.in as well.
     package_data={
-        'pywebify': ['config.ini', 'img/*','js/*','templates/css/*','templates/html/*', 'setup.txt', 'tests/*'],
+        'pywebify': ['config.ini', 'img/*','js/*','templates/css/*','templates/html/*', 'setup.txt'],
     },
 
     # Although 'package_data' is the preferred approach, in some case you may
