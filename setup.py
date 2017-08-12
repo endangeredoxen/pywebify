@@ -82,7 +82,7 @@ setup(
     # installed, specify them here.  If using Python 2.6 or less, then these
     # have to be included in MANIFEST.in as well.
     package_data={
-        'pywebify': ['config.ini', 'img/*','js/*','templates/css/*','templates/html/*', 'setup.txt'],
+        'pywebify': ['config.ini', 'img/*','js/*','templates/css/*','templates/html/*', 'setup.txt', 'tests/*'],
     },
 
     # Although 'package_data' is the preferred approach, in some case you may
