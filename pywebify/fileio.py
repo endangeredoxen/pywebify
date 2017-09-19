@@ -255,7 +255,7 @@ def str_2_dtype(val, ignore_list=False):
 
 
 class ConfigFile():
-    def __init__(self, path=None, paste=False):
+    def __init__(self, path=None, paste=False, raw=False):
         """
         Config file reader
 
@@ -275,6 +275,7 @@ class ConfigFile():
         self.config_dict = {}
         self.is_valid = False
         self.paste = paste
+        self.raw = raw
         self.rel_path = os.path.dirname(__file__)
 
         if self.config_path:
@@ -283,6 +284,8 @@ class ConfigFile():
             self.read_file()
         elif self.paste:
             self.read_pasted()
+        elif self.raw is not False:
+            self.read_raw()
         else:
             raise ValueError('Could not find a config.ini file at the '
                              'following location: %s' % self.config_path)
@@ -312,6 +315,13 @@ class ConfigFile():
         data = win32clipboard.GetClipboardData()
         win32clipboard.CloseClipboard()
         self.config.read_string(data)
+
+    def read_raw(self):
+        """
+        Read from a raw string
+        """
+
+        self.config.read_string(self.raw)
 
     def validate_file_path(self):
         """
