@@ -22,7 +22,7 @@ setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='0.1.0.dev1',
+    version='0.2.0',
 
     description='Browser-based html/image file report builder',
     long_description=long_description,
@@ -68,11 +68,10 @@ setup(
     # your project is installed. For an analysis of "install_requires" vs pip's
     # requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
-    install_requires=['pandas','numpy','natsort','fileio'],
+    dependency_links = ['https://github.com/endangeredoxen/fileio/zipball/master#egg=fileio-0.1.0'],
+    
+    install_requires=['pandas','numpy','natsort','fileio==0.1.0'],
 
-    dependency_links = [
-        'git+ssh://git@github.com:endangeredoxen/fileio.git'
-    ],
     # List additional groups of dependencies here (e.g. development
     # dependencies). You can install these using the following syntax,
     # for example:
