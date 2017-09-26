@@ -4,6 +4,5 @@ __license__   = 'GPLv3'
 __version__   = '.1'
 __url__       = 'https://github.com/endangeredoxen/pywebify'
 
-from pywebify.fileio import *
 from pywebify.template import *
 from pywebify.pywebify import *

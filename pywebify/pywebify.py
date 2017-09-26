@@ -10,8 +10,8 @@ __version__   = '0.2'
 __url__       = 'https://github.com/endangeredoxen/pywebify'
 
 import pdb
-from pywebify.fileio import ConfigFile
-from pywebify.fileio import Dir2HTML
+from fileio import ConfigFile
+from fileio import Dir2HTML
 from pywebify.template import Template
 import getpass
 import os

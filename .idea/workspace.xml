@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="050e4886-7fdd-430d-ab97-c30dc4af66cf" name="Default" comment="" />
+    <list default="true" id="050e4886-7fdd-430d-ab97-c30dc4af66cf" name="Default" comment="">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/pywebify/fileio.py" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pywebify/__init__.py" afterPath="$PROJECT_DIR$/pywebify/__init__.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pywebify/pywebify.py" afterPath="$PROJECT_DIR$/pywebify/pywebify.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/setup.py" afterPath="$PROJECT_DIR$/setup.py" />
+    </list>
     <ignored path="pywebify.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -21,14 +27,13 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="fileio.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/pywebify/fileio.py">
+      <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pywebify/__init__.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="841" column="45" selection-start-line="0" selection-start-column="0" selection-end-line="882" selection-end-column="76" />
+            <state vertical-scroll-proportion="-3.3333333">
+              <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
               <folding>
-                <element signature="e#31518#31804#0" expanded="false" />
-                <element signature="e#31518#31664#1" expanded="false" />
+                <element signature="e#192#223#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -57,47 +62,39 @@
       <file leaf-file-name="pywebify.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pywebify/pywebify.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="9" column="60" selection-start-line="5" selection-start-column="0" selection-end-line="9" selection-end-column="60" />
+            <state vertical-scroll-proportion="-2.6785715">
+              <caret line="32" column="16" selection-start-line="32" selection-start-column="13" selection-end-line="32" selection-end-column="16" />
               <folding>
-                <element signature="e#795#1417#0" expanded="false" />
-                <element signature="e#795#955#1" expanded="false" />
-                <element signature="e#1442#1606#0" expanded="false" />
-                <element signature="e#1442#1510#1" expanded="false" />
-                <element signature="e#1687#2828#0" expanded="false" />
-                <element signature="e#1687#2166#1" expanded="false" />
-                <element signature="e#2213#2518#0" expanded="false" />
-                <element signature="e#2213#2421#1" expanded="false" />
-                <element signature="e#2855#2943#0" expanded="false" />
-                <element signature="e#2855#2913#1" expanded="false" />
-                <element signature="e#2972#3298#0" expanded="false" />
-                <element signature="e#2972#3210#1" expanded="false" />
-                <element signature="e#3373#4997#1" expanded="false" />
-                <element signature="e#7992#8418#0" expanded="false" />
-                <element signature="e#8454#9069#0" expanded="false" />
-                <element signature="e#9107#9669#0" expanded="false" />
-                <element signature="e#9711#9938#0" expanded="false" />
-                <element signature="e#9973#10774#0" expanded="false" />
-                <element signature="e#9973#10086#1" expanded="false" />
-                <element signature="e#10821#11637#0" expanded="false" />
-                <element signature="e#10821#10964#1" expanded="false" />
-                <element signature="e#11689#12237#0" expanded="false" />
-                <element signature="e#11689#11920#1" expanded="false" />
-                <element signature="e#12274#13557#0" expanded="false" />
-                <element signature="e#13589#13705#0" expanded="false" />
-                <element signature="e#13762#14526#0" expanded="false" />
-                <element signature="e#13762#13938#1" expanded="false" />
-                <element signature="e#14555#15088#0" expanded="false" />
-                <element signature="e#15129#15397#0" expanded="false" />
+                <element signature="e#472#482#0" expanded="true" />
+                <element signature="e#1424#1588#0" expanded="false" />
+                <element signature="e#1424#1492#1" expanded="false" />
+                <element signature="e#1669#2810#0" expanded="false" />
+                <element signature="e#1669#2148#1" expanded="false" />
+                <element signature="e#2195#2500#0" expanded="false" />
+                <element signature="e#2195#2403#1" expanded="false" />
+                <element signature="e#2837#2925#0" expanded="false" />
+                <element signature="e#2837#2895#1" expanded="false" />
+                <element signature="e#2954#3280#0" expanded="false" />
+                <element signature="e#2954#3192#1" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="div_switch.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="setup.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/setup.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.4047619">
+              <caret line="73" column="9" selection-start-line="73" selection-start-column="9" selection-end-line="73" selection-end-column="9" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="div_switch.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pywebify/js/div_switch.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.3546284">
+            <state vertical-scroll-proportion="0.0">
               <caret line="100" column="30" selection-start-line="100" selection-start-column="30" selection-end-line="100" selection-end-column="30" />
               <folding />
             </state>
@@ -121,8 +118,8 @@
   <component name="Git.Settings">
     <option name="PREVIOUS_COMMIT_AUTHORS">
       <list>
-        <option value="Steve Nicholes &lt;endangeredoxen@gmail.com&gt;" />
         <option value="Steve Nicholes" />
+        <option value="Steve Nicholes &lt;endangeredoxen@gmail.com&gt;" />
       </list>
     </option>
     <option name="UPDATE_TYPE" value="MERGE" />
@@ -131,21 +128,22 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/pywebify/pywebify.py" />
         <option value="$PROJECT_DIR$/pywebify/template.py" />
         <option value="$PROJECT_DIR$/pywebify/js/collapse.js" />
-        <option value="$PROJECT_DIR$/pywebify/fileio.py" />
         <option value="$PROJECT_DIR$/pywebify/doc/source/overview.rst" />
         <option value="$PROJECT_DIR$/pywebify/doc/source/index.rst" />
         <option value="$PROJECT_DIR$/pywebify/js/div_switch.js" />
+        <option value="$PROJECT_DIR$/pywebify/fileio.py" />
+        <option value="$PROJECT_DIR$/pywebify/__init__.py" />
+        <option value="$PROJECT_DIR$/pywebify/pywebify.py" />
+        <option value="$PROJECT_DIR$/setup.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="-7" />
-    <option name="y" value="2" />
-    <option name="width" value="1550" />
-    <option name="height" value="905" />
+    <option name="width" value="974" />
+    <option name="height" value="1047" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -172,8 +170,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -206,124 +202,10 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="pywebify" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="pywebify" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="pywebify" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="tests" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="pywebify" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="pywebify" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="pywebify" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="templates" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="pywebify" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="pywebify" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="pywebify" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="templates" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="css" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="pywebify" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="pywebify" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="pywebify" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="pywebify" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="pywebify" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="pywebify" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="doc" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="pywebify" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="pywebify" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="pywebify" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="doc" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="source" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
+      <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -495,29 +377,35 @@
       <option name="project" value="LOCAL" />
       <updated>1461155467147</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="added option to parse config file from raw string">
+      <created>1505846991333</created>
+      <option name="number" value="00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1505846991333</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="2" width="1550" height="905" extended-state="0" />
+    <frame x="-7" y="0" width="974" height="1047" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15710561" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25156575" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32830188" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.62589926" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295063" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3283582" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32912844" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
     </layout>
@@ -536,7 +424,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Bug fixes and comment updates" />
     <MESSAGE value="streamlined up filereader&#10;cleaned up doc strings" />
-    <option name="LAST_COMMIT_MESSAGE" value="streamlined up filereader&#10;cleaned up doc strings" />
+    <MESSAGE value="added option to parse config file from raw string" />
+    <option name="LAST_COMMIT_MESSAGE" value="added option to parse config file from raw string" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -551,13 +440,56 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/pywebify/fileio.py">
+    <entry file="file://$PROJECT_DIR$/pywebify/doc/source/index.rst">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="841" column="45" selection-start-line="0" selection-start-column="0" selection-end-line="882" selection-end-column="76" />
+          <caret line="35" column="0" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pywebify/doc/source/overview.rst">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pywebify/pywebify.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="9" column="60" selection-start-line="5" selection-start-column="0" selection-end-line="9" selection-end-column="60" />
           <folding>
-            <element signature="e#31518#31804#0" expanded="false" />
-            <element signature="e#31518#31664#1" expanded="false" />
+            <element signature="e#472#482#0" expanded="true" />
+            <element signature="e#1424#1588#0" expanded="false" />
+            <element signature="e#1424#1492#1" expanded="false" />
+            <element signature="e#1669#2810#0" expanded="false" />
+            <element signature="e#1669#2148#1" expanded="false" />
+            <element signature="e#2195#2500#0" expanded="false" />
+            <element signature="e#2195#2403#1" expanded="false" />
+            <element signature="e#2837#2925#0" expanded="false" />
+            <element signature="e#2837#2895#1" expanded="false" />
+            <element signature="e#2954#3280#0" expanded="false" />
+            <element signature="e#2954#3192#1" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pywebify/js/div_switch.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pywebify/template.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+          <folding>
+            <element signature="e#488#497#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -583,35 +515,17 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#795#1417#0" expanded="false" />
-            <element signature="e#795#955#1" expanded="false" />
-            <element signature="e#1442#1606#0" expanded="false" />
-            <element signature="e#1442#1510#1" expanded="false" />
-            <element signature="e#1687#2828#0" expanded="false" />
-            <element signature="e#1687#2166#1" expanded="false" />
-            <element signature="e#2213#2518#0" expanded="false" />
-            <element signature="e#2213#2421#1" expanded="false" />
-            <element signature="e#2855#2943#0" expanded="false" />
-            <element signature="e#2855#2913#1" expanded="false" />
-            <element signature="e#2972#3298#0" expanded="false" />
-            <element signature="e#2972#3210#1" expanded="false" />
-            <element signature="e#3373#4997#1" expanded="false" />
-            <element signature="e#7992#8418#0" expanded="false" />
-            <element signature="e#8454#9069#0" expanded="false" />
-            <element signature="e#9107#9669#0" expanded="false" />
-            <element signature="e#9711#9938#0" expanded="false" />
-            <element signature="e#9973#10774#0" expanded="false" />
-            <element signature="e#9973#10086#1" expanded="false" />
-            <element signature="e#10821#11637#0" expanded="false" />
-            <element signature="e#10821#10964#1" expanded="false" />
-            <element signature="e#11689#12237#0" expanded="false" />
-            <element signature="e#11689#11920#1" expanded="false" />
-            <element signature="e#12274#13557#0" expanded="false" />
-            <element signature="e#13589#13705#0" expanded="false" />
-            <element signature="e#13762#14526#0" expanded="false" />
-            <element signature="e#13762#13938#1" expanded="false" />
-            <element signature="e#14555#15088#0" expanded="false" />
-            <element signature="e#15129#15397#0" expanded="false" />
+            <element signature="e#472#482#0" expanded="true" />
+            <element signature="e#1424#1588#0" expanded="false" />
+            <element signature="e#1424#1492#1" expanded="false" />
+            <element signature="e#1669#2810#0" expanded="false" />
+            <element signature="e#1669#2148#1" expanded="false" />
+            <element signature="e#2195#2500#0" expanded="false" />
+            <element signature="e#2195#2403#1" expanded="false" />
+            <element signature="e#2837#2925#0" expanded="false" />
+            <element signature="e#2837#2895#1" expanded="false" />
+            <element signature="e#2954#3280#0" expanded="false" />
+            <element signature="e#2954#3192#1" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -626,51 +540,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pywebify/fileio.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#31518#31804#0" expanded="false" />
-            <element signature="e#31518#31664#1" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pywebify/pywebify.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="9" column="60" selection-start-line="5" selection-start-column="0" selection-end-line="9" selection-end-column="60" />
           <folding>
-            <element signature="e#795#1417#0" expanded="false" />
-            <element signature="e#795#955#1" expanded="false" />
-            <element signature="e#1442#1606#0" expanded="false" />
-            <element signature="e#1442#1510#1" expanded="false" />
-            <element signature="e#1687#2828#0" expanded="false" />
-            <element signature="e#1687#2166#1" expanded="false" />
-            <element signature="e#2213#2518#0" expanded="false" />
-            <element signature="e#2213#2421#1" expanded="false" />
-            <element signature="e#2855#2943#0" expanded="false" />
-            <element signature="e#2855#2913#1" expanded="false" />
-            <element signature="e#2972#3298#0" expanded="false" />
-            <element signature="e#2972#3210#1" expanded="false" />
-            <element signature="e#3373#4997#1" expanded="false" />
-            <element signature="e#7992#8418#0" expanded="false" />
-            <element signature="e#8454#9069#0" expanded="false" />
-            <element signature="e#9107#9669#0" expanded="false" />
-            <element signature="e#9711#9938#0" expanded="false" />
-            <element signature="e#9973#10774#0" expanded="false" />
-            <element signature="e#9973#10086#1" expanded="false" />
-            <element signature="e#10821#11637#0" expanded="false" />
-            <element signature="e#10821#10964#1" expanded="false" />
-            <element signature="e#11689#12237#0" expanded="false" />
-            <element signature="e#11689#11920#1" expanded="false" />
-            <element signature="e#12274#13557#0" expanded="false" />
-            <element signature="e#13589#13705#0" expanded="false" />
-            <element signature="e#13762#14526#0" expanded="false" />
-            <element signature="e#13762#13938#1" expanded="false" />
-            <element signature="e#14555#15088#0" expanded="false" />
-            <element signature="e#15129#15397#0" expanded="false" />
+            <element signature="e#472#482#0" expanded="true" />
+            <element signature="e#1424#1588#0" expanded="false" />
+            <element signature="e#1424#1492#1" expanded="false" />
+            <element signature="e#1669#2810#0" expanded="false" />
+            <element signature="e#1669#2148#1" expanded="false" />
+            <element signature="e#2195#2500#0" expanded="false" />
+            <element signature="e#2195#2403#1" expanded="false" />
+            <element signature="e#2837#2925#0" expanded="false" />
+            <element signature="e#2837#2895#1" expanded="false" />
+            <element signature="e#2954#3280#0" expanded="false" />
+            <element signature="e#2954#3192#1" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -685,51 +570,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pywebify/fileio.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="10" column="18" selection-start-line="10" selection-start-column="18" selection-end-line="10" selection-end-column="18" />
-          <folding>
-            <element signature="e#31518#31804#0" expanded="false" />
-            <element signature="e#31518#31664#1" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pywebify/pywebify.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="9" column="60" selection-start-line="5" selection-start-column="0" selection-end-line="9" selection-end-column="60" />
           <folding>
-            <element signature="e#795#1417#0" expanded="false" />
-            <element signature="e#795#955#1" expanded="false" />
-            <element signature="e#1442#1606#0" expanded="false" />
-            <element signature="e#1442#1510#1" expanded="false" />
-            <element signature="e#1687#2828#0" expanded="false" />
-            <element signature="e#1687#2166#1" expanded="false" />
-            <element signature="e#2213#2518#0" expanded="false" />
-            <element signature="e#2213#2421#1" expanded="false" />
-            <element signature="e#2855#2943#0" expanded="false" />
-            <element signature="e#2855#2913#1" expanded="false" />
-            <element signature="e#2972#3298#0" expanded="false" />
-            <element signature="e#2972#3210#1" expanded="false" />
-            <element signature="e#3373#4997#1" expanded="false" />
-            <element signature="e#7992#8418#0" expanded="false" />
-            <element signature="e#8454#9069#0" expanded="false" />
-            <element signature="e#9107#9669#0" expanded="false" />
-            <element signature="e#9711#9938#0" expanded="false" />
-            <element signature="e#9973#10774#0" expanded="false" />
-            <element signature="e#9973#10086#1" expanded="false" />
-            <element signature="e#10821#11637#0" expanded="false" />
-            <element signature="e#10821#10964#1" expanded="false" />
-            <element signature="e#11689#12237#0" expanded="false" />
-            <element signature="e#11689#11920#1" expanded="false" />
-            <element signature="e#12274#13557#0" expanded="false" />
-            <element signature="e#13589#13705#0" expanded="false" />
-            <element signature="e#13762#14526#0" expanded="false" />
-            <element signature="e#13762#13938#1" expanded="false" />
-            <element signature="e#14555#15088#0" expanded="false" />
-            <element signature="e#15129#15397#0" expanded="false" />
+            <element signature="e#472#482#0" expanded="true" />
+            <element signature="e#1424#1588#0" expanded="false" />
+            <element signature="e#1424#1492#1" expanded="false" />
+            <element signature="e#1669#2810#0" expanded="false" />
+            <element signature="e#1669#2148#1" expanded="false" />
+            <element signature="e#2195#2500#0" expanded="false" />
+            <element signature="e#2195#2403#1" expanded="false" />
+            <element signature="e#2837#2925#0" expanded="false" />
+            <element signature="e#2837#2895#1" expanded="false" />
+            <element signature="e#2954#3280#0" expanded="false" />
+            <element signature="e#2954#3192#1" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -798,17 +654,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pywebify/fileio.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="841" column="45" selection-start-line="0" selection-start-column="0" selection-end-line="882" selection-end-column="76" />
-          <folding>
-            <element signature="e#31518#31804#0" expanded="false" />
-            <element signature="e#31518#31664#1" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pywebify/template.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -835,48 +680,48 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pywebify/pywebify.py">
+    <entry file="file://$PROJECT_DIR$/pywebify/js/div_switch.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="9" column="60" selection-start-line="5" selection-start-column="0" selection-end-line="9" selection-end-column="60" />
+          <caret line="100" column="30" selection-start-line="100" selection-start-column="30" selection-end-line="100" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pywebify/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-3.3333333">
+          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
           <folding>
-            <element signature="e#795#1417#0" expanded="false" />
-            <element signature="e#795#955#1" expanded="false" />
-            <element signature="e#1442#1606#0" expanded="false" />
-            <element signature="e#1442#1510#1" expanded="false" />
-            <element signature="e#1687#2828#0" expanded="false" />
-            <element signature="e#1687#2166#1" expanded="false" />
-            <element signature="e#2213#2518#0" expanded="false" />
-            <element signature="e#2213#2421#1" expanded="false" />
-            <element signature="e#2855#2943#0" expanded="false" />
-            <element signature="e#2855#2913#1" expanded="false" />
-            <element signature="e#2972#3298#0" expanded="false" />
-            <element signature="e#2972#3210#1" expanded="false" />
-            <element signature="e#3373#4997#1" expanded="false" />
-            <element signature="e#7992#8418#0" expanded="false" />
-            <element signature="e#8454#9069#0" expanded="false" />
-            <element signature="e#9107#9669#0" expanded="false" />
-            <element signature="e#9711#9938#0" expanded="false" />
-            <element signature="e#9973#10774#0" expanded="false" />
-            <element signature="e#9973#10086#1" expanded="false" />
-            <element signature="e#10821#11637#0" expanded="false" />
-            <element signature="e#10821#10964#1" expanded="false" />
-            <element signature="e#11689#12237#0" expanded="false" />
-            <element signature="e#11689#11920#1" expanded="false" />
-            <element signature="e#12274#13557#0" expanded="false" />
-            <element signature="e#13589#13705#0" expanded="false" />
-            <element signature="e#13762#14526#0" expanded="false" />
-            <element signature="e#13762#13938#1" expanded="false" />
-            <element signature="e#14555#15088#0" expanded="false" />
-            <element signature="e#15129#15397#0" expanded="false" />
+            <element signature="e#192#223#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pywebify/js/div_switch.js">
+    <entry file="file://$PROJECT_DIR$/pywebify/pywebify.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3546284">
-          <caret line="100" column="30" selection-start-line="100" selection-start-column="30" selection-end-line="100" selection-end-column="30" />
+        <state vertical-scroll-proportion="-2.6785715">
+          <caret line="32" column="16" selection-start-line="32" selection-start-column="13" selection-end-line="32" selection-end-column="16" />
+          <folding>
+            <element signature="e#472#482#0" expanded="true" />
+            <element signature="e#1424#1588#0" expanded="false" />
+            <element signature="e#1424#1492#1" expanded="false" />
+            <element signature="e#1669#2810#0" expanded="false" />
+            <element signature="e#1669#2148#1" expanded="false" />
+            <element signature="e#2195#2500#0" expanded="false" />
+            <element signature="e#2195#2403#1" expanded="false" />
+            <element signature="e#2837#2925#0" expanded="false" />
+            <element signature="e#2837#2895#1" expanded="false" />
+            <element signature="e#2954#3280#0" expanded="false" />
+            <element signature="e#2954#3192#1" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/setup.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.4047619">
+          <caret line="73" column="9" selection-start-line="73" selection-start-column="9" selection-end-line="73" selection-end-column="9" />
           <folding />
         </state>
       </provider>
