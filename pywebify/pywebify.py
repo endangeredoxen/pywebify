@@ -362,8 +362,9 @@ class PyWebify():
     def get_special(self):
         """ Populate "special" replacement strings """
 
-        self.special['BASEPATH'] = r'file:///' + \
-                                   self.base_path.replace('\\','/')
+        #self.special['BASEPATH'] = r'file:///' + \
+        #                           self.base_path.replace('\\','/')
+        self.special['BASEPATH'] = '.'
         self.special['CSS_FILE'] = osjoin(self.setup_subdir, 'css',
                                           '%s.css' % self.report_filename) \
                                    .replace('\\', '/')
@@ -462,6 +463,7 @@ class PyWebify():
             self.setup_path = osjoin(self.base_path, self.setup_subdir)
         else:
             self.setup_path = self.base_path
+
 
 if __name__ == "__main__":
     pass
