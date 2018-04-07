@@ -6,3 +6,6 @@ __url__       = 'https://github.com/endangeredoxen/pywebify'
 
 from pywebify.template import *
 from pywebify.pywebify import *
+
+from . import webpage
+from webpage import Webpage
