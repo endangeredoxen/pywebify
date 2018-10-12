@@ -190,6 +190,7 @@ class PyWebify():
         self.js_css = ''
         self.js_files = []
         self.make = kwargs.get('make', self.config['OPTIONS']['make'])
+        self.merge_html = kwargs.get('merge_html', True)
         self.natsort = kwargs.get('natsort',
                                   self.config['OPTIONS']['natsort'])
         self.navbar_path = ''
@@ -299,7 +300,7 @@ class PyWebify():
                                                      ['onmouseover'],
                               from_file=self.from_file,
                               onclick=self.config['SIDEBAR']['onclick'],
-                              exclude=self.exclude,
+                              exclude=self.exclude, merge_html=self.merge_html,
                               use_relative=self.use_relative,
                               show_ext=self.show_ext, build_rst=build_rst,
                               rst_css=self.rst_css, natsort=self.natsort)
