@@ -8,12 +8,14 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Report Structure &mdash; PyWebify 0.2 documentation</title>
+  <title>Report Structure &mdash; PyWebify 0.2.3 documentation</title>
   
 
   
   
     <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+  
   
 
   
@@ -32,7 +34,10 @@
   
 
   
-    <link rel="top" title="PyWebify 0.2 documentation" href="index.html"/>
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="PyWebify 0.2.3 documentation" href="index.html"/>
         <link rel="next" title="Config Files" href="config.html"/>
         <link rel="prev" title="PyWebifying (Making a Report)" href="launch.html"/> 
 
@@ -43,6 +48,7 @@
 
 <body class="wy-body-for-nav" role="document">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -62,7 +68,7 @@
             
             
               <div class="version">
-                0.2
+                0.2.3
               </div>
             
           
@@ -83,19 +89,25 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="launch.html">PyWebifying (Making a Report)</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="">Report Structure</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Report Structure</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#general-report-structure">General Report Structure</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#report-contents">Report Contents</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#customization">Customization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#features">Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#features">Features</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#resizing-images">Resizing images</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#adding-html-to-a-displayed-image">Adding HTML to a displayed image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#direct-links-to-content">Direct links to content</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="config.html">Config Files</a></li>
-<li class="toctree-l1"><a class="reference internal" href="templates.html">Templates</a></li>
-<li class="toctree-l1"><a class="reference internal" href="fileio.html">fileio</a></li>
 </ul>
 
             
@@ -108,8 +120,10 @@
 
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="index.html">PyWebify</a>
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PyWebify</a>
+        
       </nav>
 
 
@@ -122,19 +136,36 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="index.html">Docs</a> &raquo;</li>
-      
-    <li>Report Structure</li>
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Report Structure</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
-            <a href="_sources/overview.txt" rel="nofollow"> View page source</a>
+            
+            <a href="_sources/overview.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -180,21 +211,93 @@ specfied by adjusting CSS parameters in the <a class="reference external" href="
 </div>
 <div class="section" id="features">
 <h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
-<p>Coming soon...</p>
+<div class="section" id="resizing-images">
+<h3>Resizing images<a class="headerlink" href="#resizing-images" title="Permalink to this headline">¶</a></h3>
+<p>Image files and plots can be zoomed in or out using the following commands:</p>
+<ul class="simple">
+<li>Zoom in:  Ctrl + click on displayed image</li>
+<li>Zoom out:  Shift + click on displayed image</li>
+<li>Resize to native image size:  Alt + click on displayed image</li>
+</ul>
+</div>
+<div class="section" id="adding-html-to-a-displayed-image">
+<h3>Adding HTML to a displayed image<a class="headerlink" href="#adding-html-to-a-displayed-image" title="Permalink to this headline">¶</a></h3>
+<p>PyWebify allows you to append more details, summary tables, conclusions, etc. to a
+given image via HTML.  If PyWebify finds an html file with the exact same file path
+as an image <strong>but with the file extension `.html`</strong>, it will automatically append
+the html (including any accompanying css or javascript) to the image.  In this
+mode, the image itself can still be resized as described above.</p>
+<p>For example, with the image only (image filename: “00D0D_1D9bziHgV4a_600x450.jpg”):</p>
+<div class="figure align-center">
+<img alt="_images/add_html_before.png" src="_images/add_html_before.png" />
+</div>
+<p>Now we can add the following html file (filename: “00D0D_1D9bziHgV4a_600x450.**html**”):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;h2&gt;This is an old ugly chair&lt;/h2&gt;
+
+&lt;p&gt;Here is some text&lt;/p&gt;
+
+&lt;table border=&quot;1&quot; class=&quot;dataframe&quot;&gt;
+    &lt;thead&gt;
+        &lt;tr style=&quot;text-align: right;&quot;&gt;
+            &lt;th&gt;&lt;/th&gt;
+            &lt;th&gt;Color&lt;/th&gt;
+            &lt;th&gt;Cost&lt;/th&gt;
+            &lt;th&gt;Thread Count&lt;/th&gt;
+        &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+        &lt;tr&gt;
+            &lt;th&gt;0&lt;/th&gt;
+            &lt;td&gt;Puke Brown&lt;/td&gt;
+            &lt;td&gt;$4&lt;/td&gt;
+            &lt;td&gt;50&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/tbody&gt;
+&lt;/table&gt;
+</pre></div>
+</div>
+<p>which renders in the PyWebify report as:</p>
+<div class="figure align-center">
+<img alt="_images/add_html_after.png" src="_images/add_html_after.png" />
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Merging of image and html with the same name can be disabled by setting the
+keyword <code class="docutils literal notranslate"><span class="pre">merge_html</span></code> to <code class="docutils literal notranslate"><span class="pre">False</span></code> when building the report</p>
+</div>
+</div>
+<div class="section" id="direct-links-to-content">
+<h3>Direct links to content<a class="headerlink" href="#direct-links-to-content" title="Permalink to this headline">¶</a></h3>
+<p>There are multiple instances where you may want to link directly to an image that
+is nested within the folder structure.  PyWebify allows this by adding <cite>?id=PATH</cite>,
+to the end of the URL, where <code class="docutils literal notranslate"><span class="pre">PATH</span></code> is the relative path to the image.  For example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>file:///C:/data/pywebify_test2/report.html?id=level%201/dummy/test
+</pre></div>
+</div>
+<p>will open the report already navigated to the desired image:</p>
+<div class="figure align-center">
+<img alt="_images/direct_link.png" src="_images/direct_link.png" />
+</div>
+<p>You can get the url of any image link by right-clicking on the link in the sidebar
+and selecting the option to copy the hyperlink.</p>
+</div>
 </div>
 </div>
 
 
+           </div>
+           <div class="articleComments">
+            
            </div>
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="config.html" class="btn btn-neutral float-right" title="Config Files" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="config.html" class="btn btn-neutral float-right" title="Config Files" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="launch.html" class="btn btn-neutral" title="PyWebifying (Making a Report)" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="launch.html" class="btn btn-neutral" title="PyWebifying (Making a Report)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -225,10 +328,11 @@ specfied by adjusting CSS parameters in the <a class="reference external" href="
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.2',
+            VERSION:'0.2.3',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="_static/jquery.js"></script>

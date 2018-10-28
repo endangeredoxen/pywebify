@@ -6,26 +6,15 @@
 PyWebify:  Rapid Browser-Based Report Visualization
 ===================================================
 
-Everyone seems to be talking about data: some of it is "big"; some of it is
-"driven".  But generally speaking, data are useless unless properly visualized
-to point the investigator to correct conclusions.  Getting access to the right
-data quickly can be challenging.  For example, imagine an analysis that yields
-numerous plots, charts, images, and data tables.  How can these results be
-investigated?  Navigating through a file directory can be cumbersome, slow,
-and inefficient.  Common tools like Powerpoint quickly become intractable
-unless the number of plots and charts included is kept small, leaving no path
-to drill down further into the nitty-gritty details when questions arise.
-Saving reports in proprietary software like JMP or exensio provides better
-flexibility but also requires your organization to fork over lots of cash for
-license fees.
-
-PyWebify attempts to mitigate these issues by enabling data report
-visualization within a common web browser.  It is completely free and open-
-source and runs using Python.  Designed primarily for scientists and engineers,
-PyWebify quickly hyperlinks large numbers of images, plots, tables, or
-generic html files into a customizable, easily-navigable, and searchable
-html report.
-
+PyWebify is a simple, open-source, web-based data report builder.  It takes an
+existing folder structure containing images, plots, tables, and fully-featured
+html files into a customizable, easily-navigable, and searchable
+html report.  Unlike Powerpoint presentations or written reports which must be
+created manually and are inherently limited in the number of details that can
+be presented before the document becomes intractable, PyWebify reports are
+created with as little as a single Python command and can contain an unlimited
+amount of nested information, in order to allow the reader to drill down further
+into nitty-gritty details only if necessary.
 
 .. image:: _images/report_in_action.gif
    :align: center
@@ -41,8 +30,6 @@ User Guide Contents:
    launch
    overview
    config
-   templates
-   fileio   
 
 
 Indices and tables
