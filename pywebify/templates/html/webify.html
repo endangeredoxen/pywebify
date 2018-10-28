@@ -1,12 +1,13 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
-<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-<link rel="stylesheet" type="text/css" href="$CSS_FILE"/>
-<link rel="shortcut icon" type="image/x-icon" href=$FAVICON>
-<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js'></script>
-$JS_FILES
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <link rel="stylesheet" type="text/css" href="$CSS_FILE" />
+    <link rel="shortcut icon" type="image/x-icon" href=$FAVICON>
+    <script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js'></script>
+    $JS_FILES
 </head>
 
 <body>
@@ -15,13 +16,12 @@ $JS_FILES
     <div id="main_div">
         <div id="sidebar">
 
-$SIDEBAR
+            $SIDEBAR
 
         </div>
 
         <div id="viewer">
-            <button id="toggle"></button>
-            $START_SCREEN
+            <button id="toggle"></button> $START_SCREEN
             <div id="summary">
                 $SUMMARY
             </div>
@@ -29,4 +29,37 @@ $SIDEBAR
     </div>
 
 </body>
+<script>
+    // Automatically open to a specific image if ?id=path in url
+    window.onload = function() {
+        var url = window.location.href;
+        var queryString = url ? url.split('?')[1] : window.location.search.slice(1);
+        if (typeof queryString === "undefined") {
+            return;
+        }
+        var page = queryString.split('=')[1].replace(new RegExp('%20', 'g'), ' ');
+        var pages = page.split('/');
+        var i;
+        var child;
+        var aTags = document.querySelectorAll("a[href='?" + queryString + "']");
+        if (aTags.length > 0) {
+            var parent = aTags[0].parentElement;
+            if (parent.children[0].onmouseover != null) {
+                parent.children[0].onmouseover();
+                for (var i = 0; i < (pages.length - 1) * 2; i++) {
+                    parent = parent.parentElement;
+                    parent.click();
+                }
+            } else {
+                // directories only
+                for (var i = 0; i < pages.length * 2; i++) {
+                    parent.click();
+                    parent = parent.parentElement;
+                }
+            }
+
+        }
+    }
+</script>
+
 </html>
