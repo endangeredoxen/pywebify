@@ -59,45 +59,27 @@ def get_config():
         return input.readlines()[0]
 
 
-def kw_get(kwargs, attr, config, default=None, func=None, verbose=False):
+def kwget(dict1, dict2, val, default):
     """
-    Checks kwargs and/or a configuration file for keywords and if missing
-    returns a default value
+    Augmented kwargs.get function
 
     Args:
-        kwargs (dict): keyword arguments
-        attr (str): value to find in the config file
-        config (dict): config file section
-        default (all types): default value if attr is not in config
-        func (module):  reference to a module if kw is a function
-        verbose (boolean): print warnings
+        dict1 (dict): first dictionary to check for the value
+        dict2 (dict): second dictionary to check for the value
+        val (str): value to look for
+        default (multiple): default value if not found in
+            dict1 or dict2 keys
 
     Returns:
-        kw or default value
+        value to use
     """
 
-    def kw_return(value, func=None):
-        """ Return the keyword value or the default value
-
-        Args:
-            value (str): the value to return or the value associated with func
-            func (module): str reference to a module
-        """
-
-        if func:
-            return getattr(func, value)
-        else:
-            return value
-
-    if attr in kwargs.keys():
-        # attr provided by user in kwargs
-        return kw_return(kwargs[attr], func)
-    elif attr in config.keys():
-        # attr found in config file
-        return kw_return(config[attr], func)
+    if val in dict1.keys():
+        return dict1[val]
+    elif val in dict2.keys():
+        return dict2[val]
     else:
-        # return the default
-        return kw_return(default, func)
+        return default
 
 
 def reset_config():
@@ -145,14 +127,14 @@ class PyWebify():
         Keyword Args:
             config (str): path to config ini file (note: most options are
                           controlled using this file)
-            browser (str): name of browser with which to open the report
             exclude (list): file names to exclude from the sidebar
                             list of files
             make (bool): make the report upon initialization of the class
             natsort (bool): use natural (human) sorting on the file list
             open (bool): pop open the report
-            output_name (str):  name of output html report file
-            report_folder (str): name of folder to dump report setup files
+            report_filename (str):  name of output html report file
+            report_subdir (str): name of folder to dump report file
+            setup_subdir (str): name of folder to dump report setup files
             show_ext (bool): show/hide file extension in the file list
             subtitle (str): report subtitle (location depends on template)
             title (str): report title (location depends on template)
@@ -168,10 +150,15 @@ class PyWebify():
                 raise OSError('Config file "%s" not found.  '
                               'Please try again.' % self.config_path)
         self.config = getattr(ConfigFile(self.config_path), 'config_dict')
+        sections = ['BODY', 'BROWSER', 'EMAIL', 'FILES', 'ICONS', 'JAVASCRIPT',
+                    'LABELS', 'MAINDIV', 'NAVBAR', 'OPTIONS', 'SIDEBAR',
+                    'TEMPLATES', 'TOGGLE', 'VIEWER']
+        for sec in sections:
+            if sec not in self.config.keys():
+                self.config[sec] = {}
 
         # Set class attributes
         self.base_path = os.path.abspath(base_path)
-        self.browser = kwargs.get('browser', self.config['OPTIONS']['browser'])
         self.css = None
         self.css_path = ''
         if 'exclude' in self.config['OPTIONS']:
@@ -189,20 +176,19 @@ class PyWebify():
         self.img_path = ''
         self.js_css = ''
         self.js_files = []
-        self.make = kwargs.get('make', self.config['OPTIONS']['make'])
+        self.make = kwget(kwargs, self.config['OPTIONS'], 'make', True)
         self.merge_html = kwargs.get('merge_html', True)
-        self.natsort = kwargs.get('natsort',
-                                  self.config['OPTIONS']['natsort'])
+        self.natsort = kwget(kwargs, self.config['OPTIONS'], 'natsort', True)
         self.navbar_path = ''
-        self.open = kwargs.get('open', self.config['OPTIONS']['open'])
-        self.report_filename = kw_get(kwargs, 'report_filepath',
-                                      self.config['OPTIONS'], 'report')
+        self.open = kwget(kwargs, self.config['OPTIONS'], 'open', True)
+        self.report_filename = kwget(kwargs, self.config['OPTIONS'],
+                                     'report_filepath', 'report')
         self.report_path = None
-        self.report_subdir = kw_get(kwargs, 'report_subdir',
-                                    self.config['OPTIONS'], None)
+        self.report_subdir = kwget(kwargs, self.config['OPTIONS'],
+                                   'report_subdir', None)
         self.setup_path = None
-        self.setup_subdir = kw_get(kwargs, 'setup_subdir',
-                                   self.config['OPTIONS'], 'pywebify')
+        self.setup_subdir = kwget(kwargs, self.config['OPTIONS'],
+                                  'setup_subdir', 'pywebify')
         if 'rst_css' in self.config['TEMPLATES'].keys():
             self.rst_css = self.config['TEMPLATES']['rst_css']
             self.check_path('rst_css')
@@ -211,16 +197,16 @@ class PyWebify():
         self.show_ext = kwargs.get('show_ext',
                                    self.config['OPTIONS']['show_ext'])
         self.special = {}
-        self.subtitle = kw_get(kwargs, 'subtitle', self.config['OPTIONS'],
-                               self.base_path.split(os.sep)[-1])
+        self.subtitle = kwget(kwargs, self.config['OPTIONS'], 'subtitle',
+                              self.base_path.split(os.sep)[-1])
         self.temp_path = ''
-        self.title = kw_get(kwargs, 'title', self.config['OPTIONS'],
-                            self.base_path.split(os.sep)[-1])
-        self.use_relative = kw_get(kwargs, 'use_relative',
-                                   self.config['OPTIONS'], True)
+        self.title = kwget(kwargs, self.config['OPTIONS'], 'title',
+                           self.base_path.split(os.sep)[-1])
+        self.use_relative = kwget(kwargs, self.config['OPTIONS'],
+                                  'use_relative', True)
         for key, value in kwargs.items():
             if not hasattr(self, key):
-                setattr(self,key,value)
+                setattr(self, key, value)
 
         # Set the output path
         self.set_output_paths()
