@@ -37,7 +37,7 @@
         if (typeof queryString === "undefined") {
             return;
         }
-        var page = queryString.split('=')[1].replace(new RegExp('%20', 'g'), ' ');
+        var page = queryString.split('id=')[1].replace(new RegExp('%20', 'g'), ' ');
         var pages = page.split('/');
         var i;
         var child;
