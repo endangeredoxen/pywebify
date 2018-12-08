@@ -68,7 +68,7 @@ setup(
     # your project is installed. For an analysis of "install_requires" vs pip's
     # requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
-    dependency_links = ['https://github.com/endangeredoxen/fileio/zipball/master#egg=fileio-0.1.0'],
+    dependency_links = ['https://github.com/endangeredoxen/fileio/zipball/master#egg=fileio-0.2.5'],
 
     install_requires=['pandas','numpy','natsort','fileio==0.2.5'],
 
