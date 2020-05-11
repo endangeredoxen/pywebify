@@ -29,7 +29,7 @@ setup(
 
     # The project's main homepage.
     url='https://github.com/endangeredoxen/pywebify',
-    download_url = 'https://github.com/endangeredoxen/pywebify/archive/v0.2.3.tar.gz'
+    download_url = 'https://github.com/endangeredoxen/pywebify/archive/v0.2.3.tar.gz',
 
     # Author details
     author='Steve Nicholes',
