@@ -25,10 +25,11 @@ setup(
     version='0.2.4',
 
     description='Browser-based html/image file report builder',
+    long_description='Browser-based html/image file report builder',
 
     # The project's main homepage.
     url='https://github.com/endangeredoxen/pywebify',
-    download_url = 'https://github.com/endangeredoxen/pywebify/archive/v0.2.3.tar.gz',
+    download_url = 'https://github.com/endangeredoxen/pywebify/archive/v0.2.4.tar.gz',
 
     # Author details
     author='Steve Nicholes',
