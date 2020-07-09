@@ -15,6 +15,8 @@ here = path.abspath(path.dirname(__file__))
 # Get the long description from the README file
 with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
+with open(path.join('pywebify', 'version.txt'), 'r') as input:
+    __version__ = input.readlines()[0]
 
 setup(
     name='pywebify',
@@ -22,7 +24,7 @@ setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='0.2.5',
+    version=__version__,
 
     description='Browser-based html/image file report builder',
     long_description='Browser-based html/image file report builder',
