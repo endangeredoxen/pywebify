@@ -22,14 +22,14 @@ setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='0.2.4',
+    version='0.2.5',
 
     description='Browser-based html/image file report builder',
     long_description='Browser-based html/image file report builder',
 
     # The project's main homepage.
     url='https://github.com/endangeredoxen/pywebify',
-    download_url = 'https://github.com/endangeredoxen/pywebify/archive/v0.2.4.tar.gz',
+    download_url = 'https://github.com/endangeredoxen/pywebify/archive/v0.2.5.tar.gz',
 
     # Author details
     author='Steve Nicholes',
@@ -69,9 +69,9 @@ setup(
     # your project is installed. For an analysis of "install_requires" vs pip's
     # requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
-    dependency_links = ['https://github.com/endangeredoxen/fileio/zipball/master#egg=fileio-0.2.5'],
+    # dependency_links = [],
 
-    install_requires=['pandas','numpy','natsort','fileio==0.2.5'],
+    install_requires=['pandas','numpy','natsort','fivecentfileio==0.2.9'],
 
     # List additional groups of dependencies here (e.g. development
     # dependencies). You can install these using the following syntax,
