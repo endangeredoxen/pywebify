@@ -31,7 +31,7 @@ setup(
 
     # The project's main homepage.
     url='https://github.com/endangeredoxen/pywebify',
-    download_url = 'https://github.com/endangeredoxen/pywebify/archive/v0.2.5.tar.gz',
+    download_url = 'https://github.com/endangeredoxen/pywebify/archive/v%s.tar.gz' % __version__,
 
     # Author details
     author='Steve Nicholes',
@@ -73,7 +73,7 @@ setup(
     # https://packaging.python.org/en/latest/requirements.html
     # dependency_links = [],
 
-    install_requires=['pandas','numpy','natsort','fivecentfileio==0.2.9'],
+    install_requires=['pandas','numpy','natsort','fivecentfileio'],
 
     # List additional groups of dependencies here (e.g. development
     # dependencies). You can install these using the following syntax,
@@ -88,7 +88,7 @@ setup(
     # have to be included in MANIFEST.in as well.
     package_data={
         'pywebify': ['config.ini', 'img/*', 'js/*', 'templates/css/*',
-        'templates/html/*', 'templates/jinja/*', 'setup.txt'],
+        'templates/html/*', 'templates/jinja/*', 'setup.txt', 'version.txt'],
     },
 
     # Although 'package_data' is the preferred approach, in some case you may
