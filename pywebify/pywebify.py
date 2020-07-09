@@ -6,12 +6,11 @@
 __author__    = 'Steve Nicholes'
 __copyright__ = 'Copyright (C) 2015 Steve Nicholes'
 __license__   = 'GPLv3'
-__version__   = '0.2.3'
 __url__       = 'https://github.com/endangeredoxen/pywebify'
 
 import pdb
-from fileio import ConfigFile
-from fileio import Dir2HTML
+from fivecentfileio import ConfigFile
+from fivecentfileio import Dir2HTML
 from pywebify.template import Template
 import getpass
 import os
