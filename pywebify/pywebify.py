@@ -19,16 +19,14 @@ __copyright__ = 'Copyright (C) 2015 Steve Nicholes'
 __license__ = 'GPLv3'
 __url__ = 'https://github.com/endangeredoxen/pywebify'
 
-cur_dir = Path(os.path.dirname(__file__))
-sys.path.append(cur_dir)
 db = pdb.set_trace
 osjoin = os.path.join
 wsep = '\\'
 lsep = '/'
-sep = [wsep, lsep] if lsep in str(cur_dir) else [lsep, wsep]
+sep = [wsep, lsep] if lsep in str(os.path.dirname(__file__)) else [lsep, wsep]
 
 
-def copy_configs(path):
+def copy_configs(path, verbose=True):
     """
     Copy the default config file and the templates to a user directory for
     manipulation
@@ -37,22 +35,31 @@ def copy_configs(path):
         path (str): directory of the new file
 
     """
+
+    cur_dir = Path(os.path.dirname(__file__))
     path = Path(path.replace(*sep))
 
-    print('Transferring PyWebify files:')
+    if verbose:
+        print('Transferring PyWebify files:')
+
     # Create directory if needed
     if not os.path.exists(path):
         os.makedirs(path)
 
     # Copy the config file
-    print('   config.ini...', end='')
-    shutil.copyfile(osjoin(cur_dir, 'config.ini'), osjoin(path, 'config.ini'))
-    print('done!')
+    if verbose:
+        print('   config.ini...', end='')
+    shutil.copyfile(cur_dir.joinpath('config.ini'),
+                    path.joinpath('config.ini'))
+    if verbose:
+        print('done!')
 
     # Copy the templates folder
-    print('   templates....', end='')
+    if verbose:
+        print('   templates....', end='')
     shutil.copytree(osjoin(cur_dir, 'templates'), osjoin(path, 'templates'))
-    print('done!')
+    if verbose:
+        print('done!')
 
 
 def get_config():
@@ -60,7 +67,8 @@ def get_config():
     Read the default config path from the setup.txt file
     """
 
-    with open(osjoin(cur_dir, 'setup.txt'), 'r') as input:
+    cur_dir = Path(os.path.dirname(__file__))
+    with open(cur_dir.joinpath('setup.txt'), 'r') as input:
         return input.readlines()[0]
 
 
@@ -106,7 +114,8 @@ def set_config(path):
 
     """
 
-    with open(osjoin(cur_dir, 'setup.txt'), 'w') as output:
+    cur_dir = Path(os.path.dirname(__file__))
+    with open(cur_dir.joinpath('setup.txt'), 'w') as output:
         output.write(path)
 
 
@@ -147,8 +156,9 @@ class PyWebify():
         """
 
         # Get configuration file
-        self.config_path = Path(kwargs.get(
-            'config', get_config()).replace(*sep))
+        cur_dir = Path(os.path.dirname(__file__))
+        self.config_path = \
+            Path(str(kwargs.get('config', get_config())).replace(*sep))
         if not os.path.exists(self.config_path):
             if os.path.exists(osjoin(cur_dir, self.config_path)):
                 self.config_path = osjoin(cur_dir, self.config_path)
@@ -274,6 +284,7 @@ class PyWebify():
     def check_path(self, path):
         """ Handle relative paths for filees in current directory """
 
+        cur_dir = Path(os.path.dirname(__file__))
         file = getattr(self, path)
         if not os.path.exists(file):
             if os.path.exists(cur_dir.joinpath(file)):
@@ -408,8 +419,12 @@ class PyWebify():
 
         """
 
+        if not isinstance(files, list):
+            files = [files]
+
         for f in files:
-            f = Path(f.replace(*sep))
+            if not isinstance(f, Path):
+                f = Path(f.replace(*sep))
             self.temp_path = f
             self.check_path('temp_path')
             if os.path.exists(self.temp_path):

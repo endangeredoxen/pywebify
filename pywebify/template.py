@@ -13,6 +13,9 @@ __license__ = 'GPLv3'
 __version__ = '0.2.1'
 __url__ = 'https://github.com/endangeredoxen/pywebify'
 
+wsep = '\\'
+lsep = '/'
+sep = [wsep, lsep] if lsep in str(os.path.dirname(__file__)) else [lsep, wsep]
 db = pdb.set_trace
 
 
@@ -30,7 +33,7 @@ class Template():
         """
 
         # Set the path
-        self.templatePath = template
+        self._template_path = Path(str(template).replace(*sep))
 
         # Init the raw html output varialbe
         self.raw = ''
@@ -83,11 +86,11 @@ class Template():
             if dest==None, return self.raw
         """
 
-        self.raw = string.Template(open(self.templatePath).read())
+        self.raw = string.Template(open(self._template_path).read())
         self.substitute(caps)
         self.raw = self.raw + '\n' + bonus
         if dest:
-            if not os.path.exists(dest.parent):
+            if not dest.parent.exists():
                 os.makedirs(dest.parent)
             with open(dest, 'w') as temp:
                 temp.write(self.raw)
