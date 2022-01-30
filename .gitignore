@@ -99,12 +99,3 @@ ENV/
 
 # mypy
 .mypy_cache/
-
-*.vscode
-
-# test files
-pywebify/tests/Example/index.html
-pywebify/tests/Example
-
-# other
-*.ini.rej
