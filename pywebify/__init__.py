@@ -9,5 +9,5 @@ __url__ = 'https://github.com/endangeredoxen/pywebify'
 
 from pywebify.template import *  # noqa
 from pywebify.pywebify import *  # noqa
-#from . import webpage  # noqa
+from . import webpage  # noqa
 #from webpage import Webpage
