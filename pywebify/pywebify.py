@@ -160,8 +160,8 @@ class PyWebify():
         self.config_path = \
             Path(str(kwargs.get('config', get_config())).replace(*sep))
         if not os.path.exists(self.config_path):
-            if os.path.exists(osjoin(cur_dir, self.config_path)):
-                self.config_path = osjoin(cur_dir, self.config_path)
+            if cur_dir.joinpath(self.config_path).exists():
+                self.config_path = cur_dir.joinpath(self.config_path)
             else:
                 raise OSError('Config file "%s" not found.  '
                               'Please try again.' % self.config_path)
@@ -206,7 +206,7 @@ class PyWebify():
         self.setup_subdir = Path(kwget(kwargs, self.config['OPTIONS'],
                                        'setup_subdir', 'pywebify'))
         if 'rst_css' in self.config['TEMPLATES'].keys():
-            self.rst_css = self.config['TEMPLATES']['rst_css']
+            self.rst_css = Path(f"{self.config['TEMPLATES']['rst_css'].replace(*sep)}")
             self.check_path('rst_css')
         else:
             self.rst_css = None
@@ -282,7 +282,7 @@ class PyWebify():
                 self.html_dict['NAVBAR'] = self.navbar.write()
 
     def check_path(self, path):
-        """ Handle relative paths for filees in current directory """
+        """ Handle relative paths for files in current directory """
 
         cur_dir = Path(os.path.dirname(__file__))
         file = getattr(self, path)
@@ -379,16 +379,24 @@ class PyWebify():
         self.special['NOW'] = \
             datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.special['COMPILEDBY'] = getpass.getuser()
-        self.special['FAVICON'] = self.config['ICONS']['favicon']
+        self.special['FAVICON'] = Path(f"{self.config['ICONS']['favicon'].replace(*sep)}")
+        if not self.special['FAVICON'].exists() and \
+                self.config_path.parent.joinpath(self.special['FAVICON']).exists():
+            self.special['FAVICON'] = self.config_path.parent.joinpath(self.special['FAVICON'])
         if self.config['ICONS']['logo'] is not None:
+            self.config['ICONS']['logo'] = \
+                Path(f"{self.config['ICONS']['logo'].replace(*sep)}")
+            if not self.config['ICONS']['logo'].exists() and \
+                    self.config_path.parent.joinpath(self.config['ICONS']['logo']).exists():
+                self.config['ICONS']['logo'] = \
+                    self.config_path.parent.joinpath(self.config['ICONS']['logo'])
             self.move_files([self.config['ICONS']['logo']],
                             new_dir='img')
         self.special['QUANTITY'] = '%s' % len(self.files.files)
         self.special['REPORTNAME'] = self.report_filename
         if self.config['OPTIONS']['start_screen'] == 'logo':
             self.special['START_SCREEN'] = \
-                '<img id="img0" src="%s" alt="" />' \
-                % self.config['ICONS']['logo'].split(os.path.sep)[-1]
+                '<img id="img0" src="%s" alt="" />' % self.config['ICONS']['logo'].name
         elif 'html' in self.config['OPTIONS']['start_screen']:
             self.special['START_SCREEN'] = \
                 '<object id="html0" data="' + \
@@ -434,7 +442,10 @@ class PyWebify():
                     path = self.setup_path.joinpath(f.parent)
                 if not os.path.exists(path):
                     os.makedirs(path)
-                shutil.copy(self.temp_path, path.joinpath(f.name))
+                try:
+                    shutil.copy(self.temp_path, path.joinpath(f.name))
+                except shutil.SameFileError:
+                    pass
 
     def run(self):
         """ Build, move, and open the report files """

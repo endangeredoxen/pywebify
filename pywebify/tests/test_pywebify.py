@@ -32,18 +32,6 @@ def strip_txt(txt, key):
     return '<'.join(txt)
 
 
-@pytest.fixture
-def pyweb_index():
-    return PyWebify(osjoin(cur_dir, 'tests', 'Example'), config=osjoin(
-        cur_dir, 'tests', 'config_with_index.ini'))
-
-
-@pytest.fixture
-def pyweb_logo():
-    return PyWebify(osjoin(cur_dir, 'tests', 'Example'), config=osjoin(
-        cur_dir, 'tests', 'config_with_logo.ini'))
-
-
 def test_basic():
     pyw = PyWebify(BASE_PATH, make=False)
 

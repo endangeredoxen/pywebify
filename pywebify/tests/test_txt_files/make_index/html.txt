@@ -1,12 +1,12 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
-<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-<link rel="stylesheet" type="text/css" href="css\report.css"/>
-<link rel="shortcut icon" type="image/x-icon" href=img\favicon.png>
-<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js'></script>
-<script type="text/javascript" src="pywebify/js/div_switch.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <link rel="stylesheet" type="text/css" href="css/report.css" />
+    <link rel="shortcut icon" type="image/x-icon" href=img/favicon.png>
+    <script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js'></script>
+    <script type="text/javascript" src="pywebify/js/div_switch.js"></script>
 <script type="text/javascript" src="pywebify/js/collapse.js"></script>
 <script type="text/javascript" src="pywebify/js/div_toggle.js"></script>
 <script type="text/javascript" src="pywebify/js/filter.js"></script>
@@ -44,7 +44,7 @@
     <div id="main_div">
         <div id="sidebar">
 
-<ul id="collapse">
+            <ul id="collapse">
   <li>
     <A onclick="window.open('/Data Files')" href="?id=/Data%20Files">Data Files</A>
     <ul id="collapse">
@@ -107,4 +107,5 @@
     </div>
 
 </body>
+
 </html>
