@@ -197,6 +197,7 @@ class PyWebify():
         # Set the output path
         self.set_output_paths()
         self.exclude += [str(self.report_path / self.report_filename), str(self.setup_path), 'index.html']
+        self.exclude = [f for f in self.exclude if f != '']  # this would remove everything from the sidebar
 
         # Get the files at base_path
         self.get_files()
@@ -211,7 +212,7 @@ class PyWebify():
         css_replaces = self.get_replacements('css')
         self.css_path = self.config['TEMPLATES']['css']
         self.check_path('css_path')
-        self.css = Template(self.css_path, css_replaces+[self.special])
+        self.css = Template(self.css_path, css_replaces + [self.special])
         self.css.write(dest=self.setup_path / 'css' / f'{self.report_filename}.css', bonus=self.js_css)
 
     def build_html(self):
@@ -272,7 +273,7 @@ class PyWebify():
             list of javascript files
             javascript css
         """
-        js = ''
+        js = []
         jsfiles = []
         jscss = ''
         if self.setup_subdir is not None:
@@ -282,7 +283,7 @@ class PyWebify():
 
         for f in files:
             # Define the script call for the html file
-            js += f'<script type="text/javascript" src="{subdir}/js/{f}"></script>\n'
+            js += [f'<script type="text/javascript" src="{subdir}/js/{f}"></script>\n']
 
             # Add the filename to the js file list
             jsfiles += [Path('js') / Path(f)]
@@ -294,7 +295,7 @@ class PyWebify():
                 with open(self.temp_path, 'r') as input:
                     jscss += input.read()
 
-        return js, jsfiles, jscss
+        return '    '.join(js), jsfiles, jscss
 
     def get_replacements(self, template: str) -> dict:
         """ Find parameters in the config file that will be replaced in the given template file.
