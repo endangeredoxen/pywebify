@@ -1,10 +1,10 @@
 import sys
 import os
-import shutil
-sys.path.append('..\..')
+# import shutil
+from pywebify import PyWebify
+sys.path.append('../..')
 cur_dir = os.path.dirname(__file__)
 osjoin = os.path.join
-from pywebify import *
 
 # # Remove old transferred files
 # dirs = ['templates', 'config.ini']

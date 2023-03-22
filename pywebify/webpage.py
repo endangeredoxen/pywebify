@@ -182,7 +182,8 @@ class Webpage(object):
         Returns:
             replaced (str) input name with forbidden characters replaced
         """
-        forbidden = forbidden or ['/', '#', '&', '{', '}', '<', '>', '*', '?', '$', '!', '"', "'", ':', '@', '+', '`', '|', '=']
+        forbidden = forbidden or ['/', '#', '&', '{', '}', '<', '>', '*', '?', '$', '!', '"', "'", ':', '@', '+',
+                                  '`', '|', '=']
         replaced = name
         for f in forbidden:
             if f in name:
@@ -260,9 +261,12 @@ class Webpage(object):
         if self.pagename is None:
             raise ValueError('pagefilename has not been defined')
 
-        self.figfilename = self._figfilename    # to check for cases updating basepath|relpaths|ext after figfilename
-        self.pagefilename = self._pagefilename  # to check for cases updating basepath|relpaths|ext after figfilename
-                                                # could add a setter for each of these
+        # to check for cases updating basepath|relpaths|ext after figfilename
+        self.figfilename = self._figfilename
+
+        # to check for cases updating basepath|relpaths|ext after figfilename
+        # could add a setter for each of these
+        self.pagefilename = self._pagefilename
 
         with open(self.pagename, 'w') as fid:
             fid.write(render_template(self.template, context=self.context))
@@ -353,7 +357,8 @@ class Webpage(object):
         """
         self.tabs['content'] += ['\n</div>']
         self.tabs['tabno'] += 1
-        self.tabs['nav'] += '\n<li><a data-toggle="{}" href="#tab{:d}">{}</a></li>'.format(self.tabtype, self.tabs['tabno'], name)
+        self.tabs['nav'] += \
+            '\n<li><a data-toggle="{}" href="#tab{:d}">{}</a></li>'.format(self.tabtype, self.tabs['tabno'], name)
         self.tabs['content'] += '\n<div id="tab{:d}" class="tab-pane fade">'.format(self.tabs['tabno'])
 
         return self

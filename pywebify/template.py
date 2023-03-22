@@ -3,16 +3,18 @@
 #   Template maker utility: populates a template with special keyword values
 #   to generate an HTML page or section of a page
 ############################################################################
-__author__    = 'Steve Nicholes'
+__author__ = 'Steve Nicholes'
 __copyright__ = 'Copyright (C) 2015 Steve Nicholes'
-__license__   = 'GPLv3'
-__version__   = '0.2'
-__url__       = 'https://github.com/endangeredoxen/pywebify'
+__license__ = 'GPLv3'
+__version__ = '0.2'
+__url__ = 'https://github.com/endangeredoxen/pywebify'
 
 import os
 import string
 import pdb
-st = pdb.set_trace
+from pathlib import Path
+from typing import Union
+db = pdb.set_trace
 
 
 class Template():
@@ -66,17 +68,16 @@ class Template():
         """
 
         if caps:
-            self.subs = dict((k.upper(), v) for k,v in self.subs.items())
+            self.subs = dict((k.upper(), v) for k, v in self.subs.items())
         self.raw = self.raw.safe_substitute(self.subs)
 
-    def write(self, dest=None, caps=True, bonus=''):
-        """ Write the updated template to file
+    def write(self, dest: Union[Path, None] = None, caps: bool = True, bonus: str = ''):
+        """Write the updated template to file.
 
         Args:
-            dest (str|None):  output filepath for template; if None,
-                              self.raw returned
-            caps (bool): force uppercase on all dict keys
-            bonus (str): additional text to add to self.raw
+            dest:  output filepath for template; if None, self.raw returned
+            caps: force uppercase on all dict keys
+            bonus: additional text to add to self.raw
 
         Returns:
             if dest==None, return self.raw
@@ -86,9 +87,8 @@ class Template():
         self.substitute(caps)
         self.raw = self.raw + '\n' + bonus
         if dest:
-            dest_path = os.path.sep.join(dest.split(os.path.sep)[0:-1])
-            if not os.path.exists(dest_path):
-                os.makedirs(dest_path)
+            if not os.path.exists(dest.parent):
+                os.makedirs(dest.parent)
             with open(dest, 'w') as temp:
                 temp.write(self.raw)
         else:
