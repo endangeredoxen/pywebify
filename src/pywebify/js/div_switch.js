@@ -85,7 +85,7 @@ function div_switch(name) {
                 } else
                     zoom = 'in';
                 action = true;
-            } else if (event.ctrlKey) {
+            } else if (event.ctrlKey || event.metaKey) {
                 var resize = 1.25; // resize amount in percentage
                 if (zoom == 'out') {
                     zoom = 'in';

@@ -40,8 +40,8 @@ Resizing images
 ^^^^^^^^^^^^^^^
 Image files and plots can be zoomed in or out using the following commands:
 
-* Zoom in:  Ctrl + click on displayed image
-* Zoom out:  Shift + click on displayed image
+* Zoom in:  Ctrl + click on displayed image (⌘ on mac)
+* Zoom out:  Shift + click on displayed image (command on mac)
 * Resize to native image size:  Alt + click on displayed image
 
 Adding HTML to a displayed image
