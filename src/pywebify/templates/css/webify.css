@@ -246,5 +246,7 @@ body {
     background   : $VIEW_BKGRD;
     box-shadow   : $VIEW_SHADOW;
     overflow     : auto;
-    padding-left : $VIEW_PADDING;
+}
+#img0 {
+    padding-left: $VIEW_IMG_PADDING;
 }

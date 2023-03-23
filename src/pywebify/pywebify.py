@@ -142,7 +142,7 @@ class PyWebify():
                 raise OSError('Config file "%s" not found.  Please try again.' % self.config_path)
         self.config = getattr(ConfigFile(self.config_path), 'config_dict')
         sections = ['BODY', 'BROWSER', 'EMAIL', 'FILES', 'ICONS', 'JAVASCRIPT', 'LABELS', 'MAINDIV', 'NAVBAR',
-                    'OPTIONS', 'SIDEBAR', 'TEMPLATES', 'TOGGLE', 'VIEWER']
+                    'OPTIONS', 'RST', 'SIDEBAR', 'TEMPLATES', 'TOGGLE', 'VIEWER']
         for sec in sections:
             if sec not in self.config.keys():
                 self.config[sec] = {}
@@ -276,13 +276,21 @@ class PyWebify():
         """Build a Files object that contains information about the files used in the report."""
         if 'rst' in [f.lower() for f in self.config['FILES']['ext']]:
             build_rst = True
+
+            # Get the rst css file and do substitutions
+            rst = Template(self.rst_css, self.config['RST'])
+            rst.write(dest='rst_css_temp.css')
+
         else:
             build_rst = False
         self.files = Dir2HTML(str(self.base_path), self.config['FILES']['ext'],
                               onmouseover=self.config['SIDEBAR']['onmouseover'], from_file=self.from_file,
                               onclick=self.config['SIDEBAR']['onclick'], exclude=self.exclude,
                               merge_html=self.merge_html, use_relative=self.use_relative, show_ext=self.show_ext,
-                              build_rst=build_rst, rst_css=self.rst_css, natsort=self.natsort)
+                              build_rst=build_rst, rst_css='rst_css_temp.css', natsort=self.natsort)
+
+        if build_rst:
+            os.remove('rst_css_temp.css')
 
     def get_javascript(self, files: list) -> [str, list, str]:
         """Adds javascript files to the report.
@@ -309,15 +317,6 @@ class PyWebify():
 
             # Add the filename to the js file list
             jsfiles += [Path('js') / Path(f)]
-
-            # # Get any additional css related to the js addition
-            # self.temp_path = Path('templates') / Path('css') / (f.split('.')[0] + '.css')
-            # self.check_path('temp_path')
-            # if self.temp_path.exists():
-            #     with open(self.temp_path, 'r') as input:
-            #         jscss += input.read()
-
-        # Do any css replaces
 
         return '    '.join(js), jsfiles, jscss
 

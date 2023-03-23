@@ -19,20 +19,20 @@ body {
     letter-spacing: -0.01em;
     line-height: 120%;
     text-align: center;
-    background-color: white;
-    color: black;
-    padding: 10px;
-    border: 1px solid #aaa;
-    margin: 8px 8px 0px 8px;
-    min-width: 740px;
+    background-color: $RST_COLOR;
+    color: $RST_FONT_COLOR;
+    border: $RST_BORDER $RST_BORDER_COLOR;
+    margin: $RST_MARGIN;
+    /* min-width: $RST_MARGIN; # was 740px */
+    padding: $RST_PADDING_INTERNAL;
 }
 
 div.document {
-    background-color: white;
+    background-color: $RST_COLOR;
     text-align: left;
-    background-image: url(contents.png);
     background-repeat: repeat-x;
-    padding: 10px;
+    padding: $RST_PADDING_VIEWER;
+    font-family: $RST_FONT;
 }
 
 /* -- body styles ----------------------------------------------------------- */
@@ -56,8 +56,8 @@ div.body a {
 h1 {
     margin: 0;
     padding: 0.7em 0 0.3em 0;
-    font-size: 1.5em;
-    color: #11557C;
+    font-size: $RST_H1_FONT_SIZE;
+    color: $RST_H1_FONT_COLOR;
 }
 
 h1.title {
@@ -66,17 +66,19 @@ h1.title {
 
 h2 {
     margin: 1.25em 0 0.2em 0;
-    font-size: 1.3em;
+    font-size: $RST_H2_FONT_SIZE;
     padding: 0;
+    color: $RST_H2_FONT_COLOR;
 }
 
 h3 {
     margin: 1em 0 -0.3em 0;
-    font-size: 1.1em;
+    font-size: $RST_H3_FONT_SIZE;
+    color: $RST_H3_FONT_COLOR;
 }
 
 pre {
-    font-family: "Times New Roman", Times, serif;
+    /* font-family: "Times New Roman", Times, serif; */
     font-size: 0.95em;
     letter-spacing: 0.015em;
     line-height: 120%;
@@ -118,7 +120,7 @@ div.admonition pre, div.warning pre, div.note pre {
 }
 
 div.admonition p.admonition-title,
-div.warning p.admonition-title, 
+div.warning p.admonition-title,
 div.note p.admonition-title {
     margin: 0;
     padding: 0.1em 0 0.1em 0.5em;

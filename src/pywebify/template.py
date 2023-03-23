@@ -39,7 +39,9 @@ class Template():
         self.raw = ''
 
         # Process multiple replacement dictionaries
-        if len(subs) > 1:
+        if isinstance(subs, dict):
+            self.subs = subs
+        elif len(subs) > 1:
             self.subs = self.merge_dicts(subs)
         else:
             self.subs = subs[0]
@@ -73,7 +75,7 @@ class Template():
             self.subs = dict((k.upper(), v) for k, v in self.subs.items())
         self.raw = self.raw.safe_substitute(self.subs)
 
-    def write(self, dest: Union[Path, None] = None, caps: bool = True, bonus: str = ''):
+    def write(self, dest: Union[Path, str, None] = None, caps: bool = True, bonus: str = ''):
         """Write the updated template to file.
 
         Args:
@@ -92,6 +94,8 @@ class Template():
         self.substitute(caps)
         self.raw = self.raw + '\n' + bonus
         if dest:
+            if isinstance(dest, str):
+                dest = Path(dest)
             if not os.path.exists(dest.parent):
                 os.makedirs(dest.parent)
             with open(dest, 'w') as temp:
