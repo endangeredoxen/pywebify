@@ -8,8 +8,8 @@ __copyright__ = 'Copyright (C) 2015 Steve Nicholes'
 __license__ = 'GPLv3'
 __url__ = 'https://github.com/endangeredoxen/pywebify'
 
-from fivecentfileio import ConfigFile
-from fivecentfileio import Dir2HTML
+from pywebify.config import ConfigFile
+from pywebify.html import Dir2HTML
 from pywebify.template import Template
 from pathlib import Path
 from typing import Union
@@ -203,6 +203,9 @@ class PyWebify():
         # Get the files at base_path
         self.get_files()
 
+        # Update rst css
+        self.update_rst_css()
+
         # Get top-level string replacements
         self.get_special()
         if self.make:
@@ -260,6 +263,10 @@ class PyWebify():
                 self.navbar = Template(self.navbar_path, nav_replaces+[self.special])
                 self.html_dict['NAVBAR'] = self.navbar.write()
 
+    def update_rst_css(self):
+        """Convert rst files into built html."""
+        pass
+
     def check_path(self, path: str):
         """Handle relative paths for filees in current directory.
 
@@ -280,7 +287,6 @@ class PyWebify():
             # Get the rst css file and do substitutions
             rst = Template(self.rst_css, self.config['RST'])
             rst.write(dest='rst_css_temp.css')
-
         else:
             build_rst = False
         self.files = Dir2HTML(str(self.base_path), self.config['FILES']['ext'],
@@ -288,7 +294,6 @@ class PyWebify():
                               onclick=self.config['SIDEBAR']['onclick'], exclude=self.exclude,
                               merge_html=self.merge_html, use_relative=self.use_relative, show_ext=self.show_ext,
                               build_rst=build_rst, rst_css='rst_css_temp.css', natsort=self.natsort)
-
         if build_rst:
             os.remove('rst_css_temp.css')
 
