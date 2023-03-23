@@ -153,6 +153,7 @@ class PyWebify():
         self.base_path = base_path.resolve()
         self.css = None
         self.css_path = ''
+        self.css_replaces = self.get_replacements('css')
         if 'exclude' in self.config['OPTIONS']:
             self.exclude = kwargs.get('exclude', self.config['OPTIONS']['exclude'])
             if type(self.exclude) is str:
@@ -209,16 +210,37 @@ class PyWebify():
 
     def build_css(self):
         """Build the report css file."""
-        css_replaces = self.get_replacements('css')
+        # Get main css file
         self.css_path = self.config['TEMPLATES']['css']
         self.check_path('css_path')
-        self.css = Template(self.css_path, css_replaces + [self.special])
-        self.css.write(dest=self.setup_path / 'css' / f'{self.report_filename}.css', bonus=self.js_css)
+        css_paths = [self.css_path]
+
+        # Read any javascript css files
+        for ff in self.config['JAVASCRIPT']['files']:
+            self.temp_path = Path('templates') / Path('css') / (ff.split('.')[0] + '.css')
+            self.check_path('temp_path')
+            if self.temp_path.exists():
+                css_paths += [self.temp_path]
+
+        # Write the css file
+        self.css = Template(css_paths, self.css_replaces + [self.special])
+        dest = self.setup_path / 'css' / f'{self.report_filename}.css'
+        self.css.write(dest=dest, bonus=self.js_css)
+
+        # Clean the css from any template parameters that weren't populated by the config file
+        with open(dest, 'r') as input:
+            css = input.readlines()
+        css_new = []
+        for line in css:
+            if '$' not in line:
+                css_new += [line]
+        with open(dest, 'w') as output:
+            output.write(''.join(css_new))
 
     def build_html(self):
         """Build the html report file."""
         # Populate the html replacement dictionary
-        self.html_dict['SIDEBAR'] = self.files.ul
+        self.html_dict['SIDEBAR'] = self.files.ul.replace('  ', '    ').replace('\n', '\n            ')
         self.html_dict['JS_FILES'], self.js_files, self.js_css = self.get_javascript(self.config['JAVASCRIPT']['files'])
 
         # Load the html template and build
@@ -288,12 +310,14 @@ class PyWebify():
             # Add the filename to the js file list
             jsfiles += [Path('js') / Path(f)]
 
-            # Get any additional css related to the js addition
-            self.temp_path = Path('templates') / Path('css') / (f.split('.')[0] + '.css')
-            self.check_path('temp_path')
-            if self.temp_path.exists():
-                with open(self.temp_path, 'r') as input:
-                    jscss += input.read()
+            # # Get any additional css related to the js addition
+            # self.temp_path = Path('templates') / Path('css') / (f.split('.')[0] + '.css')
+            # self.check_path('temp_path')
+            # if self.temp_path.exists():
+            #     with open(self.temp_path, 'r') as input:
+            #         jscss += input.read()
+
+        # Do any css replaces
 
         return '    '.join(js), jsfiles, jscss
 

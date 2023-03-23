@@ -57,8 +57,10 @@ body {
     border-radius         : $NAV_BORDER_RADIUS_L $NAV_BORDER_RADIUS_R 0 0;
     -moz-border-radius    : $NAV_BORDER_RADIUS_L $NAV_BORDER_RADIUS_R 0 0;
     -webkit-border-radius : $NAV_BORDER_RADIUS_L $NAV_BORDER_RADIUS_R 0 0;
-    background            : $NAV_BKGRD;
-    border-bottom         : $NAV_BORDER_BOTTOM;
+    background-color      : $NAV_COLOR;
+    border-bottom         : $NAV_BORDER_BOTTOM_SIZE $NAV_BORDER_BOTTOM_COLOR;
+    border-top            : $NAV_BORDER_TOP_SIZE $NAV_BORDER_TOP_COLOR;
+    box-shadow            : $NAV_DROPDOWN_SHADOW rgba(46, 46, 46, 0.3);
 }
 #navbar ul {
     width      : 100%;
@@ -71,28 +73,44 @@ body {
     float           : left;
     position        : relative;
 }
+#navbar li:first-child a{
+    /* This is for the title text */
+    background-color: $NAV_TITLE_COLOR;
+    font-family     : $NAV_TITLE_FONT;
+    color           : $NAV_TITLE_FONT_COLOR;
+    text-align      : $NAV_TITLE_FONT_ALIGN;
+    text-decoration : none;
+    font-size       : $NAV_TITLE_FONT_SIZE;
+    font-weight     : $NAV_TITLE_FONT_WEIGHT;
+    font-style      : $NAV_TITLE_STYLE;
+}
+#navbar li:first-child a:hover{
+    /* This is for the title text */
+    background-color: $NAV_TITLE_COLOR;
+    font-family     : $NAV_TITLE_FONT;
+    color           : $NAV_TITLE_FONT_COLOR;
+    text-align      : $NAV_TITLE_FONT_ALIGN;
+    text-decoration : none;
+    font-size       : $NAV_TITLE_FONT_SIZE;
+    font-weight     : $NAV_TITLE_FONT_WEIGHT;
+    font-style      : $NAV_TITLE_STYLE;
+}
 #navbar a {
+    /* This is for the non-title items */
     padding         : $NAV_PADDING;
     display         : block;
-    background      : $NAV_BKGRD;
+    background      : $NAV_COLOR;
     font-family     : $NAV_FONT;
     color           : $NAV_FONT_COLOR;
     text-align      : $NAV_FONT_ALIGN;
     text-decoration : none;
     line-height     : $NAV_HEIGHT;
+    font-style      : $NAV_STYLE;
 }
-#navbar li:first-child a {
+#navbar li a {
     border-radius         : $NAV_BORDER_RADIUS_L 0 0 0;
     -moz-border-radius    : $NAV_BORDER_RADIUS_L 0 0 0;
     -webkit-border-radius : $NAV_BORDER_RADIUS_L 0 0 0;
-    background-color      : $NAV_BKGRD_TITLE;
-}
-#navbar li:hover a
-{
-    border-radius         : $NAV_BORDER_RADIUS_L 0 0 0;
-    -moz-border-radius    : $NAV_BORDER_RADIUS_L 0 0 0;
-    -webkit-border-radius : $NAV_BORDER_RADIUS_L 0 0 0;
-    background-color      : $NAV_BKGRD_LINKS;
 }
 #navbar li ul {
     width              : auto;
@@ -112,6 +130,10 @@ body {
     visibility : visible;
     top        : $NAV_HEIGHT;
     opacity    : 1;
+    box-shadow : $NAV_DROPDOWN_SHADOW rgba(46, 46, 46, 0.3);
+}
+#navbar li a:hover {
+    background-color: $NAV_COLOR_HOVER;
 }
 #navbar li ul li
 {
@@ -120,39 +142,41 @@ body {
 #navbar li ul li a {
     width       : $NAV_ITEMS_WIDTH;
     text-align  : left;
-    line-height : $NAV_HEIGHT_ITEMS;
+    line-height : $NAV_ITEMS_HEIGHT;
 }
 #navbar li ul a:hover
 {
-    background-color : $NAV_BKGRD_HOVER;
+    background-color : $NAV_COLOR_HOVER;
 }
 #navbar .main{
     font-weight     : $NAV_FONT_WEIGHT;
     font-size       : $NAV_FONT_SIZE;
+    border-left     : $NAV_BORDER_LEFT_SIZE $NAV_BORDER_LEFT_COLOR;
+    border-right    : $NAV_BORDER_RIGHT_SIZE $NAV_BORDER_RIGHT_COLOR;
 }
-#navbar .main :hover {
-    font-weight     : $NAV_FONT_WEIGHT;
-    font-size       : $NAV_FONT_SIZE;
+#navbar .sub a{
+    font-weight     : $NAV_FONT_WEIGHT_ITEMS !important;
+    font-size       : $NAV_FONT_SIZE_ITEMS !important;
+    color           : $NAV_DROPDOWN_FONT_COLOR !important;
+    background      : $NAV_DROPDOWN_COLOR !important;
+    text-align      : $NAV_DROPDOWN_FONT_ALIGN !important;
+    font-style      : $NAV_STYLE !important;
 }
-#navbar .sub{
-    font-weight     : $NAV_FONT_WEIGHT_ITEMS;
-    font-size       : $NAV_FONT_SIZE_ITEMS;
-}
-#navbar .sub :hover {
-    font-weight     : $NAV_FONT_WEIGHT_ITEMS;
-    font-size       : $NAV_FONT_SIZE_ITEMS;
+#navbar .sub a:hover {
+    background      : $NAV_DROPDOWN_COLOR_HOVER !important;
+    color           : $NAV_DROPDOWN_FONT_COLOR_HOVER !important;
 }
 #sidebar {
     float           : left;
     height          : $SB_HEIGHT;
     width           : $SB_WIDTH;
     font-size       : $SB_FONT_SIZE;
-    background      : $SB_BKGRD;
+    background      : $SB_COLOR;
     background      : -moz-linear-gradient($SB_GRADIENT);
     background      : -webkit-linear-gradient($SB_GRADIENT);
     background      : -o-linear-gradient($SB_GRADIENT);
     background      : -ms-linear-gradient($SB_GRADIENT);
-    box-shadow      : $SB_SHADOW;
+    box-shadow      : $SB_SHADOW rgba(46, 46, 46, 0.3);
     overflow-y      : auto;
     list-style-type : none;
 }
@@ -165,7 +189,7 @@ body {
     border-bottom: 1px solid $SB_DIVIDER_LINE;
 }
 #sidebar li ul li:last-child{
-    border-bottom: 0px solid $SB_BKGRD;
+    border-bottom: 0px solid $SB_COLOR;
 }
 #sidebar a:not(#image_link):not(#expandList):not(#collapseList){
     color           : $SB_FONT_COLOR;
@@ -181,11 +205,11 @@ body {
 #expandList{
     text-decoration : none;
     color: $SB_BUTTON_FONT_COLOR;
-}  
+}
 #collapseList{
     text-decoration : none;
     color: $SB_BUTTON_FONT_COLOR;
-}  
+}
 #summary{
 
 }

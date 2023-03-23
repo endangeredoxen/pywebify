@@ -18,20 +18,22 @@ db = pdb.set_trace
 
 
 class Template():
-    def __init__(self, template, subs):
+    def __init__(self, template_paths: Union[str, Path, list], subs: Union[dict, list]):
         """ Template maker
 
         Replaces strings within a specified template in order to make a
         functional HTML page or section of a page
 
         Args:
-            template (str):  path to template file
+            template_paths (str):  path to template file
             subs (dict|list):  replacement strings dict or list of dicts
 
         """
 
         # Set the path
-        self.templatePath = template
+        if not isinstance(template_paths, list):
+            template_paths = [template_paths]
+        self.template_paths = template_paths
 
         # Init the raw html output varialbe
         self.raw = ''
@@ -82,8 +84,11 @@ class Template():
         Returns:
             if dest==None, return self.raw
         """
-
-        self.raw = string.Template(open(self.templatePath).read())
+        raw = []
+        for tp in self.template_paths:
+            with open(tp, 'r') as input:
+                raw += [input.read()]
+        self.raw = string.Template('\n'.join(raw))
         self.substitute(caps)
         self.raw = self.raw + '\n' + bonus
         if dest:
