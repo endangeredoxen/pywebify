@@ -1,9 +1,9 @@
-############################################################################
+#################################################################################
 # html.py
 #
-#   Classes and functions for reading and outputting html-based files
+#   Classes and functions for reading and outputting html-based files using pandas
 #
-############################################################################
+##################################################################################
 __author__ = 'Steve Nicholes'
 __copyright__ = 'Copyright (C) 2017 Steve Nicholes'
 __license__ = 'GPLv3'
@@ -20,9 +20,8 @@ from docutils import core
 from natsort import natsorted
 from pathlib import Path
 from typing import Union
-oswalk = os.walk
 osjoin = os.path.join
-st = pdb.set_trace
+db = pdb.set_trace
 
 
 def convert_rst(file_name: Union[str, Path], stylesheet: Union[str, None] = None):
@@ -35,11 +34,15 @@ def convert_rst(file_name: Union[str, Path], stylesheet: Union[str, None] = None
         file_name: name of rst file to convert to html
         stylesheet: optional path to a stylesheet
     """
-    settings_overrides = None
-    if stylesheet is not None:
-        if type(stylesheet) is not list:
+    # Configure any css stylesheets
+    if not stylesheet:
+        settings_overrides = None
+    else:
+        if not isinstance(stylesheet, list):
             stylesheet = [stylesheet]
         settings_overrides = {'stylesheet_path': stylesheet}
+
+    # Build the rst with docutils
     source = open(file_name, 'r')
     file_dest = os.path.splitext(file_name)[0] + '.html'
     destination = open(file_dest, 'w')
@@ -124,7 +127,9 @@ class Dir2HTML():
             show_ext (bool): show/hide file extension in the file list
         """
         self.base_path = base_path
-        self.build_rst = kwargs.get('build_rst', False)
+        if isinstance(self.base_path, str):
+            self.base_path = Path(self.base_path)
+        self.build_rst = kwargs.get('build_rst', True)
         self.exclude = kwargs.get('exclude', [])
         self.files = []
         self.from_file = kwargs.get('from_file', False)
@@ -132,8 +137,8 @@ class Dir2HTML():
         self.natsort = kwargs.get('natsort', True)
         self.onclick = kwargs.get('onclick', None)
         self.onmouseover = kwargs.get('onmouseover', None)
-        self.rst = ''
         self.rst_css = kwargs.get('rst_css', None)
+        self.rst_files = []
         self.show_ext = kwargs.get('show_ext', False)
         self.ul = '<ul>'
         self.use_relative = kwargs.get('use_relative', True)
@@ -146,8 +151,8 @@ class Dir2HTML():
         self.get_files(self.from_file)
 
         if len(self.files) > 0:
-            if self.build_rst:
-                self.make_html()
+            if self.build_rst and 'rst' in self.files.ext.str.lower().values:
+                self.make_rst()
             self.filter()
             self.drop_duplicates()
             self.nan_to_str()
@@ -199,8 +204,7 @@ class Dir2HTML():
                 del g[subdirs[0]]
                 if n == 'nan':
                     for row in range(0, len(g)):
-                        node_for_value(g.filename.iloc[row],
-                                       g.html_path.iloc[row], node,
+                        node_for_value(g.filename.iloc[row], g.html_path.iloc[row], node,
                                        parent_name, set_id='image_link')
                 else:
                     try:
@@ -209,12 +213,11 @@ class Dir2HTML():
                         idx = g.full_path.apply(lambda x: len(x.split(os.path.sep))).argmin()
                     folder_path = os.sep.join(g.loc[idx, 'full_path'].split(os.sep)[0:-1])
                     if self.use_relative:
-                        folder_path = folder_path.replace(self.base_path + '\\', '')
-                        folder_path = folder_path.replace('\\', '/')
+                        folder_path = folder_path.replace(str(self.base_path) + os.sep, '')
+                        folder_path = folder_path.replace(os.sep, '/')
                     else:
                         folder_path = Path(folder_path).as_uri()
-                    child = node_for_value(n, folder_path, node,
-                                           parent_name, dir=True)
+                    child = node_for_value(n, folder_path, node, parent_name, dir=True)
                     self.df_to_xml(g, child, n)
 
         else:
@@ -244,6 +247,20 @@ class Dir2HTML():
         Args:
             from_file:  use a text file to identify the directories and files to be used in the report
         """
+        def paths_to_str(temp: dict) -> dict:
+            """Convert pathlibs to str.
+
+            Args:
+                temp: dict of filename keys
+
+            Returns:
+                updated dict
+            """
+            keys = ['full_path', 'rel_path', 'html_path', 'base_path', 'filename']
+            for k in keys:
+                temp[k] = str(temp[k])
+            return temp
+
         if from_file:
             # Build the list from a text file
             with open(self.base_path, 'r') as input:
@@ -259,37 +276,41 @@ class Dir2HTML():
         else:
             # Walk the base_path to identify all the files for the report
             self.files = []
-            for dirName, subdirList, fileList in oswalk(self.base_path):
+            for dir_name, subdir_list, file_list in os.walk(self.base_path):
                 if self.ext is not None:
-                    fileList = [f for f in fileList if f.split('.')[-1].lower() in self.ext]
-                for fname in fileList:
+                    # file_list is type str
+                    file_list = [f for f in file_list if f.split('.')[-1].lower() in self.ext]
+                for fname in file_list:
+                    fname = Path(fname)
                     temp = {}
-                    temp['full_path'] = os.path.abspath(osjoin(self.base_path, dirName, fname))
-                    temp['rel_path'] = temp['full_path'].replace(self.base_path+'\\', '')
+                    temp['full_path'] = (self.base_path / dir_name / fname).resolve()
+                    temp['rel_path'] = Path(str(temp['full_path']).replace(str(self.base_path) + os.sep, ''))
                     if self.use_relative:
-                        temp['html_path'] = temp['rel_path'].replace('\\', '/')
+                        temp['html_path'] = temp['rel_path']  # need to verify on Windows
                     else:
                         temp['html_path'] = Path(temp['full_path']).as_uri()
-                    temp['ext'] = fname.split('.')[-1]
+                    temp['ext'] = fname.suffix[1:]
                     if self.from_file:
-                        top = self.base_path.split(os.sep)[-1]
-                        subdirs = temp['full_path'].replace(self.base_path.replace(top, ''), '').split(os.sep)
+                        top = str(self.base_path).split(os.sep)[-1]
+                        subdirs = str(temp['full_path']).replace(str(self.base_path).replace(top, ''), '').split(os.sep)
                     else:
-                        subdirs = temp['full_path'].replace(self.base_path+os.sep, '').split(os.sep)
+                        subdirs = str(temp['full_path']).replace(str(self.base_path)+os.sep, '').split(os.sep)
                     temp['base_path'] = self.base_path
                     for i, s in enumerate(subdirs[:-1]):
-                        temp['subdir%s' % i] = s
-                    temp['filename_ext'] = subdirs[-1]
+                        temp[f'subdir{i}'] = s
+                    temp['filename_ext'] = temp['full_path'].suffix[1:]
                     temp['filename'] = os.path.splitext(subdirs[-1])[0]
+                    temp = paths_to_str(temp)
                     self.files += [temp]
 
-            if len(self.files) == 0 and os.path.exists(self.base_path) and self.base_path.split('.')[-1] in self.ext:
+            if len(self.files) == 0 and self.base_path.exists() and self.base_path.suffix[1:] in self.ext:
                 temp = {}
-                temp['full_path'] = os.path.abspath(self.base_path)
+                temp['full_path'] = self.base_path.resolve()
                 temp['html_path'] = Path(temp['full_path']).as_uri()
-                subdirs = temp['full_path'].split(os.sep)
-                temp['base_path'] = os.sep.join(subdirs[0:-1])
+                subdirs = temp['full_path'].parts
+                temp['base_path'] = Path(os.sep + os.sep.join(subdirs[1:-1]))
                 temp['filename'] = subdirs[-1]
+                temp = paths_to_str(temp)
                 self.files += [temp]
 
             self.files = pd.DataFrame(self.files)
@@ -311,12 +332,18 @@ class Dir2HTML():
         """Make the auto-open href."""
         return os.path.splitext('?id=%s' % value.replace(' ', '%20'))[0]
 
-    def make_html(self):
+    def make_rst(self):
         """Build html files from rst files."""
         self.rst = self.files[self.files.ext == 'rst']
         idx_to_drop = []
         for i, f in self.rst.iterrows():
+            # Convert the rst to html
             convert_rst(f['full_path'], stylesheet=self.rst_css)
+
+            # Preserve a list of rst files that were compiled
+            self.rst_files += [self.files.iloc[i]['full_path']]
+
+            # Update the file list to reflect the new html file extension
             self.files.iloc[i]['ext'] = 'html'
             self.files.iloc[i]['filename'] = self.files.iloc[i]['filename'].replace('rst', 'html')
             self.files.iloc[i]['filename_ext'] = self.files.iloc[i]['filename_ext'].replace('rst', 'html')

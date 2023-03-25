@@ -125,6 +125,7 @@ class PyWebify():
             open (bool): pop open the report
             report_filename (str):  name of output html report file
             report_subdir (str): name of folder to dump report file
+            rst (bool): flag to disable building rst files; defaults to True
             setup_subdir (str): name of folder to dump report setup files
             show_ext (bool): show/hide file extension in the file list
             subtitle (str): report subtitle (location depends on template)
@@ -151,6 +152,9 @@ class PyWebify():
         if isinstance(base_path, str):
             base_path = Path(base_path)
         self.base_path = base_path.resolve()
+        self.build_rst = kwargs.get('rst', True)
+        if not self.build_rst and 'rst' in self.config['FILES']['ext']:
+            self.config['FILES']['ext'] = [f for f in self.config['FILES']['ext'] if f != 'rst']
         self.css = None
         self.css_path = ''
         self.css_replaces = self.get_replacements('css')
@@ -218,7 +222,7 @@ class PyWebify():
         self.check_path('css_path')
         css_paths = [self.css_path]
 
-        # Read any javascript css files
+        # Read any javascript css files which are appended to the main css file
         for ff in self.config['JAVASCRIPT']['files']:
             self.temp_path = Path('templates') / Path('css') / (ff.split('.')[0] + '.css')
             self.check_path('temp_path')
@@ -239,6 +243,31 @@ class PyWebify():
                 css_new += [line]
         with open(dest, 'w') as output:
             output.write(''.join(css_new))
+
+        # Update css for compiled rsts with unique config sections titled as "RST_X", where X = some custom string
+        rst_config_keys = [f for f in self.config.keys() if f != 'RST' and 'RST' in f]
+        custom = []
+        for kk in rst_config_keys:
+            if self.config[kk].get('replace_in'):
+                replace = self.config[kk].get('replace_in')
+                if not isinstance(replace, list):
+                    replace = [replace]
+                for rr in replace:
+                    rr = str(Path(rr))
+                    found = [f for f in self.files.rst_files if rr in f]
+                    for ff in found:
+                        custom += [ff]
+                        ff2 = ff.replace('.rst', '.html')
+                        temp_css = Template(ff2, [self.config[kk]])
+                        temp_css.write(dest=ff2)
+
+        # Update css for compiled rsts without custom config parameters
+        defaults = [f for f in self.files.rst_files if f not in custom]
+        if 'RST' in self.config.keys():
+            for dd in defaults:
+                dd2 = dd.replace('.rst', '.html')
+                temp_css = Template(dd2, [self.config['RST']])
+                temp_css.write(dest=dd2)
 
     def build_html(self):
         """Build the html report file."""
@@ -263,12 +292,8 @@ class PyWebify():
                 self.navbar = Template(self.navbar_path, nav_replaces+[self.special])
                 self.html_dict['NAVBAR'] = self.navbar.write()
 
-    def update_rst_css(self):
-        """Convert rst files into built html."""
-        pass
-
     def check_path(self, path: str):
-        """Handle relative paths for filees in current directory.
+        """Handle relative paths for files in current directory.
 
         Args:
             path: name of a class attribute holding a path
@@ -278,24 +303,21 @@ class PyWebify():
         if not ffile.exists():
             if (CUR_DIR / ffile).exists():
                 setattr(self, path, CUR_DIR / ffile)
+            # else:
+            #    raise FileNotFoundError(f'could not find a file named {path}')
 
     def get_files(self):
-        """Build a Files object that contains information about the files used in the report."""
-        if 'rst' in [f.lower() for f in self.config['FILES']['ext']]:
-            build_rst = True
+        """Build a Dir2HTML file object.
 
-            # Get the rst css file and do substitutions
-            rst = Template(self.rst_css, self.config['RST'])
-            rst.write(dest='rst_css_temp.css')
-        else:
-            build_rst = False
+        This object contains the list of files in the directory and a ul/li html list implementation of the directory
+        structure.  The constructor for this object also provides inputs to compile rst files into html.  The css
+        for these compiled rst files if applied in Pywebify.build_css in order to allow custom css per rst page.
+        """
         self.files = Dir2HTML(str(self.base_path), self.config['FILES']['ext'],
                               onmouseover=self.config['SIDEBAR']['onmouseover'], from_file=self.from_file,
                               onclick=self.config['SIDEBAR']['onclick'], exclude=self.exclude,
                               merge_html=self.merge_html, use_relative=self.use_relative, show_ext=self.show_ext,
-                              build_rst=build_rst, rst_css='rst_css_temp.css', natsort=self.natsort)
-        if build_rst:
-            os.remove('rst_css_temp.css')
+                              build_rst=self.build_rst, rst_css=self.rst_css, natsort=self.natsort)
 
     def get_javascript(self, files: list) -> [str, list, str]:
         """Adds javascript files to the report.
@@ -433,6 +455,10 @@ class PyWebify():
             self.setup_path = self.base_path / Path(self.setup_subdir)
         else:
             self.setup_path = self.base_path
+
+    def update_rst_css(self):
+        """Convert rst files into built html."""
+        pass
 
 
 if __name__ == "__main__":
