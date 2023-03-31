@@ -11,7 +11,7 @@
 
 body {
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 18px;
+    font-size: $RST_FONT_SIZE;
     letter-spacing: -0.01em;
     line-height: 120%;
     text-align: center;
@@ -49,11 +49,15 @@ div.body a {
     text-decoration: underline;
 }
 
+li li {
+    font-size: $RST_LIST_FONT_SIZE;
+}
+
 h1 {
     margin: 0;
     padding: 0.7em 0 0.3em 0;
     font-size: $RST_H1_FONT_SIZE;
-    color: $RST_H1_FONT_COLOR;
+    color: $RST_H1_FONT_COLOR !important;
 }
 
 h2 {
@@ -87,12 +91,22 @@ pre a {
 
 table {
     border-collapse: collapse;
-    margin: 0 0.5em 0 0.5em;
+    margin: $RST_TABLE_MARGIN; /* 0 0.5em 0 0.5em; */
+    border: 1px solid $RST_TABLE_BORDER_COLOR;
 }
 
-table td, table th {
-    padding: 0.2em 0.5em 0.2em 0.5em;
+table td {
+    padding: $RST_TABLE_PADDING; /*0.2em 0.5em 0.2em 0.5em;*/
+    font-size: $RST_TABLE_CELL_FONT_SIZE;
+    color: $RST_TABLE_CELL_FONT_COLOR;
 }
+
+table th {
+    padding: $RST_TABLE_PADDING; /*0.2em 0.5em 0.2em 0.5em;*/
+    font-size: $RST_TABLE_HEADER_FONT_SIZE;
+    color: $RST_TABLE_HEADER_FONT_COLOR;
+}
+
 
 div.admonition, div.warning, div.note {
     font-size: 0.9em;

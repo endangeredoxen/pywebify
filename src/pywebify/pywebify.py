@@ -258,7 +258,7 @@ class PyWebify():
                     for ff in found:
                         custom += [ff]
                         ff2 = ff.replace('.rst', '.html')
-                        temp_css = Template(ff2, [self.config[kk]])
+                        temp_css = Template(ff2, [self.config[kk]])  # replace defaults?
                         temp_css.write(dest=ff2)
 
         # Update css for compiled rsts without custom config parameters
