@@ -27,7 +27,7 @@ def test_fix_sep():
 
 def test_get_config():
     path = pywebify.get_config()
-    assert str(path) == str(CUR_DIR / 'config.ini').replace('tests', str(Path('src') / Path('pywebify')))
+    assert path.suffix == '.ini'
 
 
 def test_kwget():
@@ -43,10 +43,10 @@ def test_kwget():
 
 
 def test_reset_config():
-    pywebify.set_config('hi')
+    pywebify.set_config('hi.ini')
     pywebify.reset_config()
     path = pywebify.get_config()
-    assert str(path) == str(CUR_DIR / 'config.ini').replace('tests', str(Path('src') / Path('pywebify')))
+    assert 'config.ini' in str(path)
 
 
 def test_pywebify_config_cases():

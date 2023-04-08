@@ -89,13 +89,12 @@ def str_2_dtype(val: str, ignore_list: bool = False) -> Union[str, int, float, l
             if '=="' in v:
                 new += [v.rstrip().lstrip()]
             elif '"' in v:
-                double_quoted = [f for f in re.findall(r'"([^"]*)"', v)
-                                 if f != '']
+                double_quoted = [f for f in re.findall(r'"([^"]*)"', v) if f != '']
                 v = str(v.replace('"', ''))
                 for dq in double_quoted:
                     v = v.replace(dq, '"%s"' % dq)
                 try:
-                    if type(ast.literal_eval(v.lstrip())) is str:
+                    if isinstance(ast.literal_eval(v.lstrip()), str):
                         v = ast.literal_eval(v.lstrip())
                     new += [v]
                 except:  # noqa
@@ -124,6 +123,8 @@ def str_2_dtype(val: str, ignore_list: bool = False) -> Union[str, int, float, l
                     return '#' + v[1].rstrip().lstrip()
                 else:
                     return v[0].rstrip().lstrip()
+            elif val in chars.values():
+                return val
             else:
                 val = val.rstrip().lstrip()
                 if val[0] in ['"', "'"] and val[-1] in ['"', "'"]:
@@ -164,7 +165,7 @@ class ConfigFile():
         elif self.raw is not False:
             self.read_raw()
         else:
-            raise ValueError('Could not find a config.ini file at the following location: %s' % self.config_path)
+            raise FileNotFoundError('Could not find a config.ini file at the following location: %s' % self.config_path)
 
         self.make_dict()
 
