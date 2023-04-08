@@ -199,7 +199,7 @@ class Dir2HTML():
         node.set('id', 'collapse')
 
         if len(subdirs) > 0:
-            groups = df.groupby(subdirs[0])
+            groups = df.groupby(subdirs[0], sort=False)
             for i, (n, g) in enumerate(groups):
                 del g[subdirs[0]]
                 if n == 'nan':
@@ -319,6 +319,11 @@ class Dir2HTML():
             if self.natsort and len(self.files) > 0:
                 temp = self.files.set_index('full_path')
                 self.files = temp.reindex(index=natsorted(temp.index)).reset_index()
+
+            # Add top level files below the folder list
+            folders = self.files.loc[self.files.subdir0.map(str) != 'nan']
+            top_level_files = self.files.loc[self.files.subdir0.map(str) == 'nan']
+            self.files = pd.concat([folders, top_level_files]).reset_index(drop=True)
 
     def filter(self):
         """Filter out any files on the exclude list."""
