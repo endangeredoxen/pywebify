@@ -102,3 +102,4 @@ ENV/
 .mypy_cache/
 
 src/pywebify/.DS_Store
+src/pywebify/setup.txt
