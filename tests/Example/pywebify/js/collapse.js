@@ -5,6 +5,7 @@
 /*   https://github.com/endangeredoxen/pywebify                                */
 /*******************************************************************************/
 
+
 function prepareList() {
     $('#collapse').find('li:has(ul)')
     .click( function(event) {

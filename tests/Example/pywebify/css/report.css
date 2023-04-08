@@ -4,7 +4,7 @@ html {
 }
 body {
     margin     : 0;
-    background : #aaa;
+    background : #aaaaaaa;
     background : -moz-linear-gradient(NA);
     background : -webkit-linear-gradient(NA);
     background : -o-linear-gradient(NA);
@@ -57,49 +57,58 @@ body {
     border-radius         : 0px 0px 0 0;
     -moz-border-radius    : 0px 0px 0 0;
     -webkit-border-radius : 0px 0px 0 0;
-    background            : #334364;
-    border-bottom         : 2px solid;
+    background-color      : #52555B;
+    box-shadow            : 3px 3px 3px 0px rgba(46, 46, 46, 0.3);
 }
 #navbar ul {
     width      : 100%;
     margin     : 0;
     padding    : 0;
-    list-style : none;
 }
 #navbar li {
     margin          : 0;
     padding         : 0;
     float           : left;
     position        : relative;
-    list-style-type : none;
+}
+#navbar li:first-child a{
+    /* This is for the title text */
+    background-color: #1e1e1e;
+    font-family     : Arial;
+    color           : #BDB498;
+    text-align      : center;
+    text-decoration : none;
+    font-size       : 18px;
+    font-weight     : bold;
+    font-style      : italic;
+}
+#navbar li:first-child a:hover{
+    /* This is for the title text */
+    background-color: #1e1e1e;
+    font-family     : Arial;
+    color           : #BDB498;
+    text-align      : center;
+    text-decoration : none;
+    font-size       : 18px;
+    font-weight     : bold;
+    font-style      : italic;
 }
 #navbar a {
+    /* This is for the non-title items */
     padding         : 0px 25px;
     display         : block;
-    background      : #334364;
+    background      : #52555B;
     font-family     : Arial;
-    font-size       : 16px;
-    font-weight     : bold;
-    color           : #aaaaaa;
+    color           : #d6d0c8;
     text-align      : center;
     text-decoration : none;
     line-height     : 40px;
+    font-style      : normal;
 }
-#navbar li:first-child a {
+#navbar li a {
     border-radius         : 0px 0 0 0;
     -moz-border-radius    : 0px 0 0 0;
     -webkit-border-radius : 0px 0 0 0;
-    background-color      : #2E3C5A;
-}
-#navbar li:first-child:hover a {
-    border-radius         : 0px 0 0 0;
-    -moz-border-radius    : 0px 0 0 0;
-    -webkit-border-radius : 0px 0 0 0;
-    background-color      : $NAV_BKGRD_LINKS;
-}
-#navbar li:hover a
-{
-    background-color : #475674;
 }
 #navbar li ul {
     width              : auto;
@@ -119,46 +128,84 @@ body {
     visibility : visible;
     top        : 40px;
     opacity    : 1;
+    box-shadow : 3px 3px 3px 0px rgba(46, 46, 46, 0.3);
+}
+#navbar li a:hover {
+    background-color: #686F7E;
 }
 #navbar li ul li
 {
     width : 100%;
 }
 #navbar li ul li a {
-    width       : 350px;
+    width       : 400px;
     text-align  : left;
-    font-size   : 12px;
     line-height : 30px;
 }
 #navbar li ul a:hover
 {
-    background-color : #475674;
+    background-color : #686F7E;
+}
+#navbar .main{
+    font-weight     : bold;
+    font-size       : 16px;
+    border-right    : 1px solid #5F6166;
+}
+#navbar .sub a{
+    font-weight     : bold !important;
+    font-size       : 12px !important;
+    color           : #dddddd !important;
+    background      : #686F7E !important;
+    text-align      : left !important;
+    font-style      : normal !important;
+}
+#navbar .sub a:hover {
+    background      : #464A52 !important;
+    color           : #eeeeee !important;
 }
 #sidebar {
     float           : left;
-    height          : 96%;
+    height          : 97%;
     width           : 300px;
     font-size       : 18px;
-    background      : #2f2f2f;
+    background      : #313131;
     background      : -moz-linear-gradient(NA);
     background      : -webkit-linear-gradient(NA);
     background      : -o-linear-gradient(NA);
     background      : -ms-linear-gradient(NA);
-    box-shadow      : 0px 20px 8px;
+    box-shadow      : 0px 2px 8px rgba(46, 46, 46, 0.3);
     overflow-y      : auto;
     list-style-type : none;
 }
 #sidebar li{
     list-style : none;
     font-size : 95%;
+    border-top: 1px solid #3c3c3c;
 }
-#sidebar a {
-    color           : #aaaaaa;
+#sidebar li:last-child{
+    border-bottom: 1px solid #3c3c3c;
+}
+#sidebar li ul li:last-child{
+    border-bottom: 0px solid #313131;
+}
+#sidebar a:not(#image_link):not(#expandList):not(#collapseList){
+    color           : #cccaaa;
     text-decoration : none;
-
 }
 #sidebar a:hover {
-    color: #FFCC00;
+    color: #F9F1D5;
+}
+#image_link{
+    color: #aaaaaa;
+    text-decoration : none;
+}
+#expandList{
+    text-decoration : none;
+    color: #aaaaaa;
+}
+#collapseList{
+    text-decoration : none;
+    color: #aaaaaa;
 }
 #summary{
 
@@ -179,7 +226,7 @@ body {
     padding          : 6px 5px;
     text-decoration  : none;
     position         : absolute;
-    bottom           : 25px;
+    bottom           : 3%;
 }
 #toggle:hover {
     background-color : #575657;
@@ -191,12 +238,14 @@ body {
     outline : 0px;
 }
 #viewer {
-    height     : 96%;
-    background : white;
-    box-shadow : 0px 2px 8px;
-    overflow   : auto;
+    height       : 97%;
+    background   : white;
+    box-shadow   : 0px 2px 8px;
+    overflow     : auto;
 }
-
+#img0 {
+    padding-left: 5px;
+}
 #collapse {
     margin-left : -20px;
 
@@ -220,7 +269,6 @@ body {
     padding-left        : 35px;
     padding-right       : 10px;
     background-repeat   : no-repeat;
-    word-wrap           : break-word;
 }
 #collapse .collapsed {
     background-image : url(../img/collapsed.png);
@@ -231,11 +279,11 @@ body {
 .listControl{
   margin-bottom : 15px;
   margin-left   : 15px;
-  margin-top    : 5px;
+  margin-top    : 10px;
 }
 .listControl a {
-    border       : 1px solid #555555;
-    color        : #555555;
+    border       : 1px solid #5F6166;
+    color        : #5F6166;
     cursor       : pointer;
     height       : 1.5em;
     line-height  : 1.5em;
@@ -244,9 +292,10 @@ body {
 }
 .listControl a:hover {
     background-color : #555555;
-    color            : #222222;
+    color            : #d6d0c8 !important;
     font-weight      : normal;
 }
+
 .filterinput {
     float         : right;
     position      : relative;
@@ -257,29 +306,32 @@ body {
     background    : #eee;
     border-radius : 3px 3px 3px 3px;
     color         : #aaaaaa;
-}#pixelCheckboxDiv{
+}
+
+#pixelCheckboxDiv{
     margin-bottom : 0px;
     margin-left   : -5px;
 }
 #pixelCheckboxText{
-    color       : #aaaaaa;
-    font-style  : italic;
-    margin-left : 6px;
-    display     : inline-block;
-    position    : relative;
-    top         : -12px;
-    left        : 6px;
+    color         : #aaaaaa;
+    font-style    : italic;
+    margin-left   : 10px;
+    margin-top    : 5px;
+    margin-bottom : 5px;
+    display       : inline-block;
+    position      : relative;
+    top           : -11px;
+    left          : 6px;
 }
 #pixelCheckbox {
     display : none;
 }
 #pixelCheckboxSpan {
     display        : inline-block;
-    border         : 1px solid #cacece;
-    border-radius  : 3px;
+    border         : 1px solid #aaaaaa;
+    border-radius  : 2px;
     width          : 15px;
     height         : 15px;
-    background     : #555555;
     vertical-align : middle;
     text-align     : center;
     position       : relative;
@@ -304,3 +356,4 @@ body {
 #pixelCheckbox :checked + #pixelCheckboxSpan:before {
     content : '\2714';
 }
+

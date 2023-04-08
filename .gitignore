@@ -103,3 +103,4 @@ ENV/
 
 src/pywebify/.DS_Store
 src/pywebify/setup.txt
+.DS_Store

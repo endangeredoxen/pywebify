@@ -50,7 +50,7 @@ def copy_configs(path: Path):
 
 
 def fix_sep(path: Union[Path, None]) -> Path:
-    """Fix slashes in the path separator due to an artificat in ConfigParser."""
+    """Fix slashes in the path separator due to an artifact in ConfigParser."""
     if not path:
         return None
 
@@ -59,8 +59,10 @@ def fix_sep(path: Union[Path, None]) -> Path:
 
 def get_config():
     """Read the default config path from the setup.txt file."""
+    if not (CUR_DIR / 'setup.txt').exists():
+        make_setup()
     with open(CUR_DIR / 'setup.txt', 'r') as input:
-        return input.readlines()[0]
+        return Path(input.readlines()[0])
 
 
 def kwget(dict1: dict, dict2: dict, val: str, default: Union[str, int, float]) -> Union[str, int, float]:
@@ -84,9 +86,17 @@ def kwget(dict1: dict, dict2: dict, val: str, default: Union[str, int, float]) -
         return default
 
 
+def make_setup():
+    """Make a setup.txt file if it doesn't exist."""
+    setup_path = Path(os.path.dirname(__file__)) / 'setup.txt'
+    if not os.path.exists(setup_path):
+        with open(setup_path, 'w') as output:
+            output.write(str(Path(os.path.dirname(__file__)) / 'config.ini'))
+
+
 def reset_config():
     """Reset the default config path in setup.txt."""
-    set_config('config.ini')
+    set_config(Path(os.path.dirname(__file__)) / 'config.ini')
 
 
 def set_config(path: Path):
@@ -100,7 +110,7 @@ def set_config(path: Path):
 
     """
     with open(CUR_DIR / 'setup.txt', 'w') as output:
-        output.write(path)
+        output.write(str(path))
 
 
 class PyWebify():
@@ -148,9 +158,9 @@ class PyWebify():
             if (CUR_DIR / self.config_path).exists():
                 self.config_path = CUR_DIR / self.config_path
             else:
-                raise OSError('Config file "%s" not found.  Please try again.' % self.config_path)
+                raise FileNotFoundError('Config file "%s" not found.  Please try again.' % self.config_path)
         self.config = getattr(ConfigFile(self.config_path), 'config_dict')
-        sections = ['BODY', 'BROWSER', 'EMAIL', 'FILES', 'ICONS', 'JAVASCRIPT', 'LABELS', 'MAINDIV', 'NAVBAR',
+        sections = ['BODY', 'BROWSER', 'EMAIL', 'FILES', 'ICONS', 'JAVASCRIPT', 'MAINDIV', 'NAVBAR',
                     'OPTIONS', 'RST', 'SIDEBAR', 'TEMPLATES', 'TOGGLE', 'VIEWER']
         for sec in sections:
             if sec not in self.config.keys():
@@ -160,18 +170,17 @@ class PyWebify():
         if isinstance(base_path, str):
             base_path = Path(base_path)
         self.base_path = base_path.resolve()
-        self.build_rst = kwargs.get('rst', True)
-        if not self.build_rst and 'rst' in self.config['FILES']['ext']:
+        self.build_rst = kwargs.get('build_rst', True)
+        if self.build_rst and 'rst' not in self.config['FILES']['ext']:
+            self.config['FILES']['ext'] += ['rst']
+        elif not self.build_rst and 'rst' in self.config['FILES']['ext']:
             self.config['FILES']['ext'] = [f for f in self.config['FILES']['ext'] if f != 'rst']
         self.css = None
         self.css_path = ''
         self.css_replaces = self.get_replacements('css')
-        if 'exclude' in self.config['OPTIONS']:
-            self.exclude = kwargs.get('exclude', self.config['OPTIONS']['exclude'])
-            if type(self.exclude) is str:
-                self.exclude = [self.exclude]
-        else:
-            self.exclude = []
+        self.exclude = kwget(kwargs, self.config['OPTIONS'], 'exclude', [])
+        if isinstance(self.exclude, str):
+            self.exclude = [self.exclude]
         self.files = None
         self.from_file = False
         self.html = None
@@ -341,17 +350,16 @@ class PyWebify():
         js = []
         jsfiles = []
         jscss = ''
-        if self.setup_subdir is not None:
-            subdir = self.setup_subdir
-        else:
-            subdir = ''
 
         for f in files:
             # Define the script call for the html file
-            js += [f'<script type="text/javascript" src="{subdir}/js/{f}"></script>\n']
+            js += [f'<script type="text/javascript" src="{self.setup_subdir}/js/{f}"></script>\n']
 
             # Add the filename to the js file list
-            jsfiles += [Path('js') / Path(f)]
+            jsfiles += [Path('js') / f]
+
+        if str(self.setup_subdir) in str(self.special['JQUERY']):
+            jsfiles += [Path('js') / 'jquery.min.js']
 
         return '    '.join(js), jsfiles, jscss
 
@@ -464,7 +472,7 @@ class PyWebify():
 
         # Set the actual html file path
         if self.report_subdir is not None:
-            self.report_path = self.base_path / self.report_folder
+            self.report_path = self.base_path / self.report_subdir
         else:
             self.report_path = self.base_path
 

@@ -10,11 +10,6 @@ __url__ = 'https://github.com/endangeredoxen/pywebify'
 from pywebify.template import *  # noqa
 from pywebify.pywebify import *  # noqa
 from pywebify.config import *  # noqa
-from pathlib import Path
 
 
-# install default setup.txt based on current install directory
-setup_path = Path(os.path.dirname(__file__)) / 'setup.txt'
-if not os.path.exists(setup_path):
-    with open(setup_path, 'w') as output:
-        output.write(str(Path(os.path.dirname(__file__)) / 'config.ini'))
+make_setup()  # noqa -> from pywebify.py
