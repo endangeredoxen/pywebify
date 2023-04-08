@@ -59,7 +59,7 @@ def fix_sep(path: Union[Path, None]) -> Path:
 
 def get_config():
     """Read the default config path from the setup.txt file."""
-    with open(osjoin(CUR_DIR, 'setup.txt'), 'r') as input:
+    with open(CUR_DIR / 'setup.txt', 'r') as input:
         return input.readlines()[0]
 
 
@@ -133,7 +133,15 @@ class PyWebify():
 
         """
         # Get configuration file
-        self.config_path = kwargs.get('config', get_config())
+        if 'config' in kwargs.keys():
+            # Preference to user-specified config
+            self.config_path = kwargs['config']
+        elif (CUR_DIR / 'setup.txt').exists():
+            # Else look for "setup.txt" and read the user-default config path
+            self.config_path = get_config()
+        else:
+            # Else if "setup.txt" is missing, use the default from the install directory
+            self.config_path = Path(os.path.dirname(__file__)) / 'config.ini'
         if isinstance(self.config_path, str):
             self.config_path = Path(self.config_path)
         if not self.config_path.exists():
@@ -369,6 +377,13 @@ class PyWebify():
         """Populate "special" replacement strings."""
         self.special['BASEPATH'] = '.'
         self.special['CSS_FILE'] = self.setup_subdir / 'css' / (f"{self.report_filename}.css").replace('\\', '/')
+        if 'jquery' in self.config['JAVASCRIPT']:
+            # Pull location from config - specify web specific here
+            #   ex: http://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js
+            self.special['JQUERY'] = self.config['JAVASCRIPT']['jquery']
+        else:
+            # or use local version
+            self.special['JQUERY'] = self.setup_subdir / 'js' / 'jquery.min.js'
         self.special['NOW'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.special['COMPILEDBY'] = getpass.getuser()
         self.special['FAVICON'] = fix_sep(self.config['ICONS']['favicon'])
@@ -414,7 +429,10 @@ class PyWebify():
                     path = self.setup_path / f.parent
                 if not path.exists():
                     os.makedirs(path)
-                shutil.copy(self.temp_path, path / f.name)
+                try:
+                    shutil.copy(self.temp_path, path / f.name)
+                except shutil.SameFileError:
+                    pass
 
     def run(self):
         """Build, move, and open the report files."""
