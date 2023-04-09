@@ -105,6 +105,12 @@ def convert_rst(file_name: Union[str, Path], stylesheet: Union[str, None] = None
                 output.write(html)
 
 
+class EmptyReportError(Exception):
+    def __init__(self, *args, **kwargs):
+        """Empty report error."""
+        Exception.__init__(self, *args, **kwargs)
+
+
 class Dir2HTML():
     def __init__(self, base_path: Union[str, Path], ext: Union[list, None] = None, **kwargs):
         """Directory to unordered html list (UL) conversion tool.
@@ -114,7 +120,7 @@ class Dir2HTML():
             ext: file extensions to include when building file list
 
         Keyword Args:
-            build_rst (bool): convert rst files to html
+            build_rst (bool): convert rst files to html. Defaults to True.
             exclude (list): names of files to exclude from the UL
             from_file (bool): make the report from a text file containing a
                 list of directories and files or just scan the
@@ -125,6 +131,7 @@ class Dir2HTML():
                 the UL
             rst_css (str): path to css file for rst files
             show_ext (bool): show/hide file extension in the file list
+            use_relative (bool):  use relative paths.  Defaults to True.
         """
         self.base_path = base_path
         if isinstance(self.base_path, str):
@@ -144,20 +151,23 @@ class Dir2HTML():
         self.use_relative = kwargs.get('use_relative', True)
 
         self.ext = ext
-        if self.ext is not None and type(self.ext) is not list:
+        if self.ext is not None and not isinstance(self.ext, list):
             self.ext = self.ext.replace(' ', '').split(',')
             self.ext = [f.lower() for f in self.ext]
+        elif not self.ext or len(self.ext) == 0:
+            raise ValueError('list of file extensions is required')
 
         self.get_files(self.from_file)
+        if len(self.files) == 0:
+            raise EmptyReportError(f'No files found with extension(s): {", ".join(self.ext)}.  Report is empty!')
 
-        if len(self.files) > 0:
-            if self.build_rst and 'rst' in self.files.ext.str.lower().values:
-                self.make_rst()
-            self.filter()
-            self.drop_duplicates()
-            self.nan_to_str()
-            self.make_links()
-            self.make_ul()
+        if self.build_rst and 'rst' in self.files.ext.str.lower().values:
+            self.make_rst()
+        self.filter()
+        self.drop_duplicates()
+        self.nan_to_str()
+        self.make_links()
+        self.make_ul()
 
     def df_to_xml(self, df: pd.DataFrame, parent_node: Union[ElementTree.Element, None] = None, parent_name: str = ''):
         """Builds an xml structure from a DataFrame.
@@ -268,18 +278,17 @@ class Dir2HTML():
             temp = pd.DataFrame()
             files = [f.strip('\n') for f in files if len(f) > 0]
             for f in files:
-                self.base_path = f
+                self.base_path = Path(f).resolve()
                 self.get_files(False)
-                temp = pd.concat([temp, self.files])
+                if len(self.files) > 0:
+                    temp = pd.concat([temp, self.files])
             self.files = temp.reset_index(drop=True)
 
         else:
             # Walk the base_path to identify all the files for the report
             self.files = []
             for dir_name, subdir_list, file_list in os.walk(self.base_path):
-                if self.ext is not None:
-                    # file_list is type str
-                    file_list = [f for f in file_list if f.split('.')[-1].lower() in self.ext]
+                file_list = [f for f in file_list if f.split('.')[-1].lower() in self.ext]
                 for fname in file_list:
                     fname = Path(fname)
                     temp = {}
@@ -303,16 +312,32 @@ class Dir2HTML():
                     temp = paths_to_str(temp)
                     self.files += [temp]
 
-            if len(self.files) == 0 and self.base_path.exists() and self.base_path.suffix[1:] in self.ext:
+            # Discrete files will not get os.walked so add manually (only applies to file_list=True)
+            if not self.base_path.is_dir() and self.base_path.exists():
                 temp = {}
                 temp['full_path'] = self.base_path.resolve()
-                temp['html_path'] = Path(temp['full_path']).as_uri()
-                subdirs = temp['full_path'].parts
-                temp['base_path'] = Path(os.sep + os.sep.join(subdirs[1:-1]))
-                temp['filename'] = subdirs[-1]
+                temp['rel_path'] = self.base_path
+                if self.use_relative:
+                    temp['html_path'] = temp['rel_path']  # need to verify on Windows
+                else:
+                    temp['html_path'] = Path(temp['full_path']).as_uri()
+                temp['ext'] = self.base_path.suffix[1:]
+                if temp['ext'] not in self.ext:
+                    # if ext is not in the list of allowed, drop it
+                    return
+                temp['base_path'] = self.base_path
+                for i, s in enumerate(self.base_path.parts[:-1]):
+                    temp[f'subdir{i}'] = s
+                temp['filename_ext'] = self.base_path.suffix[1:]
+                temp['filename'] = os.path.splitext(self.base_path.name)[0]
                 temp = paths_to_str(temp)
                 self.files += [temp]
 
+            # Exit if no files found
+            if len(self.files) == 0:
+                return
+
+            # Make list into DataFrame
             self.files = pd.DataFrame(self.files)
 
             # Sort the files
