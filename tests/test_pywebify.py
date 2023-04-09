@@ -2,9 +2,8 @@ import pytest
 import os
 import pywebify
 import importlib
+import bs4
 from pathlib import Path
-
-
 CUR_DIR = Path(os.path.dirname(__file__))
 
 
@@ -95,20 +94,40 @@ def test_other_class_attributes():
     assert pw.rock == 'roll'
 
 
-def test_full_report():
+def test_full_report_logo_config():
     pw = pywebify.PyWebify('tests/Example', config='tests/config_with_logo.ini', open=False)
+
+    # check for sample string in report.html
     with open(str(pw.report_path / pw.report_filename) + '.html', 'r') as input:
         report = input.read()
     assert '<button id="toggle"></button> <img id="img0" src="." alt="" />' in report
 
+
+def test_full_report_index_config():
     pw = pywebify.PyWebify('tests/Example', config='tests/config_with_index.ini', open=False)
+
+    # check for sample string in report.html
     with open(str(pw.report_path / pw.report_filename) + '.html', 'r') as input:
         report = input.read()
     assert '<button id="toggle"></button> <object id="html0" data="index.html" width=100% height=100% />' in report
 
+    # check for sample string in index.html
     with open(str(pw.report_path / 'index.html'), 'r') as input:
         index = input.read()
     assert f"{pw.config['RST_INDEX']['rst_h1_font_color']} !important;" in index
+
+    # parse the html for all the expected files in the sidebar
+    soup = bs4.BeautifulSoup(report)
+    sidebar = soup.find_all('div', {'id': 'sidebar'})
+    uls = sidebar[0].find_all('ul')
+    lis = [li for ul in uls for li in ul.find_all('li')]
+    hrefs = list(dict.fromkeys([str(href).split()[1].replace('href="?id=', '').replace('%20', ' ')[:-1]
+                                for li in lis for href in li.find_all('a')]))
+    assert hrefs == ['Data Files', 'Data Files/BER', 'Data Files/BER/eye_diagrams', 'Data Files/BER/port3',
+                     'Data Files/MMI', 'Data Files/MMI/1x2', 'Data Files/MMI/2x2', 'Data Files/Summary',
+                     'Data Files/cat pirate', 'Data Files/sin', 'Microscopy', 'Microscopy/delay line',
+                     'Microscopy/input channels', 'Microscopy/mzis',
+                     'file_with_a_really_long_filename_to_observe_word_wrapping_issues']
 
 
 def test_init_make_setup():
