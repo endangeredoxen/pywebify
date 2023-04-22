@@ -5,10 +5,9 @@ on:
 
 jobs:
   test:
-    runs-on: macos-12
-
     strategy:
       matrix:
+        runs-on: [macos-latest, windows-latest]
         python-version: ['3.8', '3.10']
 
     steps:
