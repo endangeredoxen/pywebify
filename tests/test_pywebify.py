@@ -123,11 +123,13 @@ def test_full_report_index_config():
     lis = [li for ul in uls for li in ul.find_all('li')]
     hrefs = list(dict.fromkeys([str(href).split()[1].replace('href="?id=', '').replace('%20', ' ')[:-1]
                                 for li in lis for href in li.find_all('a')]))
-    assert hrefs == ['Data Files', 'Data Files/BER', 'Data Files/BER/eye_diagrams', 'Data Files/BER/port3',
-                     'Data Files/MMI', 'Data Files/MMI/1x2', 'Data Files/MMI/2x2', 'Data Files/Summary',
-                     'Data Files/cat pirate', 'Data Files/sin', 'Microscopy', 'Microscopy/delay line',
-                     'Microscopy/input channels', 'Microscopy/mzis',
-                     'file_with_a_really_long_filename_to_observe_word_wrapping_issues']
+    expected = ['Data Files', 'Data Files/BER', 'Data Files/BER/eye_diagrams', 'Data Files/BER/port3',
+                'Data Files/MMI', 'Data Files/MMI/1x2', 'Data Files/MMI/2x2', 'Data Files/Summary',
+                'Data Files/cat pirate', 'Data Files/sin', 'Microscopy', 'Microscopy/delay line',
+                'Microscopy/input channels', 'Microscopy/mzis',
+                'file_with_a_really_long_filename_to_observe_word_wrapping_issues']
+    expected = [f.replace('/', os.sep) for f in expected]
+    assert hrefs == expected
 
 
 def test_init_make_setup():
