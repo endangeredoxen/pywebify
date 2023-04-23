@@ -40,6 +40,7 @@ def convert_rst(file_name: Union[str, Path], stylesheet: Union[str, None] = None
     else:
         if not isinstance(stylesheet, list):
             stylesheet = [stylesheet]
+        stylesheet = [str(f) for f in stylesheet]
         settings_overrides = {'stylesheet_path': stylesheet}
 
     # Build the rst with docutils
